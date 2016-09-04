@@ -11,9 +11,36 @@ package selimjose;
  */
 public abstract class clnUsuario {
     
+    protected int CdUsuario;
     protected String NmUsuario;
+    protected String DtNasc;
+    protected String Sexo;
+    protected int Tel; 
+    protected String Email;
+    protected String Login;
+    protected String Senha;
+    protected boolean Status;
+    protected int CEP;
+    protected int CdBairros;
+    protected int CdCidades;
     
-            
-           
+    public int getCdUsuario(){
+        return CdUsuario;        
+    }
+    public void setCdUsuario(int CdUsuario){
+        this.CdUsuario = CdUsuario;
+    }
     
+    public String getNmUsuario(){
+        return NmUsuario;        
+    }
+    public void setNmUsuario(String NmUsuario){
+        this.NmUsuario = NmUsuario;
+    }
+    
+    public boolean Login(String Login, String Senha)
+    {
+        /* -- Metodo */
+        return true;
+    }
 }
