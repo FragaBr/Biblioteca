@@ -11,4 +11,19 @@ package selimjose;
  */
 public class clnModEnsino {
     
+    protected int CdModEnsino;
+    protected String NmModalidade;
+    
+    public int getCdModEnsino(){
+        return CdModEnsino;        
+    }
+    public void setCdModEnsino(int CdModEnsino){
+        this.CdModEnsino = CdModEnsino;
+    }
+    public String getNmModalidade(){
+        return NmModalidade;        
+    }
+    public void setNmModalidade (String NmModalidade){
+        this.NmModalidade = NmModalidade;
+    }        
 }

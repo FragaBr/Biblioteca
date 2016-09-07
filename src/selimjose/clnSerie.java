@@ -11,4 +11,19 @@ package selimjose;
  */
 public class clnSerie {
     
+    protected int CdSerie;
+    protected String NmSerie;
+    
+    public int getCdSerie(){
+        return CdSerie;        
+    }
+    public void setCdSerie(int CdSerie){
+        this.CdSerie = CdSerie;
+    }
+    public String getNmSerie(){
+        return NmSerie;        
+    }
+    public void setNmSerie(String NmSerie){
+        this.NmSerie = NmSerie;
+    }
 }
