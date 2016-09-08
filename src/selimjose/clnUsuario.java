@@ -22,7 +22,9 @@ public abstract class clnUsuario {
     protected boolean Status;
     protected int CEP;
     protected int CdBairros;
-    protected int CdCidades;
+    protected int CdCidades;    
+    protected int numeroLogradouro;  //numero da casa onde mora.
+    
     
     public int getCdUsuario(){
         return CdUsuario;        

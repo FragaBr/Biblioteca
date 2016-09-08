@@ -11,4 +11,19 @@ package selimjose;
  */
 public class clnEditora {
     
+    protected int CdEditora;
+    protected String NmEditora;
+    
+    public int getCdEditora(){
+        return CdEditora;
+    }
+    public void setCdEditora(int CdEditora){
+        this.CdEditora = CdEditora;
+    }
+    public String getNmEditora(){
+        return NmEditora;
+    }
+    public void setNmEditora(String NmEditora){
+        this.NmEditora = NmEditora;
+    }
 }

@@ -11,4 +11,19 @@ package selimjose;
  */
 public class clnAutor {
     
+    protected int CdAutor;
+    protected String NmAutor;
+    
+    public int getCdAutor(){
+        return CdAutor;
+    }
+    public void setCdAutor(int CdAutor){
+        this.CdAutor = CdAutor;
+    }
+    public String getNmAutor(){
+        return NmAutor;
+    }
+    public void setNmAutor(String NmAutor){
+        this.NmAutor = NmAutor;
+    }
 }
