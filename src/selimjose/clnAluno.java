@@ -11,4 +11,7 @@ package selimjose;
  */
 public class clnAluno {
     
+    
+    int a;
+    
 }
