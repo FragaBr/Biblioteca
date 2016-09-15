@@ -60,7 +60,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
 
         jLabel21.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel21.setText("Titulo*:");
-        jLabel21.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel21.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         textField1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         textField1.setForeground(new java.awt.Color(153, 153, 153));
@@ -73,7 +73,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
 
         jLabel22.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel22.setText("Autor*:");
-        jLabel22.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel22.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jPanel2.setBackground(new java.awt.Color(153, 102, 0));
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 1, 1, 2, new java.awt.Color(102, 51, 0)));
@@ -91,7 +91,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
 
         jLabel24.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel24.setText("Edição:");
-        jLabel24.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel24.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jComboBox2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jComboBox2.setForeground(new java.awt.Color(153, 153, 153));
@@ -109,7 +109,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
 
         jLabel25.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel25.setText("Ano*:");
-        jLabel25.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel25.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         textField4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         textField4.setForeground(new java.awt.Color(153, 153, 153));
@@ -122,7 +122,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
 
         jLabel27.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel27.setText("ISBN/ISSN:");
-        jLabel27.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel27.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         textField5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         textField5.setForeground(new java.awt.Color(153, 153, 153));
@@ -139,7 +139,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Codigo", "Titulo", "Autor", "Editora", "Ano", ""
+                "Código", "Título", "Autor", "Editora", "Ano", ""
             }
         ) {
             boolean[] canEdit = new boolean [] {

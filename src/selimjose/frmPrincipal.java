@@ -170,7 +170,7 @@ public frmPrincipal(java.awt.Frame parent, boolean modal) {
         jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel12.setFont(new java.awt.Font("Candara", 0, 14)); // NOI18N
-        jLabel12.setText("Reserva, Emprestimo, Devolucao");
+        jLabel12.setText("Alteração de Critérios");
         jLabel12.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel13.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
