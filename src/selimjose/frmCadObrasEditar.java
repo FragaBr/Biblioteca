@@ -9,12 +9,12 @@ package selimjose;
  *
  * @author Rhay
  */
-public class frmCadObras extends javax.swing.JDialog {
+public class frmCadObrasEditar extends javax.swing.JDialog {
 
     /**
-     * Creates new form frmCadObras
+     * Creates new form frmCadObrasEditar
      */
-    public frmCadObras(java.awt.Frame parent, boolean modal) {
+    public frmCadObrasEditar(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -61,11 +61,10 @@ public class frmCadObras extends javax.swing.JDialog {
         jMenuRelatorios1 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Biblioteca Tancredo Neves");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/InserirObra.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/EditarObra.png"))); // NOI18N
 
         jLabel21.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel21.setText("Titulo*:");
@@ -211,7 +210,7 @@ public class frmCadObras extends javax.swing.JDialog {
         });
 
         jButton4.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jButton4.setText("Novo");
+        jButton4.setText("Salvar");
         jButton4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -250,7 +249,7 @@ public class frmCadObras extends javax.swing.JDialog {
                                 .addGap(287, 287, 287)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel22)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel24)
                                             .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -368,7 +367,7 @@ public class frmCadObras extends javax.swing.JDialog {
         jMenuRelatorios.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jMenuBar1.add(jMenuRelatorios);
 
-        jMenuRelatorios1.setText("Ativar/Desativar Obra");
+        jMenuRelatorios1.setText("Desativar Obra");
         jMenuRelatorios1.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jMenuBar1.add(jMenuRelatorios1);
 
@@ -437,20 +436,20 @@ public class frmCadObras extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmCadObras.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadObrasEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmCadObras.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadObrasEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmCadObras.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadObrasEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmCadObras.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadObrasEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frmCadObras dialog = new frmCadObras(new javax.swing.JFrame(), true);
+                frmCadObrasEditar dialog = new frmCadObrasEditar(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
