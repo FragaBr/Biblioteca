@@ -9,12 +9,12 @@ package selimjose;
  *
  * @author Bruna
  */
-public class frmCadAutores extends javax.swing.JFrame {
+public class frmCadSeries extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmCadAutores
+     * Creates new form frmCadSeries
      */
-    public frmCadAutores() {
+    public frmCadSeries() {
         initComponents();
     }
 
@@ -49,7 +49,7 @@ public class frmCadAutores extends javax.swing.JFrame {
 
         textField1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         textField1.setForeground(new java.awt.Color(153, 153, 153));
-        textField1.setText("Digite o nome do autor");
+        textField1.setText("Digite o nome da serie");
         textField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textField1ActionPerformed(evt);
@@ -57,7 +57,8 @@ public class frmCadAutores extends javax.swing.JFrame {
         });
 
         jLabel22.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
-        jLabel22.setText("Autor*:");
+        jLabel22.setText("Serie*:");
+        jLabel22.setToolTipText("");
         jLabel22.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jPanel2.setBackground(new java.awt.Color(153, 102, 0));
@@ -80,7 +81,7 @@ public class frmCadAutores extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Código", "Autor"
+                "Código", "Serie"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -111,7 +112,6 @@ public class frmCadAutores extends javax.swing.JFrame {
         jButton7.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_goleft.png"))); // NOI18N
         jButton7.setText("Voltar");
-        jButton7.setActionCommand("Voltar");
         jButton7.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,8 +210,8 @@ public class frmCadAutores extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,20 +261,20 @@ public class frmCadAutores extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmCadAutores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadSeries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmCadAutores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadSeries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmCadAutores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadSeries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmCadAutores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadSeries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmCadAutores().setVisible(true);
+                new frmCadSeries().setVisible(true);
             }
         });
     }
