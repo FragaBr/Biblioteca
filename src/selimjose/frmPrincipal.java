@@ -25,6 +25,10 @@ public class frmPrincipal extends javax.swing.JDialog {
 private static final DateFormat FORMATO = new SimpleDateFormat("HH:mm:ss");
 private static final DateFormat FORMATO2 = new SimpleDateFormat("EEE, d MMM yyyy");
 
+    public frmPrincipal() {
+        initComponents();
+    }
+
 
 private class ClockRunnable implements Runnable {
     public void run() {
