@@ -25,8 +25,15 @@ public class frmPrincipal extends javax.swing.JDialog {
 private static final DateFormat FORMATO = new SimpleDateFormat("HH:mm:ss");
 private static final DateFormat FORMATO2 = new SimpleDateFormat("EEE, d MMM yyyy");
 
-    public frmPrincipal() {
+ 
+public frmPrincipal(java.awt.Frame parent, boolean modal) {
+        
+        super(parent, modal);
+        
         initComponents();
+        Thread clockThread = new Thread(new frmPrincipal.ClockRunnable(), "Clock thread");
+        clockThread.setDaemon(true);
+        clockThread.start();
     }
 
 
@@ -57,26 +64,7 @@ private class ClockRunnable implements Runnable {
 public void setHora(Date date) {
     textDataSistema.setText(FORMATO.format(date));
     textDataSistema2.setText(FORMATO2.format(date));
-    
 }
-
-
-
-public frmPrincipal(java.awt.Frame parent, boolean modal) {
-        
-        super(parent, modal);
-        
-        initComponents();
-        Thread clockThread = new Thread(new frmPrincipal.ClockRunnable(), "Clock thread");
-        clockThread.setDaemon(true);
-        clockThread.start();
-        
-        
-        
-          
-          setLocationRelativeTo(null);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -231,6 +219,11 @@ public frmPrincipal(java.awt.Frame parent, boolean modal) {
         jLabel25.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel25.setText("Configurações");
         jLabel25.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel25.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel25MouseClicked(evt);
+            }
+        });
 
         jLabel26.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel26.setText("Sugestões de Compra");
@@ -500,6 +493,14 @@ public frmPrincipal(java.awt.Frame parent, boolean modal) {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jLabel25MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel25MouseClicked
+        this.setVisible(false);
+        frmCriteriosSistema P = new frmCriteriosSistema();
+            P.setLocationRelativeTo(null);
+            P.setResizable(true);
+            P.setVisible(true);
+    }//GEN-LAST:event_jLabel25MouseClicked
 
     /**
      * @param args the command line arguments

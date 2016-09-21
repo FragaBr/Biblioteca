@@ -267,12 +267,13 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-
-        frmPrincipal P = new frmPrincipal();
+        
+        this.setVisible(false);
+        frmPrincipal P = new frmPrincipal(new javax.swing.JFrame(), true);
                 P.setLocationRelativeTo(null);
                 P.setResizable(true);
                 P.setVisible(true);
-        this.dispose();
+        
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -280,7 +281,11 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        frmCadAutores A = new frmCadAutores();
+                A.setLocationRelativeTo(null);
+                A.setResizable(true);
+                A.setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

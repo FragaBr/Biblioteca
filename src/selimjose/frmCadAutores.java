@@ -47,12 +47,19 @@ public class frmCadAutores extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/EditarObra.png"))); // NOI18N
 
+        textField1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         textField1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         textField1.setForeground(new java.awt.Color(153, 153, 153));
+        textField1.setName(""); // NOI18N
         textField1.setText("Digite o nome do autor");
         textField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textField1ActionPerformed(evt);
+            }
+        });
+        textField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                limpar(evt);
             }
         });
 
@@ -111,7 +118,6 @@ public class frmCadAutores extends javax.swing.JFrame {
         jButton7.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_goleft.png"))); // NOI18N
         jButton7.setText("Voltar");
-        jButton7.setActionCommand("Voltar");
         jButton7.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -233,7 +239,12 @@ public class frmCadAutores extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+    
+        this.setVisible(false);
+        frmCriteriosSistema A = new frmCriteriosSistema();
+                A.setLocationRelativeTo(null);
+                A.setResizable(true);
+                A.setVisible(true);  
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -243,6 +254,10 @@ public class frmCadAutores extends javax.swing.JFrame {
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void limpar(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_limpar
+        
+    }//GEN-LAST:event_limpar
 
     /**
      * @param args the command line arguments
