@@ -19,7 +19,7 @@ import selimjose.clnAutor;
 public class AutorDao extends Dao implements DbDao<clnAutor> {
      
     public static final String SQL_INSERIR =  
-    "INSERT INTO `bancobib`.`autor` (`NmAutor`) VALUES (?)";
+    "INSERT INTO `autor` (`NmAutor`) VALUES (?)";
     
     public static final String SQL_EXCLUIR =
     "DELETE FROM `bancobib`.`Autor` WHERE `CdAutor`=? ";
@@ -48,7 +48,7 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
             con = getConnection();
             ps = con.prepareStatement(SQL_INSERIR, Statement.RETURN_GENERATED_KEYS);
             //ps.setInt(1, Obj.getCdAutor());
-            ps.setString(2,Obj.getNmAutor());            
+            ps.setString(1,Obj.getNmAutor());            
             ps.execute();
             rs = ps.getGeneratedKeys();
             

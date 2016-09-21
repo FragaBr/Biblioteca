@@ -27,7 +27,7 @@ public abstract class Dao {
             // carrega classe do banco de dados
             Class.forName(JDBC_DRIVER);  //carrega classe de drive do banco de dados
             //estabelece conexao com banco de dados
-            con = DriverManager.getConnection(DATABASE_URL, "", "");
+            con = DriverManager.getConnection(DATABASE_URL, "root", "");
         } catch ( ClassNotFoundException e){
         	throw new DaoException("Erro de driver ao acessar banco de dados: " + e.getMessage());
         } catch (Exception e) {

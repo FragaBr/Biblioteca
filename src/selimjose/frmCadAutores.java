@@ -10,7 +10,7 @@ import dao.DaoException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
+import selimjose.clnAutor;
 /**
  *
  * @author Bruna
@@ -249,7 +249,7 @@ public class frmCadAutores extends javax.swing.JFrame {
             a.setNmAutor(txtNomeAutor.getText());
              
             if (aDao.Exists(a) != null) {
-                JOptionPane.showMessageDialog(this, "Autor já existente!", "Cadastrando Autores", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Autor já existente!", "Cadastrando Produto", JOptionPane.WARNING_MESSAGE);
             } else {
                 try {
                     aDao.inserir(a);
@@ -257,13 +257,11 @@ public class frmCadAutores extends javax.swing.JFrame {
                     Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(this, "O Autor foi cadastrado com sucesso!!", "Cadastrando Autores", JOptionPane.INFORMATION_MESSAGE);
-                
+                //dispose();
             }
         } else {
             JOptionPane.showMessageDialog(this, "Campos em branco!", "Cadastrando Autores", JOptionPane.WARNING_MESSAGE);
         }
-        
-        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
