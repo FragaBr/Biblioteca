@@ -9,14 +9,10 @@ package dao;
  *
  * @author Bruna
  */
-public class DaoException extends Exception {
+public interface DbDao<T> {
     
-    public DaoException(){
-		super();
-	}
-	
-	public DaoException(String msg){
-		super(msg);
-	}
-	
+        public int inserir(T Obj) throws DaoException;
+	public T pesquisar(int id) throws DaoException;
+	public boolean excluir(int id) throws DaoException;
+	public boolean alterar(T Obj) throws DaoException;    
 }

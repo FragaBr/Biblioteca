@@ -53,6 +53,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
         jMenuRelatorios1 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 

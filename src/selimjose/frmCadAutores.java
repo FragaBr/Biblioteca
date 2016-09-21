@@ -5,6 +5,12 @@
  */
 package selimjose;
 
+import dao.AutorDao;
+import dao.DaoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Bruna
@@ -29,7 +35,7 @@ public class frmCadAutores extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        textField1 = new java.awt.TextField();
+        txtNomeAutor = new java.awt.TextField();
         jLabel22 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -47,17 +53,17 @@ public class frmCadAutores extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/EditarObra.png"))); // NOI18N
 
-        textField1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        textField1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        textField1.setForeground(new java.awt.Color(153, 153, 153));
-        textField1.setName(""); // NOI18N
-        textField1.setText("Digite o nome do autor");
-        textField1.addActionListener(new java.awt.event.ActionListener() {
+        txtNomeAutor.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtNomeAutor.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtNomeAutor.setForeground(new java.awt.Color(153, 153, 153));
+        txtNomeAutor.setName(""); // NOI18N
+        txtNomeAutor.setText("Digite o nome do autor");
+        txtNomeAutor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField1ActionPerformed(evt);
+                txtNomeAutorActionPerformed(evt);
             }
         });
-        textField1.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNomeAutor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 limpar(evt);
             }
@@ -178,7 +184,7 @@ public class frmCadAutores extends javax.swing.JFrame {
                                                 .addGap(18, 18, 18)
                                                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtNomeAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(66, 66, 66)
                                                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))))))))
                 .addContainerGap(60, Short.MAX_VALUE))
@@ -195,7 +201,7 @@ public class frmCadAutores extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNomeAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(58, 58, 58)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -230,21 +236,43 @@ public class frmCadAutores extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
+    private void txtNomeAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeAutorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField1ActionPerformed
+    }//GEN-LAST:event_txtNomeAutorActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+    
+        if ((!txtNomeAutor.getText().isEmpty())) {
+            AutorDao aDao = new AutorDao();
+            clnAutor a = new clnAutor();
+            
+            a.setNmAutor(txtNomeAutor.getText());
+             
+            if (aDao.Exists(a) != null) {
+                JOptionPane.showMessageDialog(this, "Autor já existente!", "Cadastrando Autores", JOptionPane.WARNING_MESSAGE);
+            } else {
+                try {
+                    aDao.inserir(a);
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(this, "O Autor foi cadastrado com sucesso!!", "Cadastrando Autores", JOptionPane.INFORMATION_MESSAGE);
+                
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Campos em branco!", "Cadastrando Autores", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
     
         this.setVisible(false);
         frmCriteriosSistema A = new frmCriteriosSistema();
-                A.setLocationRelativeTo(null);
-                A.setResizable(true);
-                A.setVisible(true);  
+            A.setLocationRelativeTo(null);
+            A.setResizable(true);
+            A.setVisible(true);  
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -307,6 +335,6 @@ public class frmCadAutores extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private java.awt.TextField textField1;
+    private java.awt.TextField txtNomeAutor;
     // End of variables declaration//GEN-END:variables
 }
