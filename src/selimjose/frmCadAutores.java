@@ -50,19 +50,29 @@ private void buscaNome() {
         });
 
         AutorDao aDAO = new AutorDao();
-        
-        arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-        for (clnAutor p : arrayaut) {
+       
+            arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnAutor p : arrayaut) {
             TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
-        }
+            }            
+                
     }
 private void AtualizaTabela() {
     
-        AutorDao aDAO = new AutorDao();        
-        arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-        clnAutor pa = arrayaut.get(arrayaut.size()-1);
-        tabelaLista.addRow(new Object[]{pa.getCdAutor(), pa.getNmAutor()});
+        AutorDao aDAO = new AutorDao();
+        if(!arrayaut.isEmpty())
+        {
+            tabelaLista.setRowCount(0);
+            tabelaLista.fireTableDataChanged();
+            arrayaut.clear();
+            arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnAutor p : arrayaut) {
+            TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
+            
+            }                       
+        }
 }
 
     /**
@@ -156,6 +166,11 @@ private void AtualizaTabela() {
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/lupa.png"))); // NOI18N
         jButton5.setText("Pesquisar");
         jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
@@ -331,16 +346,16 @@ private void AtualizaTabela() {
             JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             try {
-                    objautor.setNmAutor((String) TabelaAutor.getValueAt(linha,1));
+                    objautor.setNmAutor(txtNomeAutor.getText());
                     objautor.setCdAutor((int) TabelaAutor.getValueAt(linha,0));
                     System.out.println( objautor.getCdAutor());
                     System.out.println( objautor.getNmAutor());
                     aDao.alterar(objautor);
-                    //AtualizaTabela();
+                    AtualizaTabela();
                 } catch (DaoException ex) {
                 Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
             }
-             }        
+             }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -362,8 +377,7 @@ private void AtualizaTabela() {
                 } catch (DaoException ex) {
                     Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-        
+            }        
         }
         txtNomeAutor.setText("");
     }//GEN-LAST:event_jButton9ActionPerformed
@@ -379,7 +393,15 @@ private void AtualizaTabela() {
         
     }//GEN-LAST:event_seleciona
 
-    /**
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+       
+        AutorDao aDao = new AutorDao();
+        clnAutor a = new clnAutor();
+        a.setNmAutor(txtNomeAutor.getText());
+        aDao.pesquisar(WIDTH)
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    /** 
      * @param args the command line arguments
      */
     public static void main(String args[]) {

@@ -32,7 +32,7 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
       
     public static final String SQL_PESQUISAR_AUTOR =
     "SELECT `CdAutor`,`NmAutor` FROM `autor`"+
-    "WHERE `CdAutor`=?";
+    "WHERE `NmAutor`=?";
     
     public static final String SQL_EXISTS
             = " select * from autor "
@@ -65,7 +65,7 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
     }
 
     @Override
-    public clnAutor pesquisar(int id) throws DaoException {
+    public clnAutor pesquisar(String nm) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
