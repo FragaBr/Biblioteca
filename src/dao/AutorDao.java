@@ -31,8 +31,7 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
     "UPDATE `autor` SET `NmAutor` = ? WHERE `CdAutor` = ?";
       
     public static final String SQL_PESQUISAR_AUTOR =
-    "SELECT `CdAutor`,`NmAutor` FROM `autor`"+
-    "WHERE `NmAutor`=?";
+    "SELECT * FROM `autor` WHERE `NmAutor` = ? ";
     
     public static final String SQL_EXISTS
             = " select * from autor "
@@ -66,7 +65,31 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
 
     @Override
     public clnAutor pesquisar(String nm) throws DaoException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        clnAutor cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR_AUTOR);  
+            ps.setString (1, nm);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnAutor();
+                cRet.setNmAutor(rs.getString("NmAutor"));    
+                cRet.setCdAutor(rs.getInt("CdAutor")); 
+            }
+                
+        } catch (Exception e) {
+            new DaoException("Autor nao inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }        
+	
+        return cRet;
     }
 
     @Override
@@ -155,6 +178,36 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
         try {
             con = getConnection();
             ps = con.prepareStatement("select * from autor");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnAutor();
+                cRet.setCdAutor(rs.getInt("CdAutor"));
+                cRet.setNmAutor(rs.getString("NmAutor"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Autor nao inserido" + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+      
+     public List<clnAutor> PesquisarLista(TextAutoCompleter c, clnAutor p) {
+        ArrayList<clnAutor> a = new ArrayList<>();
+        clnAutor cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR_AUTOR);
+            ps.setString(1, p.getNmAutor());
             rs = ps.executeQuery();
 
             while (rs.next()) {
