@@ -5,11 +5,14 @@
  */
 package dao;
 
+import com.mxrck.autocompleter.TextAutoCompleter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import selimjose.clnAutor;
 
 /**
@@ -22,13 +25,13 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
     "INSERT INTO `autor` (`NmAutor`) VALUES (?)";
     
     public static final String SQL_EXCLUIR =
-    "DELETE FROM `bancobib`.`Autor` WHERE `CdAutor`=? ";
+    "DELETE FROM `autor` WHERE `CdAutor`=? ";
     
     public static final String SQL_ALTERAR_AUTOR = 
-    "UPDATE `autor` SET `NmAutor` = ?> WHERE `CdAutor` = ?";
+    "UPDATE `autor` SET `NmAutor` = ? WHERE `CdAutor` = ?";
       
     public static final String SQL_PESQUISAR_AUTOR =
-    "SELECT `CdAutor`,`NmAutor` FROM `Autor`"+
+    "SELECT `CdAutor`,`NmAutor` FROM `autor`"+
     "WHERE `CdAutor`=?";
     
     public static final String SQL_EXISTS
@@ -47,7 +50,6 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_INSERIR, Statement.RETURN_GENERATED_KEYS);
-            //ps.setInt(1, Obj.getCdAutor());
             ps.setString(1,Obj.getNmAutor());            
             ps.execute();
             rs = ps.getGeneratedKeys();
@@ -69,12 +71,49 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
 
     @Override
     public boolean excluir(int id) throws DaoException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean ret = false;        
+        PreparedStatement ps = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_EXCLUIR);  
+            ps.setInt (1, id);
+            int qtd = ps.executeUpdate();
+            
+            if (qtd>0)
+                ret = true;
+            
+        } catch (Exception e) {
+            new DaoException("Autor não removido"+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps);
+        }        
+        return ret;
     }
 
     @Override
     public boolean alterar(clnAutor Obj) throws DaoException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        boolean ret = false;        
+        PreparedStatement ps = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_ALTERAR_AUTOR);  
+            ps.setString(1,Obj.getNmAutor());
+            ps.setInt(2, Obj.getCdAutor());
+            int qtd = ps.executeUpdate();            
+            if (qtd>0)
+                ret = true;
+            
+        } catch (Exception e) {
+        	 new DaoException(" Alteração não efetuada."+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps);
+        }        
+        return ret;
     }
     
       public clnAutor Exists(clnAutor p) {
@@ -104,4 +143,34 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
 
         return cRet;
     }
+      
+      public List<clnAutor> listar(TextAutoCompleter c) {
+        ArrayList<clnAutor> a = new ArrayList<>();
+        clnAutor cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement("select * from autor");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnAutor();
+                cRet.setCdAutor(rs.getInt("CdAutor"));
+                cRet.setNmAutor(rs.getString("NmAutor"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Autor nao inserido" + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+
 }

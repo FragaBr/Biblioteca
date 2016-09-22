@@ -7,9 +7,16 @@ package selimjose;
 
 import dao.AutorDao;
 import dao.DaoException;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import com.mxrck.autocompleter.TextAutoCompleter;
+import javax.swing.table.DefaultTableModel;
 import selimjose.clnAutor;
 /**
  *
@@ -17,12 +24,46 @@ import selimjose.clnAutor;
  */
 public class frmCadAutores extends javax.swing.JFrame {
 
+    private DefaultTableModel tabelaLista = new DefaultTableModel();
+     ArrayList<clnAutor> arrayaut = null;
     /**
      * Creates new form frmCadAutores
      */
     public frmCadAutores() {
         initComponents();
+        tabelaLista = (DefaultTableModel) TabelaAutor.getModel();
+        buscaNome();
+        this.setLocationRelativeTo(null);
+        this.setResizable(true);
+        this.setVisible(true);
     }
+private void buscaNome() {
+       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas
+        
+        TabelaAutor.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected,
+                        hasFocus, row, column);
+                return this;
+            }
+        });
+
+        AutorDao aDAO = new AutorDao();
+        
+        arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+        for (clnAutor p : arrayaut) {
+            TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
+        }
+    }
+private void AtualizaTabela() {
+    
+        AutorDao aDAO = new AutorDao();        
+        arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+        clnAutor pa = arrayaut.get(arrayaut.size()-1);
+        tabelaLista.addRow(new Object[]{pa.getCdAutor(), pa.getNmAutor()});
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,7 +80,7 @@ public class frmCadAutores extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TabelaAutor = new javax.swing.JTable();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
@@ -65,7 +106,7 @@ public class frmCadAutores extends javax.swing.JFrame {
         });
         txtNomeAutor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                limpar(evt);
+                clean(evt);
             }
         });
 
@@ -87,8 +128,8 @@ public class frmCadAutores extends javax.swing.JFrame {
             .addGap(0, 5, Short.MAX_VALUE)
         );
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TabelaAutor.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        TabelaAutor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -104,7 +145,12 @@ public class frmCadAutores extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        TabelaAutor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                seleciona(evt);
+            }
+        });
+        jScrollPane1.setViewportView(TabelaAutor);
 
         jButton5.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/lupa.png"))); // NOI18N
@@ -249,10 +295,11 @@ public class frmCadAutores extends javax.swing.JFrame {
             a.setNmAutor(txtNomeAutor.getText());
              
             if (aDao.Exists(a) != null) {
-                JOptionPane.showMessageDialog(this, "Autor já existente!", "Cadastrando Produto", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Autor já existente!", "Cadastrando Autores", JOptionPane.WARNING_MESSAGE);
             } else {
                 try {
                     aDao.inserir(a);
+                    AtualizaTabela();
                 } catch (DaoException ex) {
                     Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -262,6 +309,7 @@ public class frmCadAutores extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Campos em branco!", "Cadastrando Autores", JOptionPane.WARNING_MESSAGE);
         }
+        txtNomeAutor.setText("");
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -274,16 +322,62 @@ public class frmCadAutores extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+        
+        AutorDao aDao = new AutorDao();
+        clnAutor objautor = new clnAutor();
+            
+        int linha = TabelaAutor.getSelectedRow();
+        if(linha==-1){
+            JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }else{
+            try {
+                    objautor.setNmAutor((String) TabelaAutor.getValueAt(linha,1));
+                    objautor.setCdAutor((int) TabelaAutor.getValueAt(linha,0));
+                    System.out.println( objautor.getCdAutor());
+                    System.out.println( objautor.getNmAutor());
+                    aDao.alterar(objautor);
+                    //AtualizaTabela();
+                } catch (DaoException ex) {
+                Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+            }
+             }        
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
+        
+        AutorDao aDao = new AutorDao();
+        clnAutor a = new clnAutor();
+            
+        int linha = TabelaAutor.getSelectedRow();
+        if(linha==-1){
+            JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }else{
+            int opcao = JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir ?", " - Excluir -", JOptionPane.YES_NO_OPTION);
+            if(opcao == JOptionPane.YES_OPTION)
+            {
+                int id = (int) TabelaAutor.getValueAt(linha,0);
+                tabelaLista.removeRow(linha);
+                try {
+                    aDao.excluir(id);
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        
+        }
+        txtNomeAutor.setText("");
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void limpar(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_limpar
+    private void clean(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_clean
+        txtNomeAutor.setText("");
+    }//GEN-LAST:event_clean
+
+    private void seleciona(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleciona
         
-    }//GEN-LAST:event_limpar
+        int linha = TabelaAutor.getSelectedRow();
+        txtNomeAutor.setText((String) TabelaAutor.getValueAt(linha,1));
+        
+    }//GEN-LAST:event_seleciona
 
     /**
      * @param args the command line arguments
@@ -321,6 +415,7 @@ public class frmCadAutores extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TabelaAutor;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
@@ -332,7 +427,6 @@ public class frmCadAutores extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private java.awt.TextField txtNomeAutor;
     // End of variables declaration//GEN-END:variables
 }
