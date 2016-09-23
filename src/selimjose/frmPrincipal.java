@@ -34,6 +34,8 @@ public frmPrincipal(java.awt.Frame parent, boolean modal) {
         Thread clockThread = new Thread(new frmPrincipal.ClockRunnable(), "Clock thread");
         clockThread.setDaemon(true);
         clockThread.start();
+        this.setLocationRelativeTo(null);
+        this.setResizable(true);
     }
 
 
@@ -168,6 +170,11 @@ public void setHora(Date date) {
         jLabel13.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel13.setText("de Livros");
         jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/compra.png"))); // NOI18N
         jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -228,6 +235,11 @@ public void setHora(Date date) {
         jLabel26.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel26.setText("Sugestões de Compra");
         jLabel26.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel26.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
 
         textDataSistema.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         textDataSistema.setText("jLabel17");
@@ -497,10 +509,18 @@ public void setHora(Date date) {
     private void jLabel25MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel25MouseClicked
         this.setVisible(false);
         frmCriteriosSistema P = new frmCriteriosSistema();
-            P.setLocationRelativeTo(null);
-            P.setResizable(true);
-            P.setVisible(true);
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
     }//GEN-LAST:event_jLabel25MouseClicked
+
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+       this.setVisible(false);
+        frmCriteriosSistema P = new frmCriteriosSistema();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jLabel13MouseClicked
 
     /**
      * @param args the command line arguments
