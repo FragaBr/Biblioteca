@@ -268,7 +268,7 @@ public class frmCadSeries extends javax.swing.JFrame {
                                             .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGap(18, 18, 18)
                                             .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -425,7 +425,7 @@ public class frmCadSeries extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeSerieKeyPressed
 
     private void TabelaSerieMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaSerieMouseClicked
-        //
+        //mouse clicked
         int linha = TabelaSerie.getSelectedRow();
         txtNomeSerie.setText((String) TabelaSerie.getValueAt(linha,1));
     }//GEN-LAST:event_TabelaSerieMouseClicked

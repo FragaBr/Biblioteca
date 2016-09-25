@@ -12,7 +12,7 @@ package selimjose;
 public class clnModEnsino {
     
     protected int CdModEnsino;
-    protected String NmModalidade;
+    protected String NmModEnsino;
     
     public int getCdModEnsino(){
         return CdModEnsino;        
@@ -20,10 +20,10 @@ public class clnModEnsino {
     public void setCdModEnsino(int CdModEnsino){
         this.CdModEnsino = CdModEnsino;
     }
-    public String getNmModalidade(){
-        return NmModalidade;        
+    public String getNmModEnsino(){
+        return NmModEnsino;        
     }
-    public void setNmModalidade (String NmModalidade){
-        this.NmModalidade = NmModalidade;
+    public void setNmModEnsino(String NmModalidade){
+        this.NmModEnsino = NmModalidade;
     }        
 }
