@@ -5,19 +5,82 @@
  */
 package selimjose;
 
+import dao.DaoException;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import com.mxrck.autocompleter.TextAutoCompleter;
+import javax.swing.table.DefaultTableModel;
+import dao.ModEnsinoDao;
+import selimjose.clnModEnsino;
 /**
  *
  * @author Bruna
  */
 public class frmCadModEnsino extends javax.swing.JFrame {
 
+    private DefaultTableModel tabelaLista = new DefaultTableModel();
+     ArrayList<clnModEnsino> arraym = null;
     /**
      * Creates new form frmCadModEnsino
      */
     public frmCadModEnsino() {
         initComponents();
+        tabelaLista = (DefaultTableModel) TabelaModEnsino.getModel();
+        buscaNome(); 
         this.setLocationRelativeTo(null);
         this.setResizable(true);
+        
+    }
+    private void buscaNome() {
+       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas
+        
+        TabelaModEnsino.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected,
+                        hasFocus, row, column);
+                return this;
+            }
+        });
+
+        ModEnsinoDao aDAO = new ModEnsinoDao();
+       
+            arraym = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnModEnsino p : arraym) {
+            TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
+            }  
+    }
+
+    private void AtualizaTabela() {
+    
+        ModEnsinoDao aDAO = new ModEnsinoDao();
+        if(!arraym.isEmpty())
+        {
+            tabelaLista.setRowCount(0);
+            tabelaLista.fireTableDataChanged();
+            arraym.clear();
+            arraym = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnModEnsino p : arraym) {
+            TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
+            
+            }                     
+        }
+        else{
+            arraym = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnModEnsino p : arraym) {
+            TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
+            }  
+            
+        }
     }
 
     /**
@@ -53,11 +116,6 @@ public class frmCadModEnsino extends javax.swing.JFrame {
         txtNomeModEnsino.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtNomeModEnsino.setForeground(new java.awt.Color(153, 153, 153));
         txtNomeModEnsino.setText("Digite o nome da modalidade");
-        txtNomeModEnsino.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNomeModEnsinoActionPerformed(evt);
-            }
-        });
         txtNomeModEnsino.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtNomeModEnsinoKeyPressed(evt);
@@ -258,30 +316,43 @@ public class frmCadModEnsino extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNomeModEnsinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeModEnsinoActionPerformed
-       
-    }//GEN-LAST:event_txtNomeModEnsinoActionPerformed
-
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+         if ((!txtNomeModEnsino.getText().isEmpty())) {
+            ModEnsinoDao aDao = new ModEnsinoDao();
+            clnModEnsino a = new clnModEnsino();
+            
+            a.setNmModEnsino(txtNomeModEnsino.getText());
+             
+            if (aDao.Exists(a) != null) {
+                JOptionPane.showMessageDialog(this, "Serie já existente!", "Cadastrando Modalidade", JOptionPane.WARNING_MESSAGE);
+            } else {
+                try {
+                    aDao.inserir(a);
+                    AtualizaTabela();
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(this, "A Modalidade foi cadastrada com sucesso!!", "Cadastrando Modalidade", JOptionPane.INFORMATION_MESSAGE);
+                //dispose();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Campos em branco!", "Cadastrando Modalidade", JOptionPane.WARNING_MESSAGE);
+        }
+        txtNomeModEnsino.setText("");
     }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void txtNomeModEnsinoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeModEnsinoKeyPressed
-        txtNomeModEnsino.setText(" ");
-    }//GEN-LAST:event_txtNomeModEnsinoKeyPressed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
 
-        SerieDao aDao = new SerieDao();
-        clnSerie obj = new clnSerie();
+        ModEnsinoDao aDao = new ModEnsinoDao();
+        clnModEnsino obj = new clnModEnsino();
 
-        int linha = TabelaSerie.getSelectedRow();
+        int linha = TabelaModEnsino.getSelectedRow();
         if(linha==-1){
             JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             try {
-                obj.setNmSerie(txtNomeSerie.getText());
-                obj.setCdSerie((int) TabelaSerie.getValueAt(linha,0));
+                obj.setNmModEnsino(txtNomeModEnsino.getText());
+                obj.setCdModEnsino((int) TabelaModEnsino.getValueAt(linha,0));
                 aDao.alterar(obj);
                 AtualizaTabela();
             } catch (DaoException ex) {
@@ -292,17 +363,17 @@ public class frmCadModEnsino extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
 
-        SerieDao aDao = new SerieDao();
-        clnSerie a = new clnSerie();
+        ModEnsinoDao aDao = new ModEnsinoDao();
+        clnModEnsino a = new clnModEnsino();
 
-        int linha = TabelaSerie.getSelectedRow();
+        int linha = TabelaModEnsino.getSelectedRow();
         if(linha==-1){
             JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             int opcao = JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir ?", " - Excluir -", JOptionPane.YES_NO_OPTION);
             if(opcao == JOptionPane.YES_OPTION)
             {
-                int id = (int) TabelaSerie.getValueAt(linha,0);
+                int id = (int) TabelaModEnsino.getValueAt(linha,0);
                 tabelaLista.removeRow(linha);
                 try {
                     aDao.excluir(id);
@@ -311,21 +382,21 @@ public class frmCadModEnsino extends javax.swing.JFrame {
                 }
             }
         }
-        txtNomeSerie.setText("");
+        txtNomeModEnsino.setText("");
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         //Pesquisar
-        SerieDao aDao = new SerieDao();
-        clnSerie a = new clnSerie();
-        a.setNmSerie(txtNomeSerie.getText());
+        ModEnsinoDao aDao = new ModEnsinoDao();
+        clnModEnsino a = new clnModEnsino();
+        a.setNmModEnsino(txtNomeModEnsino.getText());
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
-        arrayser.clear();
-        arrayser = (ArrayList<clnSerie>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
-        for (clnSerie p : arrayser) {
-            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+        arraym.clear();
+        arraym = (ArrayList<clnModEnsino>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        for (clnModEnsino p : arraym) {
+            TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -339,14 +410,18 @@ public class frmCadModEnsino extends javax.swing.JFrame {
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         AtualizaTabela();
-        txtNomeSerie.setText("");
+        txtNomeModEnsino.setText("");
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jScrollPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MouseClicked
        //mouse clicked
-        int linha = TabelaSerie.getSelectedRow();
-        txtNomeSerie.setText((String) TabelaSerie.getValueAt(linha,1));
+        int linha = TabelaModEnsino.getSelectedRow();
+        txtNomeModEnsino.setText((String) TabelaModEnsino.getValueAt(linha,1));
     }//GEN-LAST:event_jScrollPane1MouseClicked
+
+    private void txtNomeModEnsinoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeModEnsinoKeyPressed
+       txtNomeModEnsino.setText("");
+    }//GEN-LAST:event_txtNomeModEnsinoKeyPressed
 
     /**
      * @param args the command line arguments

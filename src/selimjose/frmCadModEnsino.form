@@ -150,7 +150,6 @@
             <Property name="text" type="java.lang.String" value="Digite o nome da modalidade"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNomeModEnsinoActionPerformed"/>
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNomeModEnsinoKeyPressed"/>
           </Events>
         </Component>

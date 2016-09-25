@@ -5,18 +5,78 @@
  */
 package selimjose;
 
+import dao.DaoException;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import com.mxrck.autocompleter.TextAutoCompleter;
+import javax.swing.table.DefaultTableModel;
+import dao.SerieDao;
+import selimjose.clnSerie;
 /**
  *
  * @author Bruna
  */
 public class frmCadTurno extends javax.swing.JFrame {
 
+    private DefaultTableModel tabelaLista = new DefaultTableModel();
+     ArrayList<clnSerie> arrayser = null;
     /**
      * Creates new form frmCadTurno
      */
     public frmCadTurno() {
         initComponents();
     }
+    
+    private void buscaNome() {
+       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas
+        
+        TabelaSerie.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected,
+                        hasFocus, row, column);
+                return this;
+            }
+        });
+
+        SerieDao aDAO = new SerieDao();
+       
+            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnSerie p : arrayser) {
+            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+            }  
+    }
+
+    private void AtualizaTabela() {
+    
+        SerieDao aDAO = new SerieDao();
+        if(!arrayser.isEmpty())
+        {
+            tabelaLista.setRowCount(0);
+            tabelaLista.fireTableDataChanged();
+            arrayser.clear();
+            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnSerie p : arrayser) {
+            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+            
+            }                     
+        }
+        else{
+            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnSerie p : arrayser) {
+            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+            }  
+            
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
