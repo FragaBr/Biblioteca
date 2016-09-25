@@ -5,19 +5,84 @@
  */
 package selimjose;
 
+import dao.DaoException;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import com.mxrck.autocompleter.TextAutoCompleter;
+import javax.swing.table.DefaultTableModel;
+import dao.SerieDao;
+import selimjose.clnSerie;
+
 /**
  *
  * @author Bruna
  */
 public class frmCadSeries extends javax.swing.JFrame {
 
+    private DefaultTableModel tabelaLista = new DefaultTableModel();
+     ArrayList<clnSerie> arrayser = null;
     /**
      * Creates new form frmCadSeries
      */
     public frmCadSeries() {
         initComponents();
+        tabelaLista = (DefaultTableModel) TabelaSerie.getModel();
+        buscaNome();       
+        this.setLocationRelativeTo(null);
+        this.setResizable(true);
+        this.setVisible(true);
+    }
+    private void buscaNome() {
+       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas
+        
+        TabelaSerie.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected,
+                        hasFocus, row, column);
+                return this;
+            }
+        });
+
+        SerieDao aDAO = new SerieDao();
+       
+            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnSerie p : arrayser) {
+            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+            }  
     }
 
+    private void AtualizaTabela() {
+    
+        SerieDao aDAO = new SerieDao();
+        if(!arrayser.isEmpty())
+        {
+            tabelaLista.setRowCount(0);
+            tabelaLista.fireTableDataChanged();
+            arrayser.clear();
+            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnSerie p : arrayser) {
+            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+            
+            }                     
+        }
+        else{
+            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnSerie p : arrayser) {
+            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+            }  
+            
+        }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,17 +94,18 @@ public class frmCadSeries extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        textField1 = new java.awt.TextField();
+        txtNomeSerie = new java.awt.TextField();
         jLabel22 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton5 = new javax.swing.JButton();
+        TabelaSerie = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
         jLabel29 = new javax.swing.JLabel();
+        jButton10 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,12 +113,17 @@ public class frmCadSeries extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/EditarObra.png"))); // NOI18N
 
-        textField1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        textField1.setForeground(new java.awt.Color(153, 153, 153));
-        textField1.setText("Digite o nome da serie");
-        textField1.addActionListener(new java.awt.event.ActionListener() {
+        txtNomeSerie.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtNomeSerie.setForeground(new java.awt.Color(153, 153, 153));
+        txtNomeSerie.setText("Digite o nome da serie");
+        txtNomeSerie.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField1ActionPerformed(evt);
+                txtNomeSerieActionPerformed(evt);
+            }
+        });
+        txtNomeSerie.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNomeSerieKeyPressed(evt);
             }
         });
 
@@ -75,8 +146,8 @@ public class frmCadSeries extends javax.swing.JFrame {
             .addGap(0, 5, Short.MAX_VALUE)
         );
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TabelaSerie.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        TabelaSerie.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -92,12 +163,12 @@ public class frmCadSeries extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-
-        jButton5.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/lupa.png"))); // NOI18N
-        jButton5.setText("Pesquisar");
-        jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        TabelaSerie.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TabelaSerieMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(TabelaSerie);
 
         jButton6.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
@@ -119,6 +190,20 @@ public class frmCadSeries extends javax.swing.JFrame {
             }
         });
 
+        jLabel29.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        jLabel29.setText("Consulta");
+        jLabel29.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jButton10.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_undo.png"))); // NOI18N
+        jButton10.setText("Restaurar Tela");
+        jButton10.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
         jButton8.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_edit.png"))); // NOI18N
         jButton8.setText("Alterar");
@@ -129,10 +214,6 @@ public class frmCadSeries extends javax.swing.JFrame {
             }
         });
 
-        jLabel29.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        jLabel29.setText("Consulta");
-        jLabel29.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
         jButton9.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_cancel.png"))); // NOI18N
         jButton9.setText("Excluir");
@@ -140,6 +221,16 @@ public class frmCadSeries extends javax.swing.JFrame {
         jButton9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton9ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/lupa.png"))); // NOI18N
+        jButton5.setText("Pesquisar");
+        jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
             }
         });
 
@@ -155,8 +246,11 @@ public class frmCadSeries extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(41, 41, 41)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel29)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 547, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -164,17 +258,16 @@ public class frmCadSeries extends javax.swing.JFrame {
                                     .addGap(15, 15, 15)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel22)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(66, 66, 66)
-                                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))))))))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(txtNomeSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(66, 66, 66)
+                                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
                 .addContainerGap(60, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -189,18 +282,20 @@ public class frmCadSeries extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
+                    .addComponent(txtNomeSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(74, 74, 74)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5)
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48)
+                .addGap(32, 32, 32)
                 .addComponent(jLabel29)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(49, Short.MAX_VALUE))
         );
 
@@ -224,13 +319,9 @@ public class frmCadSeries extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
+    private void txtNomeSerieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeSerieActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField1ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_txtNomeSerieActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         frmCriteriosSistema P = new frmCriteriosSistema();
@@ -240,13 +331,104 @@ public class frmCadSeries extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        AtualizaTabela();
+        txtNomeSerie.setText("");
+    }//GEN-LAST:event_jButton10ActionPerformed
+
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+
+        SerieDao aDao = new SerieDao();
+        clnSerie obj = new clnSerie();
+
+        int linha = TabelaSerie.getSelectedRow();
+        if(linha==-1){
+            JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }else{
+            try {
+                obj.setNmSerie(txtNomeSerie.getText());
+                obj.setCdSerie((int) TabelaSerie.getValueAt(linha,0));
+                aDao.alterar(obj);
+                AtualizaTabela();
+            } catch (DaoException ex) {
+                Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
+
+        SerieDao aDao = new SerieDao();
+        clnSerie a = new clnSerie();
+
+        int linha = TabelaSerie.getSelectedRow();
+        if(linha==-1){
+            JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }else{
+            int opcao = JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir ?", " - Excluir -", JOptionPane.YES_NO_OPTION);
+            if(opcao == JOptionPane.YES_OPTION)
+            {
+                int id = (int) TabelaSerie.getValueAt(linha,0);
+                tabelaLista.removeRow(linha);
+                try {
+                    aDao.excluir(id);
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        txtNomeSerie.setText("");
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        //Pesquisar
+        SerieDao aDao = new SerieDao();
+        clnSerie a = new clnSerie();
+        a.setNmSerie(txtNomeSerie.getText());
+        tabelaLista.setRowCount(0);
+        tabelaLista.fireTableDataChanged();
+        arrayser.clear();
+        arrayser = (ArrayList<clnSerie>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        for (clnSerie p : arrayser) {
+            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if ((!txtNomeSerie.getText().isEmpty())) {
+            SerieDao aDao = new SerieDao();
+            clnSerie a = new clnSerie();
+            
+            a.setNmSerie(txtNomeSerie.getText());
+             
+            if (aDao.Exists(a) != null) {
+                JOptionPane.showMessageDialog(this, "Serie já existente!", "Cadastrando Series", JOptionPane.WARNING_MESSAGE);
+            } else {
+                try {
+                    aDao.inserir(a);
+                    AtualizaTabela();
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(this, "A serie foi cadastrada com sucesso!!", "Cadastrando Series", JOptionPane.INFORMATION_MESSAGE);
+                //dispose();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Campos em branco!", "Cadastrando Series", JOptionPane.WARNING_MESSAGE);
+        }
+        txtNomeSerie.setText("");
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void txtNomeSerieKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeSerieKeyPressed
+        txtNomeSerie.setText("");
+    }//GEN-LAST:event_txtNomeSerieKeyPressed
+
+    private void TabelaSerieMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaSerieMouseClicked
+        //
+        int linha = TabelaSerie.getSelectedRow();
+        txtNomeSerie.setText((String) TabelaSerie.getValueAt(linha,1));
+    }//GEN-LAST:event_TabelaSerieMouseClicked
 
     /**
      * @param args the command line arguments
@@ -284,6 +466,8 @@ public class frmCadSeries extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TabelaSerie;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
@@ -295,7 +479,6 @@ public class frmCadSeries extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private java.awt.TextField textField1;
+    private java.awt.TextField txtNomeSerie;
     // End of variables declaration//GEN-END:variables
 }

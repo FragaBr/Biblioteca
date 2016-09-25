@@ -14,13 +14,13 @@ public class clnTurno {
     protected int CdTurno;
     protected String NmTurno;
     
-    public int getCdturno(){
+    public int getCdTurno(){
         return CdTurno;
     }
     public void setCdTurno(int CdTurno){
         this.CdTurno = CdTurno;
     }
-    public String getNmturno(){
+    public String getNmTurno(){
         return NmTurno;
     }
     public void setNmTurno(String NmTurno){
