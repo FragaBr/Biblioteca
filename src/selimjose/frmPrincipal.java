@@ -521,7 +521,7 @@ public void setHora(Date date) {
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
        this.setVisible(false);
-        frmCriteriosSistema P = new frmCriteriosSistema();
+        frmSugestoes P = new frmSugestoes();
         P.setLocationRelativeTo(null);
         P.setResizable(true);
         P.setVisible(true);

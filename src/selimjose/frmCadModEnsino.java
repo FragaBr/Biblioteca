@@ -25,7 +25,7 @@ import selimjose.clnModEnsino;
 public class frmCadModEnsino extends javax.swing.JFrame {
 
     private DefaultTableModel tabelaLista = new DefaultTableModel();
-     ArrayList<clnModEnsino> arraym = null;
+     ArrayList<clnModEnsino> arraymodensino = null;
     /**
      * Creates new form frmCadModEnsino
      */
@@ -51,8 +51,8 @@ public class frmCadModEnsino extends javax.swing.JFrame {
 
         ModEnsinoDao aDAO = new ModEnsinoDao();
        
-            arraym = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-            for (clnModEnsino p : arraym) {
+            arraymodensino = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnModEnsino p : arraymodensino) {
             TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
             }  
@@ -61,21 +61,21 @@ public class frmCadModEnsino extends javax.swing.JFrame {
     private void AtualizaTabela() {
     
         ModEnsinoDao aDAO = new ModEnsinoDao();
-        if(!arraym.isEmpty())
+        if(!arraymodensino.isEmpty())
         {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
-            arraym.clear();
-            arraym = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-            for (clnModEnsino p : arraym) {
+            arraymodensino.clear();
+            arraymodensino = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnModEnsino p : arraymodensino) {
             TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
             
             }                     
         }
         else{
-            arraym = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-            for (clnModEnsino p : arraym) {
+            arraymodensino = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnModEnsino p : arraymodensino) {
             TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
             }  
@@ -162,6 +162,11 @@ public class frmCadModEnsino extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        TabelaModEnsino.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TabelaModEnsinoMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(TabelaModEnsino);
@@ -392,9 +397,9 @@ public class frmCadModEnsino extends javax.swing.JFrame {
         a.setNmModEnsino(txtNomeModEnsino.getText());
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
-        arraym.clear();
-        arraym = (ArrayList<clnModEnsino>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
-        for (clnModEnsino p : arraym) {
+        arraymodensino.clear();
+        arraymodensino = (ArrayList<clnModEnsino>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        for (clnModEnsino p : arraymodensino) {
             TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
         }
@@ -414,14 +419,18 @@ public class frmCadModEnsino extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jScrollPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MouseClicked
-       //mouse clicked
-        int linha = TabelaModEnsino.getSelectedRow();
-        txtNomeModEnsino.setText((String) TabelaModEnsino.getValueAt(linha,1));
+       
     }//GEN-LAST:event_jScrollPane1MouseClicked
 
     private void txtNomeModEnsinoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeModEnsinoKeyPressed
        txtNomeModEnsino.setText("");
     }//GEN-LAST:event_txtNomeModEnsinoKeyPressed
+
+    private void TabelaModEnsinoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaModEnsinoMouseClicked
+        //mouse clicked
+        int linha = TabelaModEnsino.getSelectedRow();
+        txtNomeModEnsino.setText((String) TabelaModEnsino.getValueAt(linha,1));
+    }//GEN-LAST:event_TabelaModEnsinoMouseClicked
 
     /**
      * @param args the command line arguments

@@ -5,79 +5,18 @@
  */
 package selimjose;
 
-import dao.AutorDao;
-import dao.DaoException;
-import java.awt.Color;
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
-import javax.swing.table.DefaultTableModel;
-import selimjose.clnAutor;
 /**
  *
  * @author Bruna
  */
-public class frmCadAutores extends javax.swing.JFrame {
+public class frmCadCargo extends javax.swing.JFrame {
 
-    private DefaultTableModel tabelaLista = new DefaultTableModel();
-     ArrayList<clnAutor> arrayaut = null;
-     private final int i;
     /**
-     * Creates new form frmCadAutores
-     * @param i
+     * Creates new form frmCadCargo
      */
-    public frmCadAutores(int i) {
+    public frmCadCargo() {
         initComponents();
-        tabelaLista = (DefaultTableModel) TabelaAutor.getModel();
-        buscaNome();
-        this.setLocationRelativeTo(null);
-        this.setResizable(true);
-        this.setVisible(true);
-        this.i=i;
     }
-    
-private void buscaNome() {
-       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas
-        
-        TabelaAutor.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus, int row, int column) {
-                super.getTableCellRendererComponent(table, value, isSelected,
-                        hasFocus, row, column);
-                return this;
-            }
-        });
-
-        AutorDao aDAO = new AutorDao();
-       
-            arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-            for (clnAutor p : arrayaut) {
-            TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
-            }  
-    }
-
-private void AtualizaTabela() {
-    
-        AutorDao aDAO = new AutorDao();
-        if(!arrayaut.isEmpty())
-        {
-            tabelaLista.setRowCount(0);
-            tabelaLista.fireTableDataChanged();
-            arrayaut.clear();
-            arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-            for (clnAutor p : arrayaut) {
-            TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
-            
-            }                       
-        }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -113,20 +52,15 @@ private void AtualizaTabela() {
         txtNomeAutor.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtNomeAutor.setForeground(new java.awt.Color(153, 153, 153));
         txtNomeAutor.setName(""); // NOI18N
-        txtNomeAutor.setText("Digite o nome do autor");
-        txtNomeAutor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNomeAutorActionPerformed(evt);
-            }
-        });
+        txtNomeAutor.setText("Digite o nome do cargo");
         txtNomeAutor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                clean(evt);
+                txtNomeAutorclean(evt);
             }
         });
 
         jLabel22.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
-        jLabel22.setText("Autor*:");
+        jLabel22.setText("Cargo*:");
         jLabel22.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jPanel2.setBackground(new java.awt.Color(153, 102, 0));
@@ -162,7 +96,7 @@ private void AtualizaTabela() {
         });
         TabelaAutor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                seleciona(evt);
+                TabelaAutorseleciona(evt);
             }
         });
         jScrollPane1.setViewportView(TabelaAutor);
@@ -170,7 +104,6 @@ private void AtualizaTabela() {
         jButton5.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/lupa.png"))); // NOI18N
         jButton5.setText("Pesquisar");
-        jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -180,7 +113,6 @@ private void AtualizaTabela() {
         jButton6.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
         jButton6.setText("Inserir");
-        jButton6.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -190,7 +122,6 @@ private void AtualizaTabela() {
         jButton7.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_goleft.png"))); // NOI18N
         jButton7.setText("Voltar");
-        jButton7.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -200,7 +131,6 @@ private void AtualizaTabela() {
         jButton8.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_edit.png"))); // NOI18N
         jButton8.setText("Alterar");
-        jButton8.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
@@ -214,7 +144,6 @@ private void AtualizaTabela() {
         jButton9.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_cancel.png"))); // NOI18N
         jButton9.setText("Excluir");
-        jButton9.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton9ActionPerformed(evt);
@@ -224,7 +153,6 @@ private void AtualizaTabela() {
         jButton10.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_undo.png"))); // NOI18N
         jButton10.setText("Restaurar Tela");
-        jButton10.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
@@ -245,7 +173,7 @@ private void AtualizaTabela() {
                         .addGap(41, 41, 41)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,7 +195,7 @@ private void AtualizaTabela() {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel29, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 547, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,18 +246,40 @@ private void AtualizaTabela() {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNomeAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeAutorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeAutorActionPerformed
+    private void txtNomeAutorclean(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeAutorclean
+        txtNomeAutor.setText("");
+    }//GEN-LAST:event_txtNomeAutorclean
+
+    private void TabelaAutorseleciona(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaAutorseleciona
+
+        int linha = TabelaAutor.getSelectedRow();
+        txtNomeAutor.setText((String) TabelaAutor.getValueAt(linha,1));
+
+    }//GEN-LAST:event_TabelaAutorseleciona
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        //Pesquisar
+        AutorDao aDao = new AutorDao();
+        clnAutor a = new clnAutor();
+        a.setNmAutor(txtNomeAutor.getText());
+        tabelaLista.setRowCount(0);
+        tabelaLista.fireTableDataChanged();
+        arrayaut.clear();
+        arrayaut = (ArrayList<clnAutor>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        for (clnAutor p : arrayaut) {
+            TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-    
+
         if ((!txtNomeAutor.getText().isEmpty())) {
             AutorDao aDao = new AutorDao();
             clnAutor a = new clnAutor();
-            
+
             a.setNmAutor(txtNomeAutor.getText());
-             
+
             if (aDao.Exists(a) != null) {
                 JOptionPane.showMessageDialog(this, "Autor já existente!", "Cadastrando Autores", JOptionPane.WARNING_MESSAGE);
             } else {
@@ -349,51 +299,39 @@ private void AtualizaTabela() {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+
         this.setVisible(false);
-        if(this.i == 1)
-        {
-            frmCriteriosSistema A = new frmCriteriosSistema();
-            A.setLocationRelativeTo(null);
-            A.setResizable(true);
-            A.setVisible(true);            
-        }else if(this.i == 2){
-            frmSugestoes S = new frmSugestoes();
-            S.setLocationRelativeTo(null);
-            S.setResizable(true);
-            S.setVisible(true);            
-        }else{
-            frmCadObras O = new frmCadObras(new javax.swing.JFrame(), true);
-            O.setLocationRelativeTo(null);
-            O.setResizable(true);
-            O.setVisible(true);            
-        }       
+        frmCriteriosSistema A = new frmCriteriosSistema();
+        A.setLocationRelativeTo(null);
+        A.setResizable(true);
+        A.setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        
+
         AutorDao aDao = new AutorDao();
         clnAutor objautor = new clnAutor();
-            
+
         int linha = TabelaAutor.getSelectedRow();
         if(linha==-1){
             JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             try {
-                    objautor.setNmAutor(txtNomeAutor.getText());
-                    objautor.setCdAutor((int) TabelaAutor.getValueAt(linha,0));
-                    aDao.alterar(objautor);
-                    AtualizaTabela();
-                } catch (DaoException ex) {
+                objautor.setNmAutor(txtNomeAutor.getText());
+                objautor.setCdAutor((int) TabelaAutor.getValueAt(linha,0));
+                aDao.alterar(objautor);
+                AtualizaTabela();
+            } catch (DaoException ex) {
                 Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
             }
-             }
+        }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        
+
         AutorDao aDao = new AutorDao();
         clnAutor a = new clnAutor();
-            
+
         int linha = TabelaAutor.getSelectedRow();
         if(linha==-1){
             JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -408,43 +346,17 @@ private void AtualizaTabela() {
                 } catch (DaoException ex) {
                     Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }        
+            }
         }
         txtNomeAutor.setText("");
     }//GEN-LAST:event_jButton9ActionPerformed
-
-    private void clean(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_clean
-        txtNomeAutor.setText("");
-    }//GEN-LAST:event_clean
-
-    private void seleciona(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleciona
-        
-        int linha = TabelaAutor.getSelectedRow();
-        txtNomeAutor.setText((String) TabelaAutor.getValueAt(linha,1));
-        
-    }//GEN-LAST:event_seleciona
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       //Pesquisar
-        AutorDao aDao = new AutorDao();
-        clnAutor a = new clnAutor();
-        a.setNmAutor(txtNomeAutor.getText());
-        tabelaLista.setRowCount(0);
-        tabelaLista.fireTableDataChanged();
-        arrayaut.clear();
-        arrayaut = (ArrayList<clnAutor>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
-        for (clnAutor p : arrayaut) {
-            TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
-        }
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         AtualizaTabela();
         txtNomeAutor.setText("");
     }//GEN-LAST:event_jButton10ActionPerformed
 
-    /** 
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -461,20 +373,20 @@ private void AtualizaTabela() {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmCadAutores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmCadAutores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmCadAutores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmCadAutores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmCadCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmCadAutores(1).setVisible(true);
+                new frmCadCargo().setVisible(true);
             }
         });
     }

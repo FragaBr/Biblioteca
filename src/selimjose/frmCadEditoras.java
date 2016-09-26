@@ -25,12 +25,13 @@ import selimjose.clnEditora;
  */
 public class frmCadEditoras extends javax.swing.JFrame {
 
+    private final int i;
     private DefaultTableModel tabelaLista = new DefaultTableModel();
     ArrayList<clnEditora> arrayaut = null;
     /**
      * Creates new form frmCadEditoras
      */
-    public frmCadEditoras() {
+    public frmCadEditoras(int i) {
         
         initComponents();
         tabelaLista = (DefaultTableModel) TabelaEditora.getModel();
@@ -38,6 +39,7 @@ public class frmCadEditoras extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setVisible(true);
+        this.i=i;
     }
 
     /**
@@ -332,10 +334,23 @@ public class frmCadEditoras extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         this.setVisible(false);
-        frmCriteriosSistema A = new frmCriteriosSistema();
+        if(this.i == 1)
+        {
+            frmCriteriosSistema A = new frmCriteriosSistema();
             A.setLocationRelativeTo(null);
             A.setResizable(true);
-            A.setVisible(true);
+            A.setVisible(true);            
+        }else if(this.i == 2){
+            frmSugestoes S = new frmSugestoes();
+            S.setLocationRelativeTo(null);
+            S.setResizable(true);
+            S.setVisible(true);            
+        }else{
+            frmCadObras O = new frmCadObras(new javax.swing.JFrame(), true);
+            O.setLocationRelativeTo(null);
+            O.setResizable(true);
+            O.setVisible(true);            
+        }       
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -385,7 +400,7 @@ public class frmCadEditoras extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmCadEditoras().setVisible(true);
+                new frmCadEditoras(1).setVisible(true);
             }
         });
     }

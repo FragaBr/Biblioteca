@@ -16,8 +16,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
-import dao.SerieDao;
-import selimjose.clnSerie;
+import dao.TurnoDao;
+import selimjose.clnTurno;
 /**
  *
  * @author Bruna
@@ -25,18 +25,22 @@ import selimjose.clnSerie;
 public class frmCadTurno extends javax.swing.JFrame {
 
     private DefaultTableModel tabelaLista = new DefaultTableModel();
-     ArrayList<clnSerie> arrayser = null;
+     ArrayList<clnTurno> arrayser = null;
     /**
      * Creates new form frmCadTurno
      */
     public frmCadTurno() {
         initComponents();
+        tabelaLista = (DefaultTableModel) TabelaTurno.getModel();
+        buscaNome(); 
+        this.setLocationRelativeTo(null);
+        this.setResizable(true);
+        this.setVisible(true);
     }
     
     private void buscaNome() {
-       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas
-        
-        TabelaSerie.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas        
+        TabelaTurno.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             public Component getTableCellRendererComponent(JTable table, Object value,
                     boolean isSelected, boolean hasFocus, int row, int column) {
                 super.getTableCellRendererComponent(table, value, isSelected,
@@ -45,38 +49,37 @@ public class frmCadTurno extends javax.swing.JFrame {
             }
         });
 
-        SerieDao aDAO = new SerieDao();
-       
-            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-            for (clnSerie p : arrayser) {
-            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+        TurnoDao aDAO = new TurnoDao();       
+            arrayser = (ArrayList<clnTurno>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnTurno p : arrayser) {
+            TabelaTurno.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdTurno(), p.getNmTurno()});
             }  
     }
 
     private void AtualizaTabela() {
     
-        SerieDao aDAO = new SerieDao();
+        TurnoDao aDAO = new TurnoDao();
         if(!arrayser.isEmpty())
         {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             arrayser.clear();
-            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-            for (clnSerie p : arrayser) {
-            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
-            
+            arrayser = (ArrayList<clnTurno>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnTurno p : arrayser) {
+            TabelaTurno.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdTurno(), p.getNmTurno()});            
             }                     
         }
         else{
-            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
-            for (clnSerie p : arrayser) {
-            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+            arrayser = (ArrayList<clnTurno>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnTurno p : arrayser) {
+            TabelaTurno.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdTurno(), p.getNmTurno()});
             }  
             
         }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,9 +114,9 @@ public class frmCadTurno extends javax.swing.JFrame {
         txtNomeTurno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtNomeTurno.setForeground(new java.awt.Color(153, 153, 153));
         txtNomeTurno.setText("Digite o nome do Turno");
-        txtNomeTurno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNomeTurnoActionPerformed(evt);
+        txtNomeTurno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNomeTurnoKeyPressed(evt);
             }
         });
 
@@ -136,6 +139,12 @@ public class frmCadTurno extends javax.swing.JFrame {
             .addGap(0, 5, Short.MAX_VALUE)
         );
 
+        jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jScrollPane1MouseClicked(evt);
+            }
+        });
+
         TabelaTurno.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         TabelaTurno.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -151,6 +160,11 @@ public class frmCadTurno extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        TabelaTurno.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TabelaTurnoMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(TabelaTurno);
@@ -304,26 +318,43 @@ public class frmCadTurno extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNomeTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeTurnoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeTurnoActionPerformed
-
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+       if ((!txtNomeTurno.getText().isEmpty())) {
+            TurnoDao aDao = new TurnoDao();
+            clnTurno a = new clnTurno();
+            
+            a.setNmTurno(txtNomeTurno.getText());
+             
+            if (aDao.Exists(a) != null) {
+                JOptionPane.showMessageDialog(this, "Serie já existente!", " Cadastrando Turno ", JOptionPane.WARNING_MESSAGE);
+            } else {
+                try {
+                    aDao.inserir(a);
+                    AtualizaTabela();
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(this, "O Turno foi cadastrado com sucesso!!", " Cadastrando Turno ", JOptionPane.INFORMATION_MESSAGE);
+                //dispose();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Campos em branco!", " Cadastrando Turno ", JOptionPane.WARNING_MESSAGE);
+        }
+        txtNomeTurno.setText("");
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
 
-        SerieDao aDao = new SerieDao();
-        clnSerie obj = new clnSerie();
+        TurnoDao aDao = new TurnoDao();
+        clnTurno obj = new clnTurno();
 
-        int linha = TabelaSerie.getSelectedRow();
+        int linha = TabelaTurno.getSelectedRow();
         if(linha==-1){
             JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             try {
-                obj.setNmSerie(txtNomeSerie.getText());
-                obj.setCdSerie((int) TabelaSerie.getValueAt(linha,0));
+                obj.setNmTurno(txtNomeTurno.getText());
+                obj.setCdTurno((int) TabelaTurno.getValueAt(linha,0));
                 aDao.alterar(obj);
                 AtualizaTabela();
             } catch (DaoException ex) {
@@ -334,17 +365,17 @@ public class frmCadTurno extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
 
-        SerieDao aDao = new SerieDao();
-        clnSerie a = new clnSerie();
+        TurnoDao aDao = new TurnoDao();
+        clnTurno a = new clnTurno();
 
-        int linha = TabelaSerie.getSelectedRow();
+        int linha = TabelaTurno.getSelectedRow();
         if(linha==-1){
             JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             int opcao = JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir ?", " - Excluir -", JOptionPane.YES_NO_OPTION);
             if(opcao == JOptionPane.YES_OPTION)
             {
-                int id = (int) TabelaSerie.getValueAt(linha,0);
+                int id = (int) TabelaTurno.getValueAt(linha,0);
                 tabelaLista.removeRow(linha);
                 try {
                     aDao.excluir(id);
@@ -353,27 +384,27 @@ public class frmCadTurno extends javax.swing.JFrame {
                 }
             }
         }
-        txtNomeSerie.setText("");
+        txtNomeTurno.setText("");
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         //Pesquisar
-        SerieDao aDao = new SerieDao();
-        clnSerie a = new clnSerie();
-        a.setNmSerie(txtNomeSerie.getText());
+        TurnoDao aDao = new TurnoDao();
+        clnTurno a = new clnTurno();
+        a.setNmTurno(txtNomeTurno.getText());
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
         arrayser.clear();
-        arrayser = (ArrayList<clnSerie>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
-        for (clnSerie p : arrayser) {
-            TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
+        arrayser = (ArrayList<clnTurno>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        for (clnTurno p : arrayser) {
+            TabelaTurno.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdTurno(), p.getNmTurno()});
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         AtualizaTabela();
-        txtNomeSerie.setText("");
+        txtNomeTurno.setText("");
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -383,6 +414,20 @@ public class frmCadTurno extends javax.swing.JFrame {
         P.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void txtNomeTurnoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeTurnoKeyPressed
+        txtNomeTurno.setText("");
+    }//GEN-LAST:event_txtNomeTurnoKeyPressed
+
+    private void jScrollPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MouseClicked
+        
+    }//GEN-LAST:event_jScrollPane1MouseClicked
+
+    private void TabelaTurnoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaTurnoMouseClicked
+        // TODO add your handling code here:
+        int linha = TabelaTurno.getSelectedRow();
+        txtNomeTurno.setText((String) TabelaTurno.getValueAt(linha,1));
+    }//GEN-LAST:event_TabelaTurnoMouseClicked
 
     /**
      * @param args the command line arguments
