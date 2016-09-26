@@ -13,32 +13,31 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import selimjose.clnTurno;
-
+import selimjose.clnSituacao;
 /**
  *
  * @author Bruna
  */
-public class TurnoDao extends Dao implements DbDao<clnTurno> {
+public class SituacaoDao extends Dao implements DbDao<clnSituacao> {
      
     public static final String SQL_INSERIR =  
-    "INSERT INTO `turno` (`NmTurno`) VALUES (?)";
+    "INSERT INTO `situacao` (`NmSituacao`) VALUES (?)";
     
     public static final String SQL_EXCLUIR =
-    "DELETE FROM `turno` WHERE `CdTurno`=? ";
+    "DELETE FROM `situacao` WHERE `CdSituacao`=? ";
     
     public static final String SQL_ALTERAR = 
-    "UPDATE `turno` SET `NmTurno` = ? WHERE `CdTurno` = ?";
+    "UPDATE `situacao` SET `NmSituacao` = ? WHERE `CdSituacao` = ?";
       
     public static final String SQL_PESQUISAR =
-    "SELECT * FROM `turno` WHERE `NmTurno` = ? ";
+    "SELECT * FROM `situacao` WHERE `NmSituacao` = ? ";
     
     public static final String SQL_EXISTS
-            = " select * from turno "
-            + " where NmTurno = ?  ";
+            = " select * from situacao "
+            + " where NmSituacao = ?  ";
 
     @Override
-    public int inserir(clnTurno Obj) throws DaoException {
+    public int inserir(clnSituacao Obj) throws DaoException {
         
         int autoNum = -1;
 
@@ -49,7 +48,7 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_INSERIR, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,Obj.getNmTurno());            
+            ps.setString(1,Obj.getNmSituacao());            
             ps.execute();
             rs = ps.getGeneratedKeys();
             
@@ -64,9 +63,9 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
     }
     
     @Override
-    public clnTurno pesquisar(String nm) throws DaoException {
+    public clnSituacao pesquisar(String nm) throws DaoException {
         
-        clnTurno cRet = null;		
+        clnSituacao cRet = null;		
 	PreparedStatement ps = null;
         ResultSet rs = null;
         Connection con = null;
@@ -78,13 +77,13 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                cRet = new clnTurno();
-                cRet.setNmTurno(rs.getString("NmTurno"));    
-                cRet.setCdTurno(rs.getInt("CdTurno")); 
+                cRet = new clnSituacao();
+                cRet.setNmSituacao(rs.getString("NmSituacao"));    
+                cRet.setCdSituacao(rs.getInt("CdSituacao")); 
             }
                 
         } catch (Exception e) {
-            new DaoException("Turno nao inserido "+ e.getMessage()).printStackTrace();;
+            new DaoException("Situacao nao inserida "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps, rs);
         }        
@@ -108,7 +107,7 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
                 ret = true;
             
         } catch (Exception e) {
-            new DaoException("Turno não removido "+ e.getMessage()).printStackTrace();;
+            new DaoException("Situacao não removida "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps);
         }        
@@ -116,7 +115,7 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
     }
 
     @Override
-    public boolean alterar(clnTurno Obj) throws DaoException {
+    public boolean alterar(clnSituacao Obj) throws DaoException {
         
         boolean ret = false;        
         PreparedStatement ps = null;
@@ -125,8 +124,8 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_ALTERAR);  
-            ps.setString(1,Obj.getNmTurno());
-            ps.setInt(2, Obj.getCdTurno());
+            ps.setString(1,Obj.getNmSituacao());
+            ps.setInt(2, Obj.getCdSituacao());
             int qtd = ps.executeUpdate();            
             if (qtd>0)
                 ret = true;
@@ -139,8 +138,8 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         return ret;
     }
     
-      public clnTurno Exists(clnTurno p) {
-        clnTurno cRet = null;
+      public clnSituacao Exists(clnSituacao p) {
+        clnSituacao cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -149,17 +148,17 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_EXISTS);
-            ps.setString(1, p.getNmTurno());
+            ps.setString(1, p.getNmSituacao());
 
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                cRet = new clnTurno();
+                cRet = new clnSituacao();
 
-                cRet.setNmTurno(rs.getString("NmTurno"));                
+                cRet.setNmSituacao(rs.getString("NmSituacao"));                
             }
         } catch (Exception e) {
-            System.out.println("Turno ainda não inserido " + e.getMessage());
+            System.out.println("Situacao ainda não inserida " + e.getMessage());
         } finally {
             close(con, ps, rs);
         }
@@ -167,9 +166,9 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         return cRet;
     }
       
-      public List<clnTurno> listar(TextAutoCompleter c) {
-        ArrayList<clnTurno> a = new ArrayList<>();
-        clnTurno cRet = null;
+      public List<clnSituacao> listar(TextAutoCompleter c) {
+        ArrayList<clnSituacao> a = new ArrayList<>();
+        clnSituacao cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -177,18 +176,18 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
 
         try {
             con = getConnection();
-            ps = con.prepareStatement("select * from turno");
+            ps = con.prepareStatement("select * from situacao");
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                cRet = new clnTurno();
-                cRet.setCdTurno(rs.getInt("CdTurno"));
-                cRet.setNmTurno(rs.getString("NmTurno"));
+                cRet = new clnSituacao();
+                cRet.setCdSituacao(rs.getInt("CdSituacao"));
+                cRet.setNmSituacao(rs.getString("NmSituacao"));
                 
                 a.add(cRet);
             }
         } catch (Exception e) {
-            new DaoException("Turno nao inserido " + e.getMessage()).printStackTrace();;
+            new DaoException("Situacao nao inserida " + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }
@@ -196,9 +195,9 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         return a;
     }
       
-     public List<clnTurno> PesquisarLista(TextAutoCompleter c, clnTurno p) {
-        ArrayList<clnTurno> a = new ArrayList<>();
-        clnTurno cRet = null;
+     public List<clnSituacao> PesquisarLista(TextAutoCompleter c, clnSituacao p) {
+        ArrayList<clnSituacao> a = new ArrayList<>();
+        clnSituacao cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -207,18 +206,18 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_PESQUISAR);
-            ps.setString(1, p.getNmTurno());
+            ps.setString(1, p.getNmSituacao());
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                cRet = new clnTurno();
-                cRet.setCdTurno(rs.getInt("CdTurno"));
-                cRet.setNmTurno(rs.getString("NmTurno"));
+                cRet = new clnSituacao();
+                cRet.setCdSituacao(rs.getInt("CdSituacao"));
+                cRet.setNmSituacao(rs.getString("NmSituacao"));
                 
                 a.add(cRet);
             }
         } catch (Exception e) {
-            new DaoException("Turno nao inserido " + e.getMessage()).printStackTrace();;
+            new DaoException("Situacao nao inserida " + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }

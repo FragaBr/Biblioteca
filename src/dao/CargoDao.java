@@ -13,13 +13,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import selimjose.clnTurno;
-
+import selimjose.clnCargo;
 /**
  *
  * @author Bruna
  */
-public class TurnoDao extends Dao implements DbDao<clnTurno> {
+public class CargoDao extends Dao implements DbDao<clnTurno> {
      
     public static final String SQL_INSERIR =  
     "INSERT INTO `turno` (`NmTurno`) VALUES (?)";

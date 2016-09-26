@@ -295,7 +295,7 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         this.setVisible(false);
-        frmCadEditoras T = new frmCadEditoras();
+        frmCadEditoras T = new frmCadEditoras(1);
         T.setLocationRelativeTo(null);
         T.setResizable(true);
         T.setVisible(true);

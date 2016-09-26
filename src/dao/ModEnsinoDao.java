@@ -5,30 +5,39 @@
  */
 package dao;
 
+import com.mxrck.autocompleter.TextAutoCompleter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import selimjose.clnModEnsino;
 /**
  *
  * @author Bruna
  */
-public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
+public class ModEnsinoDao extends Dao implements DbDao<clnModEnsino> {
      
     public static final String SQL_INSERIR =  
-    "INSERT INTO `turno` (`NmTurno`) VALUES (?)";
+    "INSERT INTO `modensino` (`NmModEnsino`) VALUES (?)";
     
     public static final String SQL_EXCLUIR =
-    "DELETE FROM `turno` WHERE `CdTurno`=? ";
+    "DELETE FROM `modensino` WHERE `CdModEnsino`=? ";
     
     public static final String SQL_ALTERAR = 
-    "UPDATE `autor` SET `NmTurno` = ? WHERE `CdTurno` = ?";
+    "UPDATE `modensino` SET `NmModEnsino` = ? WHERE `CdModEnsino` = ?";
       
     public static final String SQL_PESQUISAR =
-    "SELECT * FROM `turno` WHERE `CdTurno` = ? ";
+    "SELECT * FROM `modensino` WHERE `NmModEnsino` = ? ";
     
     public static final String SQL_EXISTS
-            = " select * from turno "
-            + " where NmTurno = ?  ";
+            = " select * from modensino "
+            + " where NmModEnsino = ?  ";
 
     @Override
-    public int inserir(clnTurno Obj) throws DaoException {
+    public int inserir(clnModEnsino Obj) throws DaoException {
         
         int autoNum = -1;
 
@@ -39,7 +48,7 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_INSERIR, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,Obj.getNmTurno());            
+            ps.setString(1,Obj.getNmModEnsino());            
             ps.execute();
             rs = ps.getGeneratedKeys();
             
@@ -54,9 +63,9 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
     }
     
     @Override
-    public clnTurno pesquisar(String nm) throws DaoException {
+    public clnModEnsino pesquisar(String nm) throws DaoException {
         
-        clnTurno cRet = null;		
+        clnModEnsino cRet = null;		
 	PreparedStatement ps = null;
         ResultSet rs = null;
         Connection con = null;
@@ -68,13 +77,13 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                cRet = new clnTurno();
-                cRet.setNmTurno(rs.getString("NmTurno"));    
-                cRet.setCdTurno(rs.getInt("CdTurno")); 
+                cRet = new clnModEnsino();
+                cRet.setNmModEnsino(rs.getString("NmModEnsino"));    
+                cRet.setCdModEnsino(rs.getInt("CdModEnsino")); 
             }
                 
         } catch (Exception e) {
-            new DaoException("Turno nao inserido "+ e.getMessage()).printStackTrace();;
+            new DaoException("Modalidade nao inserido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps, rs);
         }        
@@ -98,7 +107,7 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
                 ret = true;
             
         } catch (Exception e) {
-            new DaoException("Turno não removido "+ e.getMessage()).printStackTrace();;
+            new DaoException("Modalidade não removido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps);
         }        
@@ -106,7 +115,7 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
     }
 
     @Override
-    public boolean alterar(clnTurno Obj) throws DaoException {
+    public boolean alterar(clnModEnsino Obj) throws DaoException {
         
         boolean ret = false;        
         PreparedStatement ps = null;
@@ -115,8 +124,8 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_ALTERAR);  
-            ps.setString(1,Obj.getNmTurno());
-            ps.setInt(2, Obj.getCdTurno());
+            ps.setString(1,Obj.getNmModEnsino());
+            ps.setInt(2, Obj.getCdModEnsino());
             int qtd = ps.executeUpdate();            
             if (qtd>0)
                 ret = true;
@@ -129,8 +138,8 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
         return ret;
     }
     
-      public clnTurno Exists(clnTurno p) {
-        clnTurno cRet = null;
+      public clnModEnsino Exists(clnModEnsino p) {
+        clnModEnsino cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -139,17 +148,17 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_EXISTS);
-            ps.setString(1, p.getNmTurno());
+            ps.setString(1, p.getNmModEnsino());
 
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                cRet = new clnTurno();
+                cRet = new clnModEnsino();
 
-                cRet.setNmTurno(rs.getString("NmTurno"));                
+                cRet.setNmModEnsino(rs.getString("NmModEnsino"));                
             }
         } catch (Exception e) {
-            System.out.println("Turno ainda não inserido " + e.getMessage());
+            System.out.println("Modalidade ainda não inserida " + e.getMessage());
         } finally {
             close(con, ps, rs);
         }
@@ -157,9 +166,9 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
         return cRet;
     }
       
-      public List<clnTurno> listar(TextAutoCompleter c) {
-        ArrayList<clnTurno> a = new ArrayList<>();
-        clnTurno cRet = null;
+      public List<clnModEnsino> listar(TextAutoCompleter c) {
+        ArrayList<clnModEnsino> a = new ArrayList<>();
+        clnModEnsino cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -167,18 +176,18 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
 
         try {
             con = getConnection();
-            ps = con.prepareStatement("select * from turno");
+            ps = con.prepareStatement("select * from modensino");
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                cRet = new clnTurno();
-                cRet.setCdTurno(rs.getInt("CdTurno"));
-                cRet.setNmTurno(rs.getString("NmTurno"));
+                cRet = new clnModEnsino();
+                cRet.setCdModEnsino(rs.getInt("CdModEnsino"));
+                cRet.setNmModEnsino(rs.getString("NmModEnsino"));
                 
                 a.add(cRet);
             }
         } catch (Exception e) {
-            new DaoException("Turno nao inserido " + e.getMessage()).printStackTrace();;
+            new DaoException("Modalidade não inserida " + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }
@@ -186,9 +195,9 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
         return a;
     }
       
-     public List<clnTurno> PesquisarLista(TextAutoCompleter c, clnTurno p) {
-        ArrayList<clnTurno> a = new ArrayList<>();
-        clnTurno cRet = null;
+     public List<clnModEnsino> PesquisarLista(TextAutoCompleter c, clnModEnsino p) {
+        ArrayList<clnModEnsino> a = new ArrayList<>();
+        clnModEnsino cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -197,18 +206,18 @@ public class ModEnsinoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_PESQUISAR);
-            ps.setString(1, p.getNmTurno());
+            ps.setString(1, p.getNmModEnsino());
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                cRet = new clnTurno();
-                cRet.setCdTurno(rs.getInt("CdTurno"));
-                cRet.setNmTurno(rs.getString("NmTurno"));
+                cRet = new clnModEnsino();
+                cRet.setCdModEnsino(rs.getInt("CdModEnsino"));
+                cRet.setNmModEnsino(rs.getString("NmModEnsino"));
                 
                 a.add(cRet);
             }
         } catch (Exception e) {
-            new DaoException("Turno nao inserido " + e.getMessage()).printStackTrace();;
+            new DaoException("Modalidade nao inserida " + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }
