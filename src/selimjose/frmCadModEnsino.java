@@ -335,7 +335,7 @@ public class frmCadModEnsino extends javax.swing.JFrame {
                     aDao.inserir(a);
                     AtualizaTabela();
                 } catch (DaoException ex) {
-                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(frmCadModEnsino.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(this, "A Modalidade foi cadastrada com sucesso!!", "Cadastrando Modalidade", JOptionPane.INFORMATION_MESSAGE);
                 //dispose();
@@ -361,7 +361,7 @@ public class frmCadModEnsino extends javax.swing.JFrame {
                 aDao.alterar(obj);
                 AtualizaTabela();
             } catch (DaoException ex) {
-                Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(frmCadModEnsino.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_jButton8ActionPerformed
@@ -383,7 +383,7 @@ public class frmCadModEnsino extends javax.swing.JFrame {
                 try {
                     aDao.excluir(id);
                 } catch (DaoException ex) {
-                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(frmCadModEnsino.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

@@ -18,26 +18,26 @@ import selimjose.clnCargo;
  *
  * @author Bruna
  */
-public class CargoDao extends Dao implements DbDao<clnTurno> {
+public class CargoDao extends Dao implements DbDao<clnCargo> {
      
     public static final String SQL_INSERIR =  
-    "INSERT INTO `turno` (`NmTurno`) VALUES (?)";
+    "INSERT INTO `cargo` (`NmCargo`) VALUES (?)";
     
     public static final String SQL_EXCLUIR =
-    "DELETE FROM `turno` WHERE `CdTurno`=? ";
+    "DELETE FROM `cargo` WHERE `CdCargo`=? ";
     
     public static final String SQL_ALTERAR = 
-    "UPDATE `turno` SET `NmTurno` = ? WHERE `CdTurno` = ?";
+    "UPDATE `cargo` SET `NmCargo` = ? WHERE `CdCargo` = ?";
       
     public static final String SQL_PESQUISAR =
-    "SELECT * FROM `turno` WHERE `NmTurno` = ? ";
+    "SELECT * FROM `cargo` WHERE `NmCargo` = ? ";
     
     public static final String SQL_EXISTS
-            = " select * from turno "
-            + " where NmTurno = ?  ";
+            = " select * from cargo "
+            + " where NmCargo = ?  ";
 
     @Override
-    public int inserir(clnTurno Obj) throws DaoException {
+    public int inserir(clnCargo Obj) throws DaoException {
         
         int autoNum = -1;
 
@@ -48,7 +48,7 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_INSERIR, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,Obj.getNmTurno());            
+            ps.setString(1,Obj.getNmCargo());            
             ps.execute();
             rs = ps.getGeneratedKeys();
             
@@ -63,9 +63,9 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
     }
     
     @Override
-    public clnTurno pesquisar(String nm) throws DaoException {
+    public clnCargo pesquisar(String nm) throws DaoException {
         
-        clnTurno cRet = null;		
+        clnCargo cRet = null;		
 	PreparedStatement ps = null;
         ResultSet rs = null;
         Connection con = null;
@@ -77,13 +77,13 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                cRet = new clnTurno();
-                cRet.setNmTurno(rs.getString("NmTurno"));    
-                cRet.setCdTurno(rs.getInt("CdTurno")); 
+                cRet = new clnCargo();
+                cRet.setNmCargo(rs.getString("NmCargo"));    
+                cRet.setCdCargo(rs.getInt("CdCargo")); 
             }
                 
         } catch (Exception e) {
-            new DaoException("Turno nao inserido "+ e.getMessage()).printStackTrace();;
+            new DaoException(" Cargo nao inserido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps, rs);
         }        
@@ -107,7 +107,7 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
                 ret = true;
             
         } catch (Exception e) {
-            new DaoException("Turno não removido "+ e.getMessage()).printStackTrace();;
+            new DaoException("Cargo não removido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps);
         }        
@@ -115,7 +115,7 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
     }
 
     @Override
-    public boolean alterar(clnTurno Obj) throws DaoException {
+    public boolean alterar(clnCargo Obj) throws DaoException {
         
         boolean ret = false;        
         PreparedStatement ps = null;
@@ -124,8 +124,8 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_ALTERAR);  
-            ps.setString(1,Obj.getNmTurno());
-            ps.setInt(2, Obj.getCdTurno());
+            ps.setString(1,Obj.getNmCargo());
+            ps.setInt(2, Obj.getCdCargo());
             int qtd = ps.executeUpdate();            
             if (qtd>0)
                 ret = true;
@@ -138,8 +138,8 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
         return ret;
     }
     
-      public clnTurno Exists(clnTurno p) {
-        clnTurno cRet = null;
+      public clnCargo Exists(clnCargo p) {
+        clnCargo cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -148,17 +148,17 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_EXISTS);
-            ps.setString(1, p.getNmTurno());
+            ps.setString(1, p.getNmCargo());
 
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                cRet = new clnTurno();
+                cRet = new clnCargo();
 
-                cRet.setNmTurno(rs.getString("NmTurno"));                
+                cRet.setNmCargo(rs.getString("NmCargo"));                
             }
         } catch (Exception e) {
-            System.out.println("Turno ainda não inserido " + e.getMessage());
+            System.out.println("Cargo ainda não inserido " + e.getMessage());
         } finally {
             close(con, ps, rs);
         }
@@ -166,9 +166,9 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
         return cRet;
     }
       
-      public List<clnTurno> listar(TextAutoCompleter c) {
-        ArrayList<clnTurno> a = new ArrayList<>();
-        clnTurno cRet = null;
+      public List<clnCargo> listar(TextAutoCompleter c) {
+        ArrayList<clnCargo> a = new ArrayList<>();
+        clnCargo cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -176,18 +176,18 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
 
         try {
             con = getConnection();
-            ps = con.prepareStatement("select * from turno");
+            ps = con.prepareStatement("select * from cargo");
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                cRet = new clnTurno();
-                cRet.setCdTurno(rs.getInt("CdTurno"));
-                cRet.setNmTurno(rs.getString("NmTurno"));
+                cRet = new clnCargo();
+                cRet.setCdCargo(rs.getInt("CdCargo"));
+                cRet.setNmCargo(rs.getString("NmCargo"));
                 
                 a.add(cRet);
             }
         } catch (Exception e) {
-            new DaoException("Turno nao inserido " + e.getMessage()).printStackTrace();;
+            new DaoException("Cargo nao inserido " + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }
@@ -195,9 +195,9 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
         return a;
     }
       
-     public List<clnTurno> PesquisarLista(TextAutoCompleter c, clnTurno p) {
-        ArrayList<clnTurno> a = new ArrayList<>();
-        clnTurno cRet = null;
+     public List<clnCargo> PesquisarLista(TextAutoCompleter c, clnCargo p) {
+        ArrayList<clnCargo> a = new ArrayList<>();
+        clnCargo cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -206,18 +206,18 @@ public class CargoDao extends Dao implements DbDao<clnTurno> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_PESQUISAR);
-            ps.setString(1, p.getNmTurno());
+            ps.setString(1, p.getNmCargo());
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                cRet = new clnTurno();
-                cRet.setCdTurno(rs.getInt("CdTurno"));
-                cRet.setNmTurno(rs.getString("NmTurno"));
+                cRet = new clnCargo();
+                cRet.setCdCargo(rs.getInt("CdCargo"));
+                cRet.setNmCargo(rs.getString("NmCargo"));
                 
                 a.add(cRet);
             }
         } catch (Exception e) {
-            new DaoException("Turno nao inserido " + e.getMessage()).printStackTrace();;
+            new DaoException("Cargo nao inserido " + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }

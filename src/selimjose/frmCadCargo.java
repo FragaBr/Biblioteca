@@ -4,19 +4,76 @@
  * and open the template in the editor.
  */
 package selimjose;
-
+import dao.CargoDao;
+import dao.DaoException;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import com.mxrck.autocompleter.TextAutoCompleter;
+import javax.swing.table.DefaultTableModel;
+import selimjose.clnCargo;
 /**
  *
  * @author Bruna
  */
 public class frmCadCargo extends javax.swing.JFrame {
-
+    
+    private DefaultTableModel tabelaLista = new DefaultTableModel();
+     ArrayList<clnCargo> arraycar = null;
     /**
      * Creates new form frmCadCargo
      */
     public frmCadCargo() {
         initComponents();
+        tabelaLista = (DefaultTableModel) TabelaCargo.getModel();
+        buscaNome();
+        this.setLocationRelativeTo(null);
+        this.setResizable(true);
+        this.setVisible(true);
     }
+    
+    private void buscaNome() {
+       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas
+        
+        TabelaCargo.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected,
+                        hasFocus, row, column);
+                return this;
+            }
+        });
+
+        CargoDao aDAO = new CargoDao();
+       
+            arraycar = (ArrayList<clnCargo>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnCargo p : arraycar) {
+            TabelaCargo.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()});
+            }  
+    }
+
+private void AtualizaTabela() {
+    
+        CargoDao aDAO = new CargoDao();
+        if(!arraycar.isEmpty())
+        {
+            tabelaLista.setRowCount(0);
+            tabelaLista.fireTableDataChanged();
+            arraycar.clear();
+            arraycar = (ArrayList<clnCargo>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnCargo p : arraycar) {
+            TabelaCargo.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()});
+            
+            }                       
+        }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,11 +86,11 @@ public class frmCadCargo extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtNomeAutor = new java.awt.TextField();
+        txtNomeCargo = new java.awt.TextField();
         jLabel22 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TabelaAutor = new javax.swing.JTable();
+        TabelaCargo = new javax.swing.JTable();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
@@ -48,14 +105,14 @@ public class frmCadCargo extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/EditarObra.png"))); // NOI18N
 
-        txtNomeAutor.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtNomeAutor.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        txtNomeAutor.setForeground(new java.awt.Color(153, 153, 153));
-        txtNomeAutor.setName(""); // NOI18N
-        txtNomeAutor.setText("Digite o nome do cargo");
-        txtNomeAutor.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNomeCargo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtNomeCargo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtNomeCargo.setForeground(new java.awt.Color(153, 153, 153));
+        txtNomeCargo.setName(""); // NOI18N
+        txtNomeCargo.setText("Digite o nome do cargo");
+        txtNomeCargo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtNomeAutorclean(evt);
+                txtNomeCargoclean(evt);
             }
         });
 
@@ -77,8 +134,8 @@ public class frmCadCargo extends javax.swing.JFrame {
             .addGap(0, 5, Short.MAX_VALUE)
         );
 
-        TabelaAutor.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        TabelaAutor.setModel(new javax.swing.table.DefaultTableModel(
+        TabelaCargo.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        TabelaCargo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -94,12 +151,12 @@ public class frmCadCargo extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        TabelaAutor.addMouseListener(new java.awt.event.MouseAdapter() {
+        TabelaCargo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TabelaAutorseleciona(evt);
+                TabelaCargoseleciona(evt);
             }
         });
-        jScrollPane1.setViewportView(TabelaAutor);
+        jScrollPane1.setViewportView(TabelaCargo);
 
         jButton5.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/lupa.png"))); // NOI18N
@@ -189,7 +246,7 @@ public class frmCadCargo extends javax.swing.JFrame {
                                                 .addGap(18, 18, 18)
                                                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(txtNomeAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtNomeCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(66, 66, 66)
                                                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -209,7 +266,7 @@ public class frmCadCargo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtNomeAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNomeCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(58, 58, 58)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -246,56 +303,56 @@ public class frmCadCargo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNomeAutorclean(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeAutorclean
-        txtNomeAutor.setText("");
-    }//GEN-LAST:event_txtNomeAutorclean
+    private void txtNomeCargoclean(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeCargoclean
+        txtNomeCargo.setText("");
+    }//GEN-LAST:event_txtNomeCargoclean
 
-    private void TabelaAutorseleciona(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaAutorseleciona
+    private void TabelaCargoseleciona(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelaCargoseleciona
 
-        int linha = TabelaAutor.getSelectedRow();
-        txtNomeAutor.setText((String) TabelaAutor.getValueAt(linha,1));
+        int linha = TabelaCargo.getSelectedRow();
+        txtNomeCargo.setText((String) TabelaCargo.getValueAt(linha,1));
 
-    }//GEN-LAST:event_TabelaAutorseleciona
+    }//GEN-LAST:event_TabelaCargoseleciona
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         //Pesquisar
-        AutorDao aDao = new AutorDao();
-        clnAutor a = new clnAutor();
-        a.setNmAutor(txtNomeAutor.getText());
+        CargoDao aDao = new CargoDao();
+        clnCargo a = new clnCargo();
+        a.setNmCargo(txtNomeCargo.getText());
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
-        arrayaut.clear();
-        arrayaut = (ArrayList<clnAutor>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
-        for (clnAutor p : arrayaut) {
-            TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
+        arraycar.clear();
+        arraycar = (ArrayList<clnCargo>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        for (clnCargo p : arraycar) {
+            TabelaCargo.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()});
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
 
-        if ((!txtNomeAutor.getText().isEmpty())) {
-            AutorDao aDao = new AutorDao();
-            clnAutor a = new clnAutor();
+        if ((!txtNomeCargo.getText().isEmpty())) {
+            CargoDao aDao = new CargoDao();
+            clnCargo a = new clnCargo();
 
-            a.setNmAutor(txtNomeAutor.getText());
+            a.setNmCargo(txtNomeCargo.getText());
 
             if (aDao.Exists(a) != null) {
-                JOptionPane.showMessageDialog(this, "Autor já existente!", "Cadastrando Autores", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Cargo já existente!", "Cadastrando Cargos", JOptionPane.WARNING_MESSAGE);
             } else {
                 try {
                     aDao.inserir(a);
                     AtualizaTabela();
                 } catch (DaoException ex) {
-                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(frmCadCargo.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                JOptionPane.showMessageDialog(this, "O Autor foi cadastrado com sucesso!!", "Cadastrando Autores", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "O Cargo foi cadastrado com sucesso!!", "Cadastrando Cargos", JOptionPane.INFORMATION_MESSAGE);
                 //dispose();
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Campos em branco!", "Cadastrando Autores", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Campos em branco!", "Cadastrando Cargos ", JOptionPane.WARNING_MESSAGE);
         }
-        txtNomeAutor.setText("");
+        txtNomeCargo.setText("");
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -309,16 +366,16 @@ public class frmCadCargo extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
 
-        AutorDao aDao = new AutorDao();
-        clnAutor objautor = new clnAutor();
+        CargoDao aDao = new CargoDao();
+        clnCargo objautor = new clnCargo();
 
-        int linha = TabelaAutor.getSelectedRow();
+        int linha = TabelaCargo.getSelectedRow();
         if(linha==-1){
             JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             try {
-                objautor.setNmAutor(txtNomeAutor.getText());
-                objautor.setCdAutor((int) TabelaAutor.getValueAt(linha,0));
+                objautor.setNmCargo(txtNomeCargo.getText());
+                objautor.setCdCargo((int) TabelaCargo.getValueAt(linha,0));
                 aDao.alterar(objautor);
                 AtualizaTabela();
             } catch (DaoException ex) {
@@ -329,31 +386,31 @@ public class frmCadCargo extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
 
-        AutorDao aDao = new AutorDao();
-        clnAutor a = new clnAutor();
+        CargoDao aDao = new CargoDao();
+        clnCargo a = new clnCargo();
 
-        int linha = TabelaAutor.getSelectedRow();
+        int linha = TabelaCargo.getSelectedRow();
         if(linha==-1){
             JOptionPane.showMessageDialog(this, "Selecione alguma linha!", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             int opcao = JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir ?", " - Excluir -", JOptionPane.YES_NO_OPTION);
             if(opcao == JOptionPane.YES_OPTION)
             {
-                int id = (int) TabelaAutor.getValueAt(linha,0);
+                int id = (int) TabelaCargo.getValueAt(linha,0);
                 tabelaLista.removeRow(linha);
                 try {
                     aDao.excluir(id);
                 } catch (DaoException ex) {
-                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(frmCadCargo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-        txtNomeAutor.setText("");
+        txtNomeCargo.setText("");
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         AtualizaTabela();
-        txtNomeAutor.setText("");
+        txtNomeCargo.setText("");
     }//GEN-LAST:event_jButton10ActionPerformed
 
     /**
@@ -392,7 +449,7 @@ public class frmCadCargo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable TabelaAutor;
+    private javax.swing.JTable TabelaCargo;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -405,6 +462,6 @@ public class frmCadCargo extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private java.awt.TextField txtNomeAutor;
+    private java.awt.TextField txtNomeCargo;
     // End of variables declaration//GEN-END:variables
 }

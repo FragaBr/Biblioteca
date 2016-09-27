@@ -332,7 +332,7 @@ public class frmCadTurno extends javax.swing.JFrame {
                     aDao.inserir(a);
                     AtualizaTabela();
                 } catch (DaoException ex) {
-                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(frmCadTurno.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(this, "O Turno foi cadastrado com sucesso!!", " Cadastrando Turno ", JOptionPane.INFORMATION_MESSAGE);
                 //dispose();
@@ -358,7 +358,7 @@ public class frmCadTurno extends javax.swing.JFrame {
                 aDao.alterar(obj);
                 AtualizaTabela();
             } catch (DaoException ex) {
-                Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(frmCadTurno.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_jButton8ActionPerformed
@@ -380,7 +380,7 @@ public class frmCadTurno extends javax.swing.JFrame {
                 try {
                     aDao.excluir(id);
                 } catch (DaoException ex) {
-                    Logger.getLogger(frmCadAutores.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(frmCadTurno.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

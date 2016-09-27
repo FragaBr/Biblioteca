@@ -27,7 +27,7 @@ public class clnCargo {
     {
         return NmCargo;
     }
-    public void setCdCargo( String NmCargo)
+    public void setNmCargo( String NmCargo)
     {
         this.NmCargo = NmCargo;
     }
