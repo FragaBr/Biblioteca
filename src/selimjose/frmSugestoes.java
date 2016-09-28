@@ -27,18 +27,22 @@ import dao.EditoraDao;
  */
 public class frmSugestoes extends javax.swing.JFrame {
 
+    private DefaultTableModel tabelaLista = new DefaultTableModel();
     private List<clnAutor> AutorList;
     private List<clnEditora> EditoraList;
+    ArrayList<clnObra> ObraList = null;
     
     /**
      * Creates new form frmSugestoes
      */
     public frmSugestoes() {
         initComponents();
-        //initAutores();
+        tabelaLista = (DefaultTableModel) tabelaObra.getModel();
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setVisible(true);
+        
+        buscaNome();
     }
     private String[] initAutores() {
         String[] autorS;
@@ -46,24 +50,64 @@ public class frmSugestoes extends javax.swing.JFrame {
         AutorList = cDAO.listar(new TextAutoCompleter(new JTextField()));
         autorS = new String[AutorList.size()];
         for (int i = 0; i < AutorList.size(); i++) {
-            autorS[i] = AutorList.get(i).getNmAutor();            }
+            autorS[i] = AutorList.get(i).getNmAutor();            
+        }
         return autorS;
     }
-    private String[] initCidades() {
-        String[] cidades;
-        try {
-            EnderecoDao cDAO = new EnderecoDao();
-            cList = cDAO.ListarTodos();
-            cidades = new String[cList.size()];
-            for (int i = 0; i < cList.size(); i++) {
-                cidades[i] = cList.get(i).getCidade();
-            }
-        } catch (DaoException e) {
-            throw new RuntimeException(e);
+    private String[] initEditora() {
+        String[] editoraS;
+        EditoraDao cDAO = new EditoraDao();
+        EditoraList = cDAO.listar(new TextAutoCompleter(new JTextField()));
+        editoraS = new String[EditoraList.size()];
+        for (int i = 0; i < EditoraList.size(); i++) {
+            editoraS[i] = EditoraList.get(i).getNmEditora();
         }
-        return cidades;
+        return editoraS;
     }
+    private void AtualizaTabela() {
+    
+        ObraDao aDAO = new ObraDao();
+        if(!ObraList.isEmpty())
+        {
+            tabelaLista.setRowCount(0);
+            tabelaLista.fireTableDataChanged();
+            ObraList.clear();
+            ObraList = (ArrayList<clnObra>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnObra p : ObraList) {
+            tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdObra(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
+            
+            }                     
+        }
+        else{
+            ObraList = (ArrayList<clnObra>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnObra p : ObraList) {
+            tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdObra(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
+            }             
+        }
+    }
+    
+    private void buscaNome() {
+       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas
+        
+        tabelaObra.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected,
+                        hasFocus, row, column);
+                return this;
+            }
+        });
 
+         ObraDao aDAO = new ObraDao();
+       
+            ObraList = (ArrayList<clnObra>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnObra p : ObraList) {
+            tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdObra(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
+            }  
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,7 +119,7 @@ public class frmSugestoes extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
+        label1 = new javax.swing.JLabel();
         txtTitulo = new java.awt.TextField();
         jLabel22 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -93,7 +137,7 @@ public class frmSugestoes extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         txtIsbn = new java.awt.TextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaObra = new javax.swing.JTable();
         jButton7 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
@@ -104,9 +148,9 @@ public class frmSugestoes extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/InserirObra.png"))); // NOI18N
 
-        jLabel21.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
-        jLabel21.setText("Título*:");
-        jLabel21.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        label1.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
+        label1.setText("Título*:");
+        label1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         txtTitulo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtTitulo.setForeground(new java.awt.Color(153, 153, 153));
@@ -153,7 +197,7 @@ public class frmSugestoes extends javax.swing.JFrame {
 
         comboeditora.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         comboeditora.setForeground(new java.awt.Color(153, 153, 153));
-        comboeditora.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite o Nome da Editora" }));
+        comboeditora.setModel(new javax.swing.DefaultComboBoxModel(initEditora()));
         comboeditora.setPreferredSize(new java.awt.Dimension(100, 18));
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
@@ -166,7 +210,8 @@ public class frmSugestoes extends javax.swing.JFrame {
 
         comboautor.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         comboautor.setForeground(new java.awt.Color(153, 153, 153));
-        comboautor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Digite o Nome do Autor" }));
+        comboautor.setModel(new javax.swing.DefaultComboBoxModel<>(initAutores()));
+        comboautor.setNextFocusableComponent(comboeditora);
         comboautor.setPreferredSize(new java.awt.Dimension(100, 18));
         comboautor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -227,24 +272,24 @@ public class frmSugestoes extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaObra.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        tabelaObra.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo", "Título", "Autor", "Editora", "Ano", "Volume"
+                "Codigo", "Título", "Edicao", "Ano", "Volume", "ISBN", "Editora", "Autor"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabelaObra);
 
         jButton7.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_goleft.png"))); // NOI18N
@@ -278,42 +323,6 @@ public class frmSugestoes extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtVolume, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-                            .addComponent(txtEdicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(106, 106, 106))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel22)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel21)
-                            .addComponent(jLabel26)
-                            .addComponent(txtTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(comboautor, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel27)
-                    .addComponent(jLabel25)
-                    .addComponent(txtIsbn, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAno, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(comboeditora, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel23))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(68, 68, 68))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(154, 154, 154))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -328,57 +337,92 @@ public class frmSugestoes extends javax.swing.JFrame {
                                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1))))
                 .addGap(31, 31, 31))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtVolume, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                        .addGap(184, 184, 184))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel24)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtEdicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(139, 139, 139))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel22)
+                            .addComponent(jLabel26)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(comboautor, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(label1)
+                                    .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtAno, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27)
+                    .addComponent(txtIsbn, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel23)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(comboeditora, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel25))
+                .addGap(116, 116, 116))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(216, 216, 216)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
+                .addGap(29, 29, 29)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
-                .addComponent(jLabel21)
+                .addComponent(label1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel23)
+                    .addComponent(jLabel22))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                            .addComponent(comboeditora, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel25)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtAno, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel22)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(comboautor, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboautor, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                         .addComponent(jLabel24)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtEdicao, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel26)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel23)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboeditora, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(13, 13, 13)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel25)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtAno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(90, 90, 90))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel27)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtIsbn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addComponent(txtEdicao, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(jLabel26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtIsbn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(63, 63, 63)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -386,6 +430,8 @@ public class frmSugestoes extends javax.swing.JFrame {
                     .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40))
         );
+
+        comboautor.getAccessibleContext().setAccessibleDescription(",");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -428,8 +474,12 @@ public class frmSugestoes extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        //AtualizaTabela();
-        //txtNomeEditora.setText("");
+        AtualizaTabela();
+        txtTitulo.setText("");
+        txtAno.setText("");
+        txtEdicao.setText("");
+        txtVolume.setText("");
+        txtIsbn.setText("");
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -448,11 +498,18 @@ public class frmSugestoes extends javax.swing.JFrame {
         E.setLocationRelativeTo(null);
         E.setResizable(true);
         E.setVisible(true);
+        comboautor.setEditable(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtTituloKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTituloKeyPressed
         // key pessed
         txtTitulo.setText("");
+        txtTitulo.setBackground(Color.white);
+        txtAno.setText("");
+        txtEdicao.setText("");
+        txtVolume.setText("");
+        txtIsbn.setText("");
+        
     }//GEN-LAST:event_txtTituloKeyPressed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -466,8 +523,19 @@ public class frmSugestoes extends javax.swing.JFrame {
             clnObra a = new clnObra();
 
             a.setTitulo(txtTitulo.getText());
-            a.setEdicao(Integer.parseInt(txtEdicao.getText()));
-            a.setAno(Integer.parseInt(txtAno.getText()));
+            if(txtEdicao.getText().isEmpty())
+            {a.setEdicao(0);                   
+            }
+            else{
+                int ed = Integer.parseInt(txtEdicao.getText());
+                a.setEdicao(ed);               
+            }
+            if(txtAno.getText().isEmpty())
+            {a.setAno(0);
+                
+            }else{
+                a.setAno(Integer.parseInt(txtAno.getText()));                
+            }           
             a.setVolume(txtVolume.getText());
             a.setISBN(txtIsbn.getText());
             
@@ -482,13 +550,40 @@ public class frmSugestoes extends javax.swing.JFrame {
            } catch (DaoException ex) {
                Logger.getLogger(frmSugestoes.class.getName()).log(Level.SEVERE, null, ex);
            }
-           
+                      
            if(aDao.Exists(a) != null){
-               
+               JOptionPane.showMessageDialog(this, " Obra já existente!", "Cadastrando Obras", JOptionPane.WARNING_MESSAGE);               
+           }else{
+                try {
+                    aDao.inserir(a);
+                    AtualizaTabela();
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmSugestoes.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(this, " Obra Cadastrada com Sucesso!!", "Cadastrando Obras", JOptionPane.INFORMATION_MESSAGE);
            }
-            
-        txtTitulo.setText("");
+        }else if ((txtTitulo.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(this, " Informe o Titulo!", "Cadastrando Obras", JOptionPane.WARNING_MESSAGE);            
+            txtTitulo.setBackground(Color.lightGray);
+        } else if ((comboautor.getItemCount() != 0)) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira o Autor!", "Cadastrando Obras", JOptionPane.WARNING_MESSAGE);
+        } else if ((comboeditora.getItemCount() != 0)) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira a Editora!", "Cadastrando Obras", JOptionPane.WARNING_MESSAGE);
         }
+        else {
+                JOptionPane.showMessageDialog(this, "Campos em branco!", "Cadastrando Obras", JOptionPane.WARNING_MESSAGE);
+            //labelCampo.setVisible(true);
+            //labelCampo1.setVisible(true);
+        }
+       
+       txtTitulo.setText("");
+       txtAno.setText("");
+       txtEdicao.setText("");
+       txtVolume.setText("");
+       txtIsbn.setText("");
+       
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void comboautorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboautorMouseClicked
@@ -543,7 +638,6 @@ public class frmSugestoes extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -553,7 +647,8 @@ public class frmSugestoes extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel label1;
+    private javax.swing.JTable tabelaObra;
     private java.awt.TextField txtAno;
     private java.awt.TextField txtEdicao;
     private java.awt.TextField txtIsbn;

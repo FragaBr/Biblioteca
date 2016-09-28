@@ -5,7 +5,6 @@
  */
 package dao;
 
-
 import com.mxrck.autocompleter.TextAutoCompleter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,32 +13,32 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import selimjose.clnEditora;
-
+import selimjose.clnExemplar;
 /**
  *
  * @author Bruna
  */
-public class EditoraDao extends Dao implements DbDao<clnEditora> {
+public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
      
     public static final String SQL_INSERIR =  
-    "INSERT INTO `editora` (`NmEditora`) VALUES (?)";
+    "INSERT INTO `exemplar` (`CdExemplar`, `Obra_CdObra`,`Obra_Editora_CdEditora`,`Obra_Autor_CdAutor`, `Situacao_CdSituacao`) VALUES (?,?,?,?,?)";
     
     public static final String SQL_EXCLUIR =
-    "DELETE FROM `editora` WHERE `CdEditora`=? ";
+    "DELETE FROM `exemplar` WHERE `CdExemplar`=? ";
     
     public static final String SQL_ALTERAR = 
-    "UPDATE `editora` SET `NmEditora` = ? WHERE `CdEditora` = ?";
+    "UPDATE `exemplar` SET `Situacao_CdSituacao` = ? WHERE `CdExemplar` = ?";
       
     public static final String SQL_PESQUISAR =
-    "SELECT * FROM `editora` WHERE `NmEditora` = ? ";
+    "SELECT * FROM `exemplar` WHERE `CdExemplar` = ? ";
     
     public static final String SQL_EXISTS
-            = " select * from editora "
-            + " where NmEditora = ?  ";
+            = " select * from exemplar "
+            + " where CdExemplar = ?  ";
 
     @Override
-    public int inserir(clnEditora Obj) throws DaoException {
+    public int inserir(clnExemplar Obj) throws DaoException {
+        
         int autoNum = -1;
 
         PreparedStatement ps = null;
@@ -49,7 +48,12 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_INSERIR, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,Obj.getNmEditora());            
+            ps.setInt(1,Obj.getCdExemplar());   
+            ps.setInt(2,Obj.getCdObra());
+            ps.setInt(3,Obj.getCdEditora());
+            ps.setInt(4,Obj.getCdAutor());
+            ps.setInt(5,Obj.getCdSituacao());
+            
             ps.execute();
             rs = ps.getGeneratedKeys();
             
@@ -63,10 +67,10 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
         return autoNum;
     }
 
-    @Override
-    public clnEditora pesquisar(String nm) throws DaoException {
-
-        clnEditora cRet = null;		
+    
+    public clnExemplar pesquisar(int nm) throws DaoException {
+        
+        clnExemplar cRet = null;		
 	PreparedStatement ps = null;
         ResultSet rs = null;
         Connection con = null;
@@ -74,17 +78,17 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_PESQUISAR);  
-            ps.setString (1, nm);
+            ps.setInt (1, nm);
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                cRet = new clnEditora();
-                cRet.setNmEditora(rs.getString("NmEditora"));    
-                cRet.setCdEditora(rs.getInt("CdEditora")); 
+                cRet = new clnExemplar();
+                cRet.setCdExemplar(rs.getInt("CdExemplar"));    
+                cRet.setCdObra(rs.getInt("Obra_CdObra")); 
             }
                 
         } catch (Exception e) {
-            new DaoException("Editora nao inserida "+ e.getMessage()).printStackTrace();;
+            new DaoException("Exemplar não inserido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps, rs);
         }        
@@ -108,7 +112,7 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
                 ret = true;
             
         } catch (Exception e) {
-            new DaoException("Ediora não removida "+ e.getMessage()).printStackTrace();;
+            new DaoException("Exemplar não removido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps);
         }        
@@ -116,7 +120,7 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
     }
 
     @Override
-    public boolean alterar(clnEditora Obj) throws DaoException {
+    public boolean alterar(clnExemplar Obj) throws DaoException {
         
         boolean ret = false;        
         PreparedStatement ps = null;
@@ -125,8 +129,8 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_ALTERAR);  
-            ps.setString(1,Obj.getNmEditora());
-            ps.setInt(2, Obj.getCdEditora());
+            ps.setInt(1,Obj.getCdSituacao());
+            ps.setInt(2, Obj.getCdExemplar());
             int qtd = ps.executeUpdate();            
             if (qtd>0)
                 ret = true;
@@ -139,8 +143,8 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
         return ret;
     }
     
-     public clnEditora Exists(clnEditora p) {
-        clnEditora cRet = null;
+      public clnExemplar Exists(clnExemplar p) {
+        clnExemplar cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -149,17 +153,17 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_EXISTS);
-            ps.setString(1, p.getNmEditora());
+            ps.setInt(1, p.getCdExemplar());
 
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                cRet = new clnEditora();
+                cRet = new clnExemplar();
 
-                cRet.setNmEditora(rs.getString("NmEditora"));                
+                cRet.setCdExemplar(rs.getInt("CdExemplar"));                
             }
         } catch (Exception e) {
-            System.out.println(" Editora ainda não inserida" + e.getMessage());
+            System.out.println(" Exemplar ainda não inserido " + e.getMessage());
         } finally {
             close(con, ps, rs);
         }
@@ -167,9 +171,9 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
         return cRet;
     }
       
-      public List<clnEditora> listar(TextAutoCompleter c) {
-        ArrayList<clnEditora> a = new ArrayList<>();
-        clnEditora cRet = null;
+      public List<clnExemplar> listar(TextAutoCompleter c) {
+        ArrayList<clnExemplar> a = new ArrayList<>();
+        clnExemplar cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -177,27 +181,31 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
 
         try {
             con = getConnection();
-            ps = con.prepareStatement("select * from editora");
+            ps = con.prepareStatement("select * from exemplar");
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                cRet = new clnEditora();
-                cRet.setCdEditora(rs.getInt("CdEditora"));
-                cRet.setNmEditora(rs.getString("NmEditora"));
+                cRet = new clnExemplar();            
+                cRet.setCdExemplar(rs.getInt("CdExemplar"));
+                cRet.setCdObra(rs.getInt("Obra_CdObra"));
+                cRet.setCdEditora(rs.getInt("Obra_Editora_CdEditora"));
+                cRet.setCdAutor(rs.getInt("Obra_Autor_CdAutor"));
+                cRet.setCdSituacao(rs.getInt("Situacao_CdSituacao"));
                 
                 a.add(cRet);
             }
         } catch (Exception e) {
-            new DaoException("Editora nao inserida" + e.getMessage()).printStackTrace();;
+            new DaoException("Exemplar nao inserido" + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }
 
         return a;
     }
-      public List<clnEditora> PesquisarLista(TextAutoCompleter c, clnEditora p) {
-        ArrayList<clnEditora> a = new ArrayList<>();
-        clnEditora cRet = null;
+      
+     public List<clnExemplar> PesquisarLista(TextAutoCompleter c, clnExemplar p) {
+        ArrayList<clnExemplar> a = new ArrayList<>();
+        clnExemplar cRet = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -206,22 +214,30 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_PESQUISAR);
-            ps.setString(1, p.getNmEditora());
+            ps.setString(1, p.getTitulo());
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                cRet = new clnEditora();
-                cRet.setCdEditora(rs.getInt("CdEditora"));
-                cRet.setNmEditora(rs.getString("NmEditora"));
-                
+                cRet = new clnExemplar();            
+                cRet.setCdExemplar(rs.getInt("CdExemplar"));
+                cRet.setCdObra(rs.getInt("Obra_CdObra"));
+                cRet.setCdEditora(rs.getInt("Obra_Editora_CdEditora"));
+                cRet.setCdAutor(rs.getInt("Obra_Autor_CdAutor"));
+                cRet.setCdSituacao(rs.getInt("Situacao_CdSituacao"));                
                 a.add(cRet);
             }
         } catch (Exception e) {
-        new DaoException(" Editora não inserida " + e.getMessage()).printStackTrace();;
+        new DaoException("Exemplar não inserido " + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }
 
         return a;
     }
+
+    @Override
+    public clnExemplar pesquisar(String id) throws DaoException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

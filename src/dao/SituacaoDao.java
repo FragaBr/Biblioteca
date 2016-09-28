@@ -191,7 +191,6 @@ public class SituacaoDao extends Dao implements DbDao<clnSituacao> {
         } finally {
             close(con, ps, rs);
         }
-
         return a;
     }
       

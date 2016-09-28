@@ -38,11 +38,5 @@ public abstract class clnUsuario {
     }
     public void setNmUsuario(String NmUsuario){
         this.NmUsuario = NmUsuario;
-    }
-    
-    public boolean Login(String Login, String Senha)
-    {
-        /* -- Metodo */
-        return true;
-    }
+    }    
 }
