@@ -20,6 +20,9 @@ public class clnAluno extends clnUsuario {
     protected int bairroFK;
     protected int cidadeFK;
 
+    public clnAluno(){
+        
+    }
     public clnAluno(int cdAlunos, String Matricula, int modEnsinoFK, int cdTurnoFK, int cdUsuarioFK, int cepFK, int bairroFK, int cidadeFK) {
         this.cdAlunos = cdAlunos;
         this.Matricula = Matricula;

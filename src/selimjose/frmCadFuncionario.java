@@ -780,7 +780,10 @@ public class frmCadFuncionario extends javax.swing.JFrame {
         txtCep.setText("");
         txtNm.setText("");
         txtTel.setText("");
-        txtLogin.setText("");
+        txtBairro.setText("");
+        txtCidade.setText("");
+        txtRua.setText("");
+        txtUF.setText("");
         txtEmail.setText("");
         txtSenha.setText("");
         txtSenha2.setText("");
@@ -788,7 +791,7 @@ public class frmCadFuncionario extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         //Inserir Funcionario
-        if ((!txtNome.getText().isEmpty()) && (!txtData.getText().isEmpty()) && (!txtCep.getText().isEmpty()) && (!txtNm.getText().isEmpty()) && (!txtLogin.getText().isEmpty())  ) 
+        if ((!txtNome.getText().isEmpty()) && (!txtData.getText().isEmpty()) && (!txtCep.getText().isEmpty()) && (!txtNm.getText().isEmpty()) && (!txtLogin.getText().isEmpty()) && (!txtSenha.getText().isEmpty()) && (!txtSenha2.getText().isEmpty())  ) 
         {
            
             FuncionarioDao aDao = new FuncionarioDao();
@@ -967,6 +970,9 @@ public class frmCadFuncionario extends javax.swing.JFrame {
     private void txtNmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNmKeyPressed
         txtNm.setText("");
         txtEmail.setText("");
+        txtLogin.setText("");
+        txtSenha.setText("");
+        txtSenha2.setText("");
     }//GEN-LAST:event_txtNmKeyPressed
 
     private void txtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyPressed
@@ -1016,7 +1022,8 @@ public class frmCadFuncionario extends javax.swing.JFrame {
             clnCidade c = new clnCidade();
 
             
-            if(!(txtCep.getText().isEmpty())){
+            if(txtCep.getText().equals("        ")){                
+            }else{
                 l.setCep(Integer.parseInt(txtCep.getText()));
                 try {
                     res = lDao.pesquisar(l.getCep());

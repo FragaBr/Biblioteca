@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import selimjose.clnAluno;
 import selimjose.clnUsuario;
 import selimjose.clnFuncionario;
 
@@ -28,10 +29,14 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
     "DELETE FROM `usuario` WHERE `CdUsuario`=? ";
     
     public static final String SQL_ALTERAR = 
-    "UPDATE `usuario` SET `NmUsuario` = ? WHERE `CdUsuario` = ?"; 
+    "UPDATE `usuario` SET `Senha` = ? WHERE `CdUsuario` = ?"; 
     
     public static final String SQL_PESQUISAR =
     "SELECT * FROM `usuario` WHERE (`NmUsuario`, `DtNasc`) = (?,?)";
+    
+    public static final String SQL_RECUPERA =
+    "SELECT * FROM `usuario` WHERE (`Login`, `DtNasc`) = (?,?)";
+    
     public static final String SQL_EXISTS
             = " select * from usuario WHERE `CdUsuario` = ? ";   
     
@@ -87,6 +92,61 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
         }	
         return cRet;
     }
+    
+    public clnFuncionario recupera(clnUsuario p) throws DaoException {
+        clnFuncionario cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_RECUPERA);  
+            ps.setString(1, p.getLogin());
+            ps.setString(2, p.getDtNasc());
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnFuncionario();
+                cRet.setCdUsuario(rs.getInt("CdUsuario"));
+                cRet.setNmUsuario(rs.getString("NmUsuario"));                
+            }
+                
+        } catch (Exception e) {
+            new DaoException("Usuario não inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }	
+        return cRet;
+    }
+    
+    public clnAluno recuperaAluno(clnUsuario p) throws DaoException {
+        clnAluno cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_RECUPERA);  
+            ps.setString(1, p.getLogin());
+            ps.setString(2, p.getDtNasc());
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnAluno();
+                cRet.setCdUsuario(rs.getInt("CdUsuario"));
+                cRet.setNmUsuario(rs.getString("NmUsuario"));                
+            }
+                
+        } catch (Exception e) {
+            new DaoException("Usuario não inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }	
+        return cRet;
+    }
+    
 
     @Override
     public boolean excluir(int id) throws DaoException {
@@ -95,7 +155,24 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
 
     @Override
     public boolean alterar(clnUsuario Obj) throws DaoException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean ret = false;        
+        PreparedStatement ps = null;
+        Connection con = null;        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_ALTERAR);  
+            ps.setString(1,Obj.getSenha());
+            ps.setInt(2, Obj.getCdUsuario());
+            int qtd = ps.executeUpdate();            
+            if (qtd>0)
+                ret = true;
+            
+        } catch (Exception e) {
+        	 new DaoException(" Alteração não efetuada."+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps);
+        }        
+        return ret;
     }    
 
     @Override

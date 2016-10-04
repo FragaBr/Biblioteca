@@ -6,7 +6,10 @@
 package selimjose;
 
 
+import dao.DaoException;
 import dao.FuncionarioDao;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import selimjose.clnFuncionario;
 /**
@@ -160,7 +163,7 @@ public class frmLogin extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
-        clnFuncionario u = null;
+        clnFuncionario u = new clnFuncionario();
         String senha = (txtPassword.getText());
         String login = txtUsuario.getText();
         if (login.equals("") || senha.equals("")) {
@@ -173,28 +176,28 @@ public class frmLogin extends javax.swing.JFrame {
                 txtPassword.requestFocus();
             }
         } else {
-
-            u = new clnFuncionario();
             
             FuncionarioDao uDAO = new FuncionarioDao();
             u.setLogin(login);
             u.setSenha(senha);
 
-            if (uDAO.Exists(u) != null) {
-
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        
-                        frmPrincipal m = new frmPrincipal(new javax.swing.JFrame(), true);                        
-                        m.setLocationRelativeTo(null);
-                        m.setResizable(true);
-                        m.setVisible(true);
-                        
-                    }
-                });
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Senha ou Usuarios não existente", "Login", JOptionPane.ERROR_MESSAGE);
+            try {
+                if (uDAO.Logar(u) != null) {
+                    
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {                            
+                            frmPrincipal m = new frmPrincipal(new javax.swing.JFrame(), true);
+                            m.setLocationRelativeTo(null);
+                            m.setResizable(true);
+                            m.setVisible(true);                            
+                        }
+                    });
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Senha ou Usuario não existentes", "Login", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (DaoException ex) {
+                Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }

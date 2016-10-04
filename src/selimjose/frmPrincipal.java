@@ -227,6 +227,11 @@ public void setHora(Date date) {
         jLabel24.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel24.setText("Consultas");
         jLabel24.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel24.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel24MouseClicked(evt);
+            }
+        });
 
         jLabel25.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel25.setText("Configurações");
@@ -534,6 +539,16 @@ public void setHora(Date date) {
         P.setResizable(true);
         P.setVisible(true);
     }//GEN-LAST:event_jLabel21MouseClicked
+
+    private void jLabel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel24MouseClicked
+        //Consultas
+        
+        this.setVisible(false);
+        frmConsulta P = new frmConsulta();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jLabel24MouseClicked
 
     /**
      * @param args the command line arguments

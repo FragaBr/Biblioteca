@@ -34,7 +34,10 @@ public class FuncionarioDao  extends Dao implements DbDao<clnFuncionario> {
     "SELECT * FROM `funcionario` WHERE `NmFuncionario` = ? ";
     
     public static final String SQL_EXISTS
-            = " select * from funcionario WHERE `Usuario_CdUsuario` = ? ";            
+            = " select * from `funcionario` WHERE `Usuario_CdUsuario` = ? ";
+    
+    public static final String SQL_LOGAR =
+    "SELECT * FROM `usuario`, `funcionario` WHERE `CdUsuario` = `Usuario_CdUsuario` and `Cargo_CdCargo` = 9 and `Login` = ? and `Senha` = ?  ";
 
     @Override
     public int inserir(clnFuncionario Obj) throws DaoException {
@@ -151,6 +154,35 @@ public class FuncionarioDao  extends Dao implements DbDao<clnFuncionario> {
     @Override
     public boolean alterar(clnFuncionario Obj) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public clnFuncionario Logar(clnFuncionario Obj) throws DaoException {
+        
+        clnFuncionario cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_LOGAR);  
+            ps.setString(1,Obj.getLogin());  
+            ps.setString(2,Obj.getSenha());
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnFuncionario();
+                cRet.setCdFuncionario(rs.getInt("CdFuncionario"));    
+                cRet.setCdUsuario(rs.getInt("Usuario_CdUsuario"));
+                cRet.setCdCargo(rs.getInt("Cargo_CdCargo")); 
+            }
+                
+        } catch (Exception e) {
+            new DaoException("Funcionario não inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }	
+        return cRet;
     }
         
 }
