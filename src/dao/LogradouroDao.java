@@ -73,8 +73,7 @@ public class LogradouroDao extends Dao implements DbDao<clnLogradouro> {
             new DaoException("Logradouro não inserido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps, rs);
-        }        
-	
+        }
         return cRet;
     }
 

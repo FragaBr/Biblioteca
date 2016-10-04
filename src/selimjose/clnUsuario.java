@@ -15,11 +15,11 @@ public abstract class clnUsuario {
     protected String NmUsuario;
     protected String DtNasc;
     protected String Sexo;
-    protected int Tel; 
+    protected String Tel; 
     protected String Email;
     protected String Login;
     protected String Senha;
-    protected boolean Status;
+    protected int Status;
     protected int CEP;
     protected int CdBairros;
     protected int CdCidades;    
@@ -57,11 +57,11 @@ public abstract class clnUsuario {
         this.Sexo = Sexo;
     }
 
-    public int getTel() {
+    public String getTel() {
         return Tel;
     }
 
-    public void setTel(int Tel) {
+    public void setTel(String Tel) {
         this.Tel = Tel;
     }
 
@@ -89,11 +89,11 @@ public abstract class clnUsuario {
         this.Senha = Senha;
     }
 
-    public boolean isStatus() {
+    public int isStatus() {
         return Status;
     }
 
-    public void setStatus(boolean Status) {
+    public void setStatus(int Status) {
         this.Status = Status;
     }
 

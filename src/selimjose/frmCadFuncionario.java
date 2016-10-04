@@ -25,6 +25,7 @@ import dao.CargoDao;
 import dao.CidadeDao;
 import dao.BairroDao;
 import dao.LogradouroDao;
+import dao.UsuarioDao;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -129,9 +130,9 @@ public class frmCadFuncionario extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jLabel34 = new javax.swing.JLabel();
         jLabel43 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        rbm = new javax.swing.JRadioButton();
+        rbf = new javax.swing.JRadioButton();
+        rbo = new javax.swing.JRadioButton();
         jLabel36 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jLabel37 = new javax.swing.JLabel();
@@ -154,7 +155,7 @@ public class frmCadFuncionario extends javax.swing.JFrame {
         jButton10 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton14 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        combocargo = new javax.swing.JComboBox<>();
         jLabel48 = new javax.swing.JLabel();
         txtCep = new javax.swing.JFormattedTextField();
         txtCidade = new java.awt.TextField();
@@ -252,14 +253,14 @@ public class frmCadFuncionario extends javax.swing.JFrame {
         jLabel43.setText("Sexo*:");
         jLabel43.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        btnGSexo.add(jRadioButton1);
-        jRadioButton1.setText("Masculino");
+        btnGSexo.add(rbm);
+        rbm.setText("Masculino");
 
-        btnGSexo.add(jRadioButton2);
-        jRadioButton2.setText("Feminino");
+        btnGSexo.add(rbf);
+        rbf.setText("Feminino");
 
-        btnGSexo.add(jRadioButton3);
-        jRadioButton3.setText("Outros");
+        btnGSexo.add(rbo);
+        rbo.setText("Outros");
 
         jLabel36.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel36.setText("Endereço");
@@ -386,6 +387,16 @@ public class frmCadFuncionario extends javax.swing.JFrame {
         jLabel47.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         txtSenha2.setText("jPasswordField1");
+        txtSenha2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSenha2FocusLost(evt);
+            }
+        });
+        txtSenha2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSenha2KeyPressed(evt);
+            }
+        });
 
         jButton10.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_undo.png"))); // NOI18N
@@ -417,7 +428,7 @@ public class frmCadFuncionario extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>( initCargo()));
+        combocargo.setModel(new javax.swing.DefaultComboBoxModel<>( initCargo()));
 
         jLabel48.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel48.setText("Rua/Av.*:");
@@ -565,8 +576,10 @@ public class frmCadFuncionario extends javax.swing.JFrame {
                                                         .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                     .addGap(33, 33, 33)
                                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jLabel47)
-                                                        .addComponent(txtSenha2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                            .addComponent(jLabel47)
+                                                            .addGap(9, 9, 9))
+                                                        .addComponent(txtSenha2)))
                                                 .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addComponent(jLabel31)
                                             .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -574,14 +587,14 @@ public class frmCadFuncionario extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jRadioButton3)
+                            .addComponent(rbo)
                             .addComponent(jLabel30)
                             .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jRadioButton2)
+                            .addComponent(rbf)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jRadioButton1)
+                                    .addComponent(rbm)
                                     .addComponent(jLabel32)
                                     .addComponent(jLabel43))
                                 .addGap(85, 85, 85)
@@ -593,7 +606,7 @@ public class frmCadFuncionario extends javax.swing.JFrame {
                                         .addComponent(jLabel34)
                                         .addGap(16, 16, 16)))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(combocargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(txtTel, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -620,7 +633,7 @@ public class frmCadFuncionario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel43)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton1))
+                        .addComponent(rbm))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -633,12 +646,12 @@ public class frmCadFuncionario extends javax.swing.JFrame {
                                 .addGap(30, 30, 30)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel34)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(combocargo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
+                .addComponent(rbf)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(rbo, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -702,8 +715,8 @@ public class frmCadFuncionario extends javax.swing.JFrame {
                                         .addComponent(jLabel46)
                                         .addGap(1, 1, 1)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtSenha)
-                                            .addComponent(txtSenha2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                                            .addComponent(txtSenha2)))
                                     .addComponent(jLabel47))))
                         .addGap(64, 64, 64)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -774,6 +787,138 @@ public class frmCadFuncionario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        //Inserir Funcionario
+        if ((!txtNome.getText().isEmpty()) && (!txtData.getText().isEmpty()) && (!txtCep.getText().isEmpty()) && (!txtNm.getText().isEmpty()) && (!txtLogin.getText().isEmpty())  ) 
+        {
+           
+            FuncionarioDao aDao = new FuncionarioDao();
+            UsuarioDao uDao = new UsuarioDao();            
+            CargoDao cDao = new CargoDao();
+            LogradouroDao eDao = new LogradouroDao();
+            CidadeDao autDao = new CidadeDao();
+            BairroDao edDao = new BairroDao();
+            
+            clnFuncionario f = new clnFuncionario();
+            clnFuncionario u = new clnFuncionario();
+            clnLogradouro res = new clnLogradouro();
+            clnBairro b = new clnBairro();
+            
+            f.setNmUsuario(txtNome.getText());
+            u.setNmUsuario(txtNome.getText());
+            f.setDtNasc(txtData.getText());
+            u.setDtNasc(txtData.getText());
+            f.setTel(txtTel.getText()); 
+            u.setTel(txtTel.getText());
+            if(rbm.isSelected()){
+                f.setSexo(rbm.getText());
+                u.setSexo(rbm.getText());
+                
+            }else if(rbf.isSelected()){
+                f.setSexo(rbf.getText());  
+                u.setSexo(rbf.getText());
+            }else{
+                 f.setSexo(rbo.getText());
+                 u.setSexo(rbo.getText());
+            }
+            try {
+                f.setCdCargo(cDao.pesquisar(combocargo.getSelectedItem().toString()).getCdCargo());
+                //u.setCdCargo(cDao.pesquisar(combocargo.getSelectedItem().toString()).getCdCargo());
+            } catch (DaoException ex) {
+                Logger.getLogger(frmCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            
+            f.setCEP(Integer.parseInt(txtCep.getText()));
+            u.setCEP(Integer.parseInt(txtCep.getText()));
+            try {
+                res = eDao.pesquisar(Integer.parseInt(txtCep.getText()));
+                int cdb = res.getCdBairro();
+                f.setCdBairros(cdb);
+                u.setCdBairros(cdb);
+                //System.out.println(f.getCdBairros());
+            } catch (DaoException ex) {
+                Logger.getLogger(frmCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            }                               
+            
+            f.setNumeroLogradouro(Integer.parseInt(txtNm.getText()));
+            u.setNumeroLogradouro(Integer.parseInt(txtNm.getText()));            
+            f.setEmail(txtEmail.getText());
+            u.setEmail(txtEmail.getText());
+            f.setLogin(txtLogin.getText());
+            u.setLogin(txtLogin.getText());
+            
+            if(txtSenha.getText().equals(txtSenha2.getText())){
+                f.setSenha(txtSenha.getText());
+                u.setSenha(txtSenha.getText());
+            }else{
+                JOptionPane.showMessageDialog(this, " As senhas são diferentes !", "Cadastrando Funconario", JOptionPane.INFORMATION_MESSAGE);
+            }
+            f.setStatus(1);
+            u.setStatus(1);
+            
+           if(uDao.Exists(f) != null){
+               JOptionPane.showMessageDialog(this, " Funcionario já existente!", "Cadastrando Funcionario", JOptionPane.WARNING_MESSAGE);               
+           }else{
+                try {  
+                    //uDao.inserir(f);
+                System.out.println("feito");
+                       uDao.inserir(u);
+                       f.setCdUsuario(uDao.pesquisar(f).getCdUsuario());
+                       aDao.inserir(f);
+                       
+                        txtNome.setText("");
+                        txtData.setText("");
+                        txtCep.setText("");
+                        txtNm.setText("");
+                        txtTel.setText("");
+                        txtLogin.setText("");
+                        txtEmail.setText("");
+                        txtSenha.setText("");
+                        txtSenha2.setText("");
+                       
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmSugestoes.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(this, " Funcionario Cadastrado com Sucesso !", "Cadastrando Funconario", JOptionPane.INFORMATION_MESSAGE);
+           }
+        }else if ((txtNome.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(this, " Informe o Nome do Funcionario!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);            
+            txtNome.setBackground(Color.lightGray);
+        } else if ((combocargo.getItemCount() == 0)) {
+            JOptionPane.showMessageDialog(this, "Insira o Cargo!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        } else if ((txtData.getText().isEmpty())) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira a Data de Nascimento!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        }else if ((txtCep.getText().isEmpty())) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira o Cep!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        }else if ((txtUF.getText().isEmpty())) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira o Estado!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        }else if ((txtBairro.getText().isEmpty())) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira o Bairro!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        }else if ((txtCidade.getText().isEmpty())) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira a Cidade!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        }else if ((txtRua.getText().isEmpty())) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira a Rua!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        }else if ((txtLogin.getText().isEmpty())) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira o Login!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        }else if ((txtSenha.getText().isEmpty())) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira a Senha!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        }else if ((txtSenha2.getText().isEmpty())) {
+            //labelCampo.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Insira a Confirmacao da Senha!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+        }else {
+                JOptionPane.showMessageDialog(this, "Campos em branco!", "Cadastrando Funconario", JOptionPane.WARNING_MESSAGE);
+            //labelCampo.setVisible(true);
+            //labelCampo1.setVisible(true);
+        }
+        
+        
         
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -812,6 +957,7 @@ public class frmCadFuncionario extends javax.swing.JFrame {
 
     private void txtNomeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyPressed
         txtNome.setText("");
+        txtNome.setBackground(Color.white);
     }//GEN-LAST:event_txtNomeKeyPressed
 
     private void txtTelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelKeyPressed
@@ -820,6 +966,7 @@ public class frmCadFuncionario extends javax.swing.JFrame {
 
     private void txtNmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNmKeyPressed
         txtNm.setText("");
+        txtEmail.setText("");
     }//GEN-LAST:event_txtNmKeyPressed
 
     private void txtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyPressed
@@ -868,19 +1015,30 @@ public class frmCadFuncionario extends javax.swing.JFrame {
             clnBairro b = new clnBairro();
             clnCidade c = new clnCidade();
 
-            l.setCep(Integer.parseInt(txtCep.getText()));
-            try {
-                res = lDao.pesquisar(l.getCep());
-                b = bDao.pesquisar(res.getCdBairro());
-                c = cDao.pesquisar(b.getCdCidade());
+            
+            if(!(txtCep.getText().isEmpty())){
+                l.setCep(Integer.parseInt(txtCep.getText()));
+                try {
+                    res = lDao.pesquisar(l.getCep());
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    b = bDao.pesquisar(res.getCdBairro());
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    c = cDao.pesquisar(b.getCdCidade());
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 txtRua.setText(res.getNmLogradouro());
                 txtBairro.setText(b.getNmBairro());
                 txtUF.setText(c.getEstado());
-                txtCidade.setText(c.getNmCidade());                
-            } catch (DaoException ex) {
-                Logger.getLogger(frmCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+                txtCidade.setText(c.getNmCidade());
             }
-            
+                 
     }//GEN-LAST:event_txtCepFocusLost
 
     private void txtCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCidadeActionPerformed
@@ -914,6 +1072,19 @@ public class frmCadFuncionario extends javax.swing.JFrame {
     private void txtBairroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBairroKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBairroKeyPressed
+
+    private void txtSenha2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSenha2FocusLost
+        // Verifica Senha:
+        if(txtSenha.getText().equals(txtSenha2.getText())){
+            }else{
+                JOptionPane.showMessageDialog(this, " As senhas são diferentes !", "Cadastrando Funconario", JOptionPane.INFORMATION_MESSAGE);
+            }
+        
+    }//GEN-LAST:event_txtSenha2FocusLost
+
+    private void txtSenha2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenha2KeyPressed
+        
+    }//GEN-LAST:event_txtSenha2KeyPressed
 
     /**
      * @param args the command line arguments
@@ -952,12 +1123,12 @@ public class frmCadFuncionario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGSexo;
+    private javax.swing.JComboBox<String> combocargo;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
@@ -988,9 +1159,9 @@ public class frmCadFuncionario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton rbf;
+    private javax.swing.JRadioButton rbm;
+    private javax.swing.JRadioButton rbo;
     private java.awt.TextField txtBairro;
     private javax.swing.JFormattedTextField txtCep;
     private java.awt.TextField txtCidade;

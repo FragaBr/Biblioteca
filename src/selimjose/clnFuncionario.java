@@ -13,7 +13,7 @@ public class clnFuncionario extends clnUsuario{
     
     protected int CdFuncionario;
     protected int CdUsuario;
-    protected int Cep;
+    protected int CEP;
     protected int CdBairro;
     protected int CdCidade;
     protected int CdCargo;
@@ -35,19 +35,19 @@ public class clnFuncionario extends clnUsuario{
     {
         this.CdUsuario = CdUsuario;
     }
-    public int getCep()
+    public int getCEP()
     {
-        return Cep;
+        return CEP;
     }
-    public void setCep( int Cep)
+    public void setCEP( int Cep)
     {
-        this.Cep = Cep;
+        this.CEP = Cep;
     }
-    public int getCdBairro()
+    public int getCdBairros()
     {
         return CdBairro;
     }
-    public void setCdBairro( int CdBairro)
+    public void setCdBairros( int CdBairro)
     {
         this.CdBairro = CdBairro;
     }

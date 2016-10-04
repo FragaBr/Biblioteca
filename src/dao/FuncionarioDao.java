@@ -22,25 +22,24 @@ import selimjose.clnFuncionario;
 public class FuncionarioDao  extends Dao implements DbDao<clnFuncionario> {
      
     public static final String SQL_INSERIR =  
-    "INSERT INTO `funcionario` (`Usuario_CdUsuario`, `Usuario_Logradouros_Cep`, `Usuario_Logradouros_Bairros_CdBairros`, `Usuario_Logradouros_Bairros_Cidades_CdCidades`, `Cargo_CdCargo`  ) VALUES (?)";
+    " INSERT INTO funcionario (`Usuario_CdUsuario`,`Usuario_Logradouros_Cep`,`Usuario_Logradouros_Bairros_CdBairros`,`Cargo_CdCargo`) VALUES (?,?,?,?)";
     
     public static final String SQL_EXCLUIR =
-    "DELETE FROM `turno` WHERE `CdTurno`=? ";
+    "DELETE FROM `funcionario` WHERE `Usuario_CdUsuario`=? ";
     
-    public static final String SQL_ALTERAR = 
-    "UPDATE `turno` SET `NmTurno` = ? WHERE `CdTurno` = ?";
+    //public static final String SQL_ALTERAR = 
+    //"UPDATE `funcionario` SET `NmTurno` = ? WHERE `Usuario_CdUsuario` = ?";
       
     public static final String SQL_PESQUISAR =
-    "SELECT * FROM `turno` WHERE `NmTurno` = ? ";
+    "SELECT * FROM `funcionario` WHERE `NmFuncionario` = ? ";
     
     public static final String SQL_EXISTS
-            = " select * from funcionario,usuario WHERE `funcionario.CdUsuario` = ? ";            
+            = " select * from funcionario WHERE `Usuario_CdUsuario` = ? ";            
 
     @Override
     public int inserir(clnFuncionario Obj) throws DaoException {
         
         int autoNum = -1;
-
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection con = null;
@@ -48,7 +47,11 @@ public class FuncionarioDao  extends Dao implements DbDao<clnFuncionario> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_INSERIR, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,Obj.getNmTurno());            
+            ps.setInt(1,Obj.getCdUsuario());  
+            ps.setInt(2,Obj.getCEP());
+            ps.setInt(3,Obj.getCdBairros());
+            ps.setInt(4,Obj.getCdCargo());
+            
             ps.execute();
             rs = ps.getGeneratedKeys();
             
@@ -78,16 +81,18 @@ public class FuncionarioDao  extends Dao implements DbDao<clnFuncionario> {
             
             if (rs.next()) {
                 cRet = new clnFuncionario();
-                cRet.setNmTurno(rs.getString("NmTurno"));    
-                cRet.setCdTurno(rs.getInt("CdTurno")); 
+                cRet.setCdFuncionario(rs.getInt("CdFuncionario"));    
+                cRet.setCdUsuario(rs.getInt("Usuario_CdUsuario"));
+                cRet.setCEP(rs.getInt("Usuario_Logradouros_Cep"));    
+                cRet.setCdBairros(rs.getInt("Usuario_Logradouros_Bairros_CdBairros"));
+                cRet.setCdCargo(rs.getInt("Cargo_CdCargo")); 
             }
                 
         } catch (Exception e) {
-            new DaoException("Turno nao inserido "+ e.getMessage()).printStackTrace();;
+            new DaoException("Funcionario não inserido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps, rs);
-        }        
-	
+        }	
         return cRet;
     }
 
@@ -107,43 +112,20 @@ public class FuncionarioDao  extends Dao implements DbDao<clnFuncionario> {
                 ret = true;
             
         } catch (Exception e) {
-            new DaoException("Turno não removido "+ e.getMessage()).printStackTrace();;
+            new DaoException(" Funcionario não removido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps);
         }        
         return ret;
     }
 
-    @Override
-    public boolean alterar(clnFuncionario Obj) throws DaoException {
-        
-        boolean ret = false;        
-        PreparedStatement ps = null;
-        Connection con = null;
-        
-        try {
-            con = getConnection();
-            ps = con.prepareStatement(SQL_ALTERAR);  
-            ps.setString(1,Obj.getNmTurno());
-            ps.setInt(2, Obj.getCdTurno());
-            int qtd = ps.executeUpdate();            
-            if (qtd>0)
-                ret = true;
-            
-        } catch (Exception e) {
-        	 new DaoException(" Alteração não efetuada."+ e.getMessage()).printStackTrace();;
-        }finally{
-            close(con, ps);
-        }        
-        return ret;
-    }
     
-      public clnFuncionario Exists(clnFuncionario p) {
+    public clnFuncionario Exists(clnFuncionario p) {
+          
         clnFuncionario cRet = null;
-
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Connection con = null;
+        Connection con = null; 
 
         try {
             con = getConnection();
@@ -165,65 +147,10 @@ public class FuncionarioDao  extends Dao implements DbDao<clnFuncionario> {
 
         return cRet;
     }
-      
-      public List<clnFuncionario> listar(TextAutoCompleter c) {
-        ArrayList<clnFuncionario> a = new ArrayList<>();
-        clnFuncionario cRet = null;
 
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Connection con = null;
-
-        try {
-            con = getConnection();
-            ps = con.prepareStatement("select * from turno");
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                cRet = new clnFuncionario();
-                cRet.setCdTurno(rs.getInt("CdTurno"));
-                cRet.setNmTurno(rs.getString("NmTurno"));
-                
-                a.add(cRet);
-            }
-        } catch (Exception e) {
-            new DaoException("Turno nao inserido " + e.getMessage()).printStackTrace();;
-        } finally {
-            close(con, ps, rs);
-        }
-
-        return a;
+    @Override
+    public boolean alterar(clnFuncionario Obj) throws DaoException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-      
-     public List<clnFuncionario> PesquisarLista(TextAutoCompleter c, clnFuncionario p) {
-        ArrayList<clnFuncionario> a = new ArrayList<>();
-        clnFuncionario cRet = null;
-
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Connection con = null;
-
-        try {
-            con = getConnection();
-            ps = con.prepareStatement(SQL_PESQUISAR);
-            ps.setString(1, p.getNmTurno());
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                cRet = new clnFuncionario();
-                cRet.setCdTurno(rs.getInt("CdTurno"));
-                cRet.setNmTurno(rs.getString("NmTurno"));
-                
-                a.add(cRet);
-            }
-        } catch (Exception e) {
-            new DaoException("Turno nao inserido " + e.getMessage()).printStackTrace();;
-        } finally {
-            close(con, ps, rs);
-        }
-
-        return a;
-    }
-    
-    
+        
 }

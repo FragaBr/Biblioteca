@@ -600,10 +600,10 @@ public class frmCadObras extends javax.swing.JDialog {
         }else if ((txtTitulo.getText().isEmpty())) {
             JOptionPane.showMessageDialog(this, " Informe o Titulo!", "Cadastrando Obras", JOptionPane.WARNING_MESSAGE);            
             txtTitulo.setBackground(Color.lightGray);
-        } else if ((comboautor.getItemCount() != 0)) {
+        } else if ((comboautor.getItemCount() == 0)) {
             //labelCampo.setVisible(true);
             JOptionPane.showMessageDialog(this, "Insira o Autor!", "Cadastrando Obras", JOptionPane.WARNING_MESSAGE);
-        } else if ((comboeditora.getItemCount() != 0)) {
+        } else if ((comboeditora.getItemCount() == 0)) {
             //labelCampo.setVisible(true);
             JOptionPane.showMessageDialog(this, "Insira a Editora!", "Cadastrando Obras", JOptionPane.WARNING_MESSAGE);
         }
