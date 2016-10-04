@@ -192,7 +192,7 @@ public class frmCadGeral extends javax.swing.JFrame {
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         //Image Click
         this.setVisible(false);
-        frmCadUsuario2 P = new frmCadUsuario2();
+        frmCadAluno P = new frmCadAluno(new javax.swing.JFrame(), true);
         P.setLocationRelativeTo(null);
         P.setResizable(true);
         P.setVisible(true);
@@ -201,7 +201,7 @@ public class frmCadGeral extends javax.swing.JFrame {
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         //Image Click
         this.setVisible(false);
-        frmCadUsuario2 O = new frmCadUsuario2();
+        frmCadFuncionario O = new frmCadFuncionario();
         O.setLocationRelativeTo(null);
         O.setResizable(true);
         O.setVisible(true);

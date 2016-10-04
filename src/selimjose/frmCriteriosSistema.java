@@ -355,7 +355,7 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         this.setVisible(false);
-        frmCadCargo P = new frmCadCargo();
+        frmCadCargo P = new frmCadCargo(1);
         P.setLocationRelativeTo(null);
         P.setResizable(true);
         P.setVisible(true);

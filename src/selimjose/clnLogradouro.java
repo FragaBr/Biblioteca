@@ -12,11 +12,10 @@ package selimjose;
 public class clnLogradouro {
     
     protected int Cep;
+    protected int CdBairro;
     protected String NmLogradouro;
     protected String Tipo;
-    protected int CdBairro;
-    protected int CdCidade;
-    
+        
     public int getCep (){
         return Cep;
     }
@@ -40,12 +39,5 @@ public class clnLogradouro {
     }
     public void setCdBairro( int CdBairro){
         this.CdBairro = CdBairro;
-    }        
-    public int getCdCidade(){
-        return CdCidade;
     }
-    public void setCdCidade( int CdCidade){
-        this.CdCidade = CdCidade;
-    }         
-    
 }

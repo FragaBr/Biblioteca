@@ -9,7 +9,7 @@ package selimjose;
  *
  * @author Bruna
  */
-public class clnFuncionario {
+public class clnFuncionario extends clnUsuario{
     
     protected int CdFuncionario;
     protected int CdUsuario;

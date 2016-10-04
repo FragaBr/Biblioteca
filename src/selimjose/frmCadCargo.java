@@ -25,16 +25,18 @@ public class frmCadCargo extends javax.swing.JFrame {
     
     private DefaultTableModel tabelaLista = new DefaultTableModel();
      ArrayList<clnCargo> arraycar = null;
+    private final int i;
     /**
      * Creates new form frmCadCargo
      */
-    public frmCadCargo() {
+    public frmCadCargo(int i) {
         initComponents();
         tabelaLista = (DefaultTableModel) TabelaCargo.getModel();
         buscaNome();
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setVisible(true);
+        this.i  = i;
     }
     
     private void buscaNome() {
@@ -69,9 +71,14 @@ private void AtualizaTabela() {
             arraycar = (ArrayList<clnCargo>) aDAO.listar(new TextAutoCompleter(new JTextField()));
             for (clnCargo p : arraycar) {
             TabelaCargo.setSelectionBackground(Color.LIGHT_GRAY);
-            tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()});
-            
+            tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()});            
             }                       
+        }else{
+            arraycar = (ArrayList<clnCargo>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            for (clnCargo p : arraycar) {
+            TabelaCargo.setSelectionBackground(Color.LIGHT_GRAY);
+            tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()}); 
+            }
         }
 }
 
@@ -357,11 +364,22 @@ private void AtualizaTabela() {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
 
-        this.setVisible(false);
-        frmCriteriosSistema A = new frmCriteriosSistema();
-        A.setLocationRelativeTo(null);
-        A.setResizable(true);
-        A.setVisible(true);
+        if(this.i == 1)
+        {
+            this.setVisible(false);
+            frmCriteriosSistema A = new frmCriteriosSistema();
+            A.setLocationRelativeTo(null);
+            A.setResizable(true);
+            A.setVisible(true);
+        }else{
+            this.setVisible(false);
+            frmCadFuncionario A = new frmCadFuncionario();
+            A.setLocationRelativeTo(null);
+            A.setResizable(true);
+            A.setVisible(true);
+            
+        }
+        
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -443,7 +461,7 @@ private void AtualizaTabela() {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmCadCargo().setVisible(true);
+                new frmCadCargo(1).setVisible(true);
             }
         });
     }
