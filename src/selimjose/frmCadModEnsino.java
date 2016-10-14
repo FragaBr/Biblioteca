@@ -329,7 +329,7 @@ public class frmCadModEnsino extends javax.swing.JFrame {
             a.setNmModEnsino(txtNomeModEnsino.getText());
              
             if (aDao.Exists(a) != null) {
-                JOptionPane.showMessageDialog(this, "Serie já existente!", "Cadastrando Modalidade", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Modalidade já existente!", "Cadastrando Modalidade", JOptionPane.WARNING_MESSAGE);
             } else {
                 try {
                     aDao.inserir(a);

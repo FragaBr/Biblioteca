@@ -98,6 +98,8 @@ public class FuncionarioDao  extends Dao implements DbDao<clnFuncionario> {
         }	
         return cRet;
     }
+    
+    
 
     @Override
     public boolean excluir(int id) throws DaoException {

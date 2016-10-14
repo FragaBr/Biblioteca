@@ -34,11 +34,17 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
     public static final String SQL_PESQUISAR =
     "SELECT * FROM `usuario` WHERE (`NmUsuario`, `DtNasc`) = (?,?)";
     
+    public static final String SQL_CONSULTA =
+    "SELECT * FROM `usuario` WHERE `NmUsuario` = ? ";
+    
     public static final String SQL_RECUPERA =
     "SELECT * FROM `usuario` WHERE (`Login`, `DtNasc`) = (?,?)";
     
     public static final String SQL_EXISTS
-            = " select * from usuario WHERE `CdUsuario` = ? ";   
+            = " select * from usuario WHERE `CdUsuario` = ? ";
+    
+    public static final String SQL_STATUS =
+    "SELECT * FROM `usuario` WHERE `Status` = ? ";
     
   
     public clnUsuario Exists(clnUsuario p) {
@@ -224,5 +230,98 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
     @Override
     public clnUsuario pesquisar(String id) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public List<clnFuncionario> PesquisarLista(TextAutoCompleter c, clnFuncionario p) {
+        ArrayList<clnFuncionario> a = new ArrayList<>();
+        clnFuncionario cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_CONSULTA);
+            ps.setString(1, p.getNmUsuario());
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnFuncionario();
+                cRet.setCdUsuario(rs.getInt("CdUsuario"));
+                cRet.setNmUsuario(rs.getString("NmUsuario"));
+                cRet.setEmail(rs.getString("Email"));
+                cRet.setTel(rs.getString("Tel"));
+                cRet.setStatus(rs.getInt("Status"));
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+        new DaoException("Funcionario não inserido " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
+    }
+    
+    public List<clnFuncionario> listar(TextAutoCompleter c) {
+        ArrayList<clnFuncionario> a = new ArrayList<>();
+        clnFuncionario cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement("select * from usuario");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnFuncionario();
+                cRet.setCdUsuario(rs.getInt("CdUsuario"));
+                cRet.setNmUsuario(rs.getString("NmUsuario"));
+                cRet.setEmail(rs.getString("Email"));
+                cRet.setTel(rs.getString("Tel"));
+                cRet.setStatus(rs.getInt("Status"));
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Autor nao inserido" + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+    
+     public List<clnFuncionario> PesquisaStatus(TextAutoCompleter c, clnFuncionario p) {
+        ArrayList<clnFuncionario> a = new ArrayList<>();
+        clnFuncionario cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_STATUS);
+            ps.setInt(1, p.isStatus());
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnFuncionario();
+                cRet.setCdUsuario(rs.getInt("CdUsuario"));
+                cRet.setNmUsuario(rs.getString("NmUsuario"));
+                cRet.setEmail(rs.getString("Email"));
+                cRet.setTel(rs.getString("Tel"));
+                cRet.setStatus(rs.getInt("Status"));
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+        new DaoException("Funcionario não inserido " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
     }
 }

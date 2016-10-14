@@ -21,20 +21,20 @@ import selimjose.clnModEnsino;
 public class ModEnsinoDao extends Dao implements DbDao<clnModEnsino> {
      
     public static final String SQL_INSERIR =  
-    "INSERT INTO `modensino` (`NmModEnsino`) VALUES (?)";
+    "INSERT INTO `modensino` (`NmModalidade`) VALUES (?)";
     
     public static final String SQL_EXCLUIR =
-    "DELETE FROM `modensino` WHERE `CdModEnsino`=? ";
+    "DELETE FROM `modensino` WHERE `NmModalidade`=? ";
     
     public static final String SQL_ALTERAR = 
-    "UPDATE `modensino` SET `NmModEnsino` = ? WHERE `CdModEnsino` = ?";
+    "UPDATE `modensino` SET `NmModalidade` = ? WHERE `CdModEnsino` = ?";
       
     public static final String SQL_PESQUISAR =
-    "SELECT * FROM `modensino` WHERE `NmModEnsino` = ? ";
+    "SELECT * FROM `modensino` WHERE `NmModalidade` = ? ";
     
     public static final String SQL_EXISTS
             = " select * from modensino "
-            + " where NmModEnsino = ?  ";
+            + " where NmModalidade = ?  ";
 
     @Override
     public int inserir(clnModEnsino Obj) throws DaoException {
@@ -182,7 +182,7 @@ public class ModEnsinoDao extends Dao implements DbDao<clnModEnsino> {
             while (rs.next()) {
                 cRet = new clnModEnsino();
                 cRet.setCdModEnsino(rs.getInt("CdModEnsino"));
-                cRet.setNmModEnsino(rs.getString("NmModEnsino"));
+                cRet.setNmModEnsino(rs.getString("NmModalidade"));
                 
                 a.add(cRet);
             }

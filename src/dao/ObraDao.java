@@ -36,6 +36,9 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
     public static final String SQL_EXISTS
             = " select * from obra "
             + " where Titulo = ?  ";
+    
+    public static final String SQL_SUG =
+    "SELECT * FROM `obra`, `exemplar` WHERE NOT `CdObra` = `Obra_CdObra` ";
 
     @Override
     public int inserir(clnObra Obj) throws DaoException {
@@ -98,7 +101,8 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
 	
         return cRet;
     }
-
+    
+    
     @Override
     public boolean excluir(int id) throws DaoException {
         boolean ret = false;        
@@ -238,6 +242,41 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
             }
         } catch (Exception e) {
         new DaoException("Obra não inserida " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+     
+     public List<clnObra> sug(TextAutoCompleter c) {
+        ArrayList<clnObra> a = new ArrayList<>();
+        clnObra cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_SUG);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnObra();
+                cRet.setCdObra(rs.getInt("CdObra"));
+                cRet.setTitulo(rs.getString("Titulo"));
+                cRet.setEdicao(rs.getInt("Edicao"));
+                cRet.setAno(rs.getInt("Ano"));
+                cRet.setVolume(rs.getString("Volume"));
+                cRet.setISBN(rs.getString("ISBN"));
+                cRet.setCdEditora(rs.getInt("Editora_CdEditora"));
+                cRet.setCdAutor(rs.getInt("Autor_CdAutor"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Obra nao inserida" + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }
