@@ -116,4 +116,37 @@ public class LogradouroDao extends Dao implements DbDao<clnLogradouro> {
         return a;
     }
     
+    
+     public ArrayList<clnLogradouro> pegarLista(int CEP) {
+        ArrayList<clnLogradouro> a = new ArrayList<>();
+        clnLogradouro cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnLogradouro();
+                cRet.setCep(rs.getInt("Cep")); 
+                cRet.setCdBairro(rs.getInt("Bairros_CdBairros"));
+                cRet.setNmLogradouro(rs.getString("NmLogradouro")); 
+                cRet.setTipo(rs.getString("Tipo"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Modalidade nao inserida " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+
+    
 }

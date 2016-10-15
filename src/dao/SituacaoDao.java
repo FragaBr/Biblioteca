@@ -194,6 +194,34 @@ public class SituacaoDao extends Dao implements DbDao<clnSituacao> {
         return a;
     }
       
+      public List<clnSituacao> listarMod(TextAutoCompleter c) {
+        ArrayList<clnSituacao> a = new ArrayList<>();
+        clnSituacao cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement("select * from situacao where CdSituacao = 1 or CdSituacao = 4 or CdSituacao = 5  ");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnSituacao();
+                cRet.setCdSituacao(rs.getInt("CdSituacao"));
+                cRet.setNmSituacao(rs.getString("NmSituacao"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Situacao nao inserida " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
+    }
+      
      public List<clnSituacao> PesquisarLista(TextAutoCompleter c, clnSituacao p) {
         ArrayList<clnSituacao> a = new ArrayList<>();
         clnSituacao cRet = null;

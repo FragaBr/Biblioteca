@@ -35,6 +35,11 @@ public class BairroDao extends Dao implements DbDao<clnBairro> {
     public static final String SQL_EXISTS
             = " select * from bairros "
             + " where CdBairros = ?  ";
+    
+    public static final String SQL_EXISTS2
+            = " select * from bairros "
+            + " where NmBairro=? and Cidades_CdCidades = ?  ";
+
 
     @Override
     public int inserir(clnBairro Obj) throws DaoException {
@@ -107,8 +112,75 @@ public class BairroDao extends Dao implements DbDao<clnBairro> {
         } finally {
             close(con, ps, rs);
         }
-
         return a;
     }
+    
+    public clnBairro Exists(int Cidades_cdCidades, String nmBairro) {
+    
+       
+        clnBairro cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_EXISTS);
+            ps.setString(1, nmBairro);
+            ps.setInt(2,Cidades_cdCidades);
+            
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                cRet = new clnBairro();
+
+                cRet.setCdBairro(rs.getInt("CdBairros"));
+                cRet.setCdCidade(Cidades_cdCidades);
+                cRet.setNmBairro(nmBairro);
+            }
+        } catch (Exception e) {
+            System.out.println(" Exemplar ainda nÃ£o inserido " + e.getMessage());
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return cRet;
+    }
+       
+    public clnBairro Exists2(int Cidades_cdCidades, String nmBairro) {
+    
+       
+        clnBairro cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_EXISTS2);
+            ps.setString(1, nmBairro);
+            ps.setInt(2,Cidades_cdCidades);
+            
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                cRet = new clnBairro();
+
+                cRet.setCdBairro(rs.getInt("CdBairros"));
+                cRet.setCdCidade(Cidades_cdCidades);
+                cRet.setNmBairro(nmBairro);
+            }
+        } catch (Exception e) {
+            System.out.println(" Exemplar ainda nÃ£o inserido " + e.getMessage());
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return cRet;
+    }
+
+    
     
 }

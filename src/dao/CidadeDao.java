@@ -36,6 +36,11 @@ public class CidadeDao extends Dao implements DbDao<clnCidade> {
     public static final String SQL_EXISTS
             = " select * from cidades "
             + " where CdCidades = ?  ";
+    
+    public static final String SQL_EXISTS2
+            = " select * from cidades "
+            + " where NmCidade = ? and Estado=? ";
+
 
     @Override
     public int inserir(clnCidade Obj) throws DaoException {
@@ -111,4 +116,72 @@ public class CidadeDao extends Dao implements DbDao<clnCidade> {
 
         return a;
     }
+    
+    public clnCidade Exists(String nmCidade, String nmEstado) {
+    
+       
+        clnCidade cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_EXISTS);
+            ps.setString(1, nmCidade);
+            ps.setString(2,nmEstado);
+            
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                cRet = new clnCidade();
+
+                cRet.setCdCidade(rs.getInt("CdCidades"));
+                cRet.setNmCidade(nmCidade);
+                cRet.setEstado(nmEstado);
+            }
+        } catch (Exception e) {
+            System.out.println(" Exemplar ainda nÃ£o inserido " + e.getMessage());
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return cRet;
+    }
+    
+
+   public clnCidade Exists2(String nmCidade, String nmEstado) {
+    
+       
+        clnCidade cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_EXISTS2);
+            ps.setString(1, nmCidade);
+            ps.setString(2,nmEstado);
+            
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                cRet = new clnCidade();
+
+                cRet.setCdCidade(rs.getInt("CdCidades"));
+                cRet.setNmCidade(nmCidade);
+                cRet.setEstado(nmEstado);
+            }
+        } catch (Exception e) {
+            System.out.println(" Exemplar ainda nÃ£o inserido " + e.getMessage());
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return cRet;
+    }
+
 }

@@ -149,9 +149,23 @@ public class frmCadObras extends javax.swing.JDialog {
         comboautor = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuCadastro = new javax.swing.JMenu();
-        jMenuConsultas = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem12 = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
+        jMenuItem14 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenuRelatorios = new javax.swing.JMenu();
-        jMenuRelatorios1 = new javax.swing.JMenu();
+        jMenuRelatorios2 = new javax.swing.JMenu();
+        jMenuRelatorios3 = new javax.swing.JMenu();
+        jMenuCadastro1 = new javax.swing.JMenu();
+        jMenuItem8 = new javax.swing.JMenuItem();
 
         jButton6.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
@@ -168,7 +182,7 @@ public class frmCadObras extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/InserirObra.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/LogoCObras.png"))); // NOI18N
 
         jLabel21.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel21.setText("Título*:");
@@ -282,7 +296,6 @@ public class frmCadObras extends javax.swing.JDialog {
         jButton5.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/lupa.png"))); // NOI18N
         jButton5.setText("Consultar Obra");
-        jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -292,7 +305,6 @@ public class frmCadObras extends javax.swing.JDialog {
         jButton7.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_goleft.png"))); // NOI18N
         jButton7.setText("Voltar");
-        jButton7.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -302,7 +314,6 @@ public class frmCadObras extends javax.swing.JDialog {
         jButton10.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_undo.png"))); // NOI18N
         jButton10.setText("Restaurar Tela");
-        jButton10.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton10.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton10MouseClicked(evt);
@@ -317,7 +328,6 @@ public class frmCadObras extends javax.swing.JDialog {
         jButton8.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
         jButton8.setText("Inserir");
-        jButton8.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
@@ -364,7 +374,7 @@ public class frmCadObras extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tabelaObra);
 
-        comboautor.setMaximumRowCount(2);
+        comboautor.setMaximumRowCount(10);
         comboautor.setModel(new javax.swing.DefaultComboBoxModel<>(initAutores()));
         comboautor.setToolTipText("");
 
@@ -409,13 +419,13 @@ public class frmCadObras extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(2, 2, 2))))
                 .addGap(46, 46, 46))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(173, 173, 173)
-                        .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel26))
@@ -427,7 +437,7 @@ public class frmCadObras extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtIsbn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                             .addComponent(txtVolume, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(538, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,22 +446,24 @@ public class frmCadObras extends javax.swing.JDialog {
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jButton10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(98, 98, 98)
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(23, 23, 23)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -497,13 +509,13 @@ public class frmCadObras extends javax.swing.JDialog {
                 .addGap(2, 2, 2)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
         );
 
@@ -511,22 +523,123 @@ public class frmCadObras extends javax.swing.JDialog {
         jMenuBar1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
 
         jMenuCadastro.setBorder(null);
-        jMenuCadastro.setText("Inserir Obra");
+        jMenuCadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/mmenubar.png"))); // NOI18N
+        jMenuCadastro.setText("Menu");
         jMenuCadastro.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jMenuCadastro.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+
+        jMenu1.setText("Cadastros");
+
+        jMenuItem1.setText("Aluno");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem10.setText("Funcionário");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem10);
+
+        jMenuItem11.setText("Livro");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem11);
+
+        jMenuCadastro.add(jMenu1);
+
+        jMenu2.setText("Movimentações");
+
+        jMenuItem12.setText("Reserva");
+        jMenu2.add(jMenuItem12);
+
+        jMenuItem13.setText("Empréstimo");
+        jMenu2.add(jMenuItem13);
+
+        jMenuItem14.setText("Devolução");
+        jMenu2.add(jMenuItem14);
+
+        jMenuCadastro.add(jMenu2);
+
+        jMenuItem2.setText("Consultas");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenuCadastro.add(jMenuItem2);
+
+        jMenuItem5.setText("Relatórios");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenuCadastro.add(jMenuItem5);
+
+        jMenuItem6.setText("Configurações");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenuCadastro.add(jMenuItem6);
+
+        jMenuItem7.setText("Sugestão de Compras");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenuCadastro.add(jMenuItem7);
+
         jMenuBar1.add(jMenuCadastro);
 
-        jMenuConsultas.setText("Editar Obra");
-        jMenuConsultas.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuConsultas);
-
-        jMenuRelatorios.setText("Consultar Obra");
+        jMenuRelatorios.setText("  Inserir Obras   ");
         jMenuRelatorios.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jMenuBar1.add(jMenuRelatorios);
 
-        jMenuRelatorios1.setText("Ativar/Desativar Obra");
-        jMenuRelatorios1.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuRelatorios1);
+        jMenuRelatorios2.setText("  Editar Obras   ");
+        jMenuRelatorios2.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+        jMenuRelatorios2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuRelatorios2MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenuRelatorios2);
+
+        jMenuRelatorios3.setText("  Ativar/Desativar Obras                          ");
+        jMenuRelatorios3.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+        jMenuRelatorios3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuRelatorios3MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenuRelatorios3);
+
+        jMenuCadastro1.setBorder(null);
+        jMenuCadastro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_exit.png"))); // NOI18N
+        jMenuCadastro1.setText("Sair");
+        jMenuCadastro1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jMenuCadastro1.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+
+        jMenuItem8.setText("Desconectar");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenuCadastro1.add(jMenuItem8);
+
+        jMenuBar1.add(jMenuCadastro1);
 
         setJMenuBar(jMenuBar1);
 
@@ -582,6 +695,7 @@ public class frmCadObras extends javax.swing.JDialog {
             }           
             a.setVolume(txtVolume.getText());
             a.setISBN(txtIsbn.getText());
+            a.setSugestao(0);
             
             try {
                 a.setCdAutor(autDao.pesquisar(comboautor.getSelectedItem().toString()).getCdAutor());
@@ -735,6 +849,96 @@ public class frmCadObras extends javax.swing.JDialog {
         txtQtd.setText("");
     }//GEN-LAST:event_txtQtdKeyPressed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // Cadastro aluno
+        this.setVisible(false);
+        frmCadAluno P = new frmCadAluno(new javax.swing.JFrame(), true);
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        // Cadastro funcionario
+        this.setVisible(false);
+        frmCadFuncionario P = new frmCadFuncionario();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        // Cadastro Livro
+        this.setVisible(false);
+        frmCadObras P = new frmCadObras(new javax.swing.JFrame(), true);
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // Consultas
+        this.setVisible(false);
+        frmConsultas P = new frmConsultas();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        //Relatorio
+        this.setVisible(false);
+        frmRelatorios P = new frmRelatorios();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // Config
+        this.setVisible(false);
+        frmCriteriosSistema P = new frmCriteriosSistema();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        // Compras
+        this.setVisible(false);
+        frmSugestoes P = new frmSugestoes();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // Menu Desconectar
+        dispose();
+        frmLogin A = new frmLogin();
+        A.setLocationRelativeTo(null);
+        A.setResizable(true);
+        A.setVisible(true);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuRelatorios2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuRelatorios2MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        frmCadObrasEd P = new frmCadObrasEd();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jMenuRelatorios2MouseClicked
+
+    private void jMenuRelatorios3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuRelatorios3MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        frmCadObrasAtivDesativ P = new frmCadObrasAtivDesativ(new javax.swing.JFrame(), true);
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jMenuRelatorios3MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -796,11 +1000,25 @@ public class frmCadObras extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCadastro;
-    private javax.swing.JMenu jMenuConsultas;
+    private javax.swing.JMenu jMenuCadastro1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenu jMenuRelatorios;
-    private javax.swing.JMenu jMenuRelatorios1;
+    private javax.swing.JMenu jMenuRelatorios2;
+    private javax.swing.JMenu jMenuRelatorios3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

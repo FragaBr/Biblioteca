@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -94,7 +95,6 @@ public void setHora(Date date) {
         jLabel16 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -119,6 +119,8 @@ public void setHora(Date date) {
         jMenuRelatorios = new javax.swing.JMenu();
         jMenuRelatorios1 = new javax.swing.JMenu();
         jMenuMovimentacao1 = new javax.swing.JMenu();
+        jMenuCadastro1 = new javax.swing.JMenu();
+        jMenuItem8 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Biblioteca Tancredo Neves");
@@ -136,11 +138,16 @@ public void setHora(Date date) {
         jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel4.setFont(new java.awt.Font("Candara", 0, 14)); // NOI18N
-        jLabel4.setText("Reserva, Emprestimo, Devolucao");
+        jLabel4.setText("Reserva, Empréstimo, Devolução");
         jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/us.png"))); // NOI18N
-        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Candara", 0, 14)); // NOI18N
         jLabel6.setText("Usuarios, Livros, Exemplares,");
@@ -159,10 +166,20 @@ public void setHora(Date date) {
         jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/cs.png"))); // NOI18N
-        jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel10MouseClicked(evt);
+            }
+        });
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/config.png"))); // NOI18N
-        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Candara", 0, 14)); // NOI18N
         jLabel12.setText("Alteração de Critérios");
@@ -178,13 +195,28 @@ public void setHora(Date date) {
         });
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/sugest.png"))); // NOI18N
-        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel14MouseClicked(evt);
+            }
+        });
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/search-flat2.png"))); // NOI18N
-        jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel15MouseClicked(evt);
+            }
+        });
 
         jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/relatorio_icon2.png"))); // NOI18N
-        jLabel16.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel16.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel16MouseClicked(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(153, 102, 0));
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 1, 1, 2, new java.awt.Color(102, 51, 0)));
@@ -202,10 +234,7 @@ public void setHora(Date date) {
 
         jLabel18.setBackground(new java.awt.Color(153, 102, 0));
 
-        jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/livro.png"))); // NOI18N
-        jLabel19.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Menu.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Menu_1.png"))); // NOI18N
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel21.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
@@ -229,6 +258,11 @@ public void setHora(Date date) {
         jLabel23.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel23.setText("Movimentações");
         jLabel23.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel23.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel23MouseClicked(evt);
+            }
+        });
 
         jLabel24.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel24.setText("Consultas");
@@ -289,14 +323,8 @@ public void setHora(Date date) {
                         .addGap(4, 4, 4)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel23))
-                                .addGap(465, 465, 465))))
+                        .addGap(575, 575, 575)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,23 +334,29 @@ public void setHora(Date date) {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel19)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(111, 111, 111)
+                        .addGap(297, 297, 297)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(75, 75, 75)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(textDataSistema, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(textDataSistema2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(jLabel5)
-                        .addGap(38, 38, 38)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel21))
-                        .addGap(138, 138, 138)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(61, 61, 61)
+                                .addComponent(jLabel5)
+                                .addGap(38, 38, 38)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel21)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(232, 232, 232)
+                                .addComponent(jLabel23))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(232, 232, 232)
+                                .addComponent(jLabel4)))
+                        .addGap(126, 126, 126)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel15)
@@ -341,7 +375,6 @@ public void setHora(Date date) {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                            .addGap(52, 52, 52)
                                             .addComponent(jLabel13)
                                             .addGap(51, 51, 51))
                                         .addComponent(jLabel26, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -355,17 +388,15 @@ public void setHora(Date date) {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel19)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
                         .addComponent(textDataSistema2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(textDataSistema)
-                        .addGap(38, 38, 38)))
+                        .addGap(38, 38, 38))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jLabel18)
@@ -444,7 +475,7 @@ public void setHora(Date date) {
         jMenuBar1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
 
         jMenuCadastro.setBorder(null);
-        jMenuCadastro.setText("Cadastro");
+        jMenuCadastro.setText("Cadastro       ");
         jMenuCadastro.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jMenuCadastro.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
 
@@ -475,7 +506,7 @@ public void setHora(Date date) {
 
         jMenuBar1.add(jMenuCadastro);
 
-        jMenuMovimentacao.setText("Movimentações");
+        jMenuMovimentacao.setText("Movimentações      ");
         jMenuMovimentacao.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
 
         jMenuItem2.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
@@ -497,21 +528,37 @@ public void setHora(Date date) {
 
         jMenuBar1.add(jMenuMovimentacao);
 
-        jMenuConsultas.setText("Consultas");
+        jMenuConsultas.setText("Consultas       ");
         jMenuConsultas.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jMenuBar1.add(jMenuConsultas);
 
-        jMenuRelatorios.setText("Relatórios");
+        jMenuRelatorios.setText("Relatórios      ");
         jMenuRelatorios.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jMenuBar1.add(jMenuRelatorios);
 
-        jMenuRelatorios1.setText("Sugestões de Compra");
+        jMenuRelatorios1.setText("Sugestões de Compra      ");
         jMenuRelatorios1.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jMenuBar1.add(jMenuRelatorios1);
 
-        jMenuMovimentacao1.setText("Configurações");
+        jMenuMovimentacao1.setText("Configurações    ");
         jMenuMovimentacao1.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jMenuBar1.add(jMenuMovimentacao1);
+
+        jMenuCadastro1.setBorder(null);
+        jMenuCadastro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_exit.png"))); // NOI18N
+        jMenuCadastro1.setText("Sair");
+        jMenuCadastro1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jMenuCadastro1.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+
+        jMenuItem8.setText("Desconectar");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenuCadastro1.add(jMenuItem8);
+
+        jMenuBar1.add(jMenuCadastro1);
 
         setJMenuBar(jMenuBar1);
 
@@ -574,7 +621,7 @@ public void setHora(Date date) {
         //Consultas
         
         this.setVisible(false);
-        frmConsulta P = new frmConsulta();
+        frmConsultas P = new frmConsultas();
         P.setLocationRelativeTo(null);
         P.setResizable(true);
         P.setVisible(true);
@@ -591,13 +638,90 @@ public void setHora(Date date) {
     }//GEN-LAST:event_jLabel22MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente Desconectar ?", " - Logout -", JOptionPane.YES_NO_OPTION);
+            if(opcao == JOptionPane.YES_OPTION)
+            {
+                this.setVisible(false);
+                frmLogin A = new frmLogin();
+                A.setLocationRelativeTo(null);
+                A.setResizable(true);
+                A.setVisible(true);
+            }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-        this.setVisible(false);
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // Menu Desconectar
+        dispose();
         frmLogin A = new frmLogin();
         A.setLocationRelativeTo(null);
         A.setResizable(true);
         A.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        // cad 
+        this.setVisible(false);
+        frmCadGeral P = new frmCadGeral();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        frmConsultas P = new frmConsultas();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jLabel15MouseClicked
+
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+        //movimentacoes
+        this.setVisible(false);
+        frmMovimentacoes P = new frmMovimentacoes();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jLabel10MouseClicked
+
+    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        frmMovimentacoes P = new frmMovimentacoes();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jLabel23MouseClicked
+
+    private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        frmRelatorios P = new frmRelatorios();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jLabel16MouseClicked
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        frmCriteriosSistema P = new frmCriteriosSistema();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jLabel11MouseClicked
+
+    private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        frmSugestoes P = new frmSugestoes();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
+    }//GEN-LAST:event_jLabel14MouseClicked
 
     /**
      * @param args the command line arguments
@@ -653,7 +777,6 @@ public void setHora(Date date) {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -672,12 +795,14 @@ public void setHora(Date date) {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCadUsuario;
     private javax.swing.JMenu jMenuCadastro;
+    private javax.swing.JMenu jMenuCadastro1;
     private javax.swing.JMenu jMenuConsultas;
     private javax.swing.JMenuItem jMenuFuncionario;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenu jMenuMovimentacao;
     private javax.swing.JMenu jMenuMovimentacao1;
     private javax.swing.JMenu jMenuRelatorios;

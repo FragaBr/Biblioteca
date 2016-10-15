@@ -21,6 +21,15 @@ public class clnObra {
     protected String ISBN;
     protected int CdEditora;
     protected int CdAutor;
+    protected int Sugestao;
+
+    public int getSugestao() {
+        return Sugestao;
+    }
+
+    public void setSugestao(int Sugestao) {
+        this.Sugestao = Sugestao;
+    }
     
     public int getCdObra (){
         return CdObra;

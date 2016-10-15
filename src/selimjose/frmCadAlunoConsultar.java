@@ -5,6 +5,16 @@
  */
 package selimjose;
 
+import dao.ModEnsinoDao;
+import dao.TurnoDao;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import static selimjose.frmCadAluno.modEnsino;
+
 /**
  *
  * @author Rhay
@@ -14,10 +24,58 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
     /**
      * Creates new form frmCadAlunoConsultar
      */
+    
+    static List<clnModEnsino> modEnsinoList;
+    static List<clnTurno>turno;
+    static List<clnBairro>bairroList;
+    static List<clnCidade>cidadeList;
+    static List<clnLogradouro>logradouroList;
+    
+    private DefaultTableModel tabelaLista = new DefaultTableModel();
+     ArrayList<clnTurno> arrayser = null;
+     
+    /*Modalidade de Ensino*/
+    public List<clnModEnsino> getModalidadeEnsino(){
+        return modEnsinoList;
+    }
+    public List<clnTurno> getTurno(){
+        return turno;
+    }
+    
     public frmCadAlunoConsultar(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        preencheCampos();
+        
+        tabelaLista = (DefaultTableModel) TabelaCadAlunos.getModel();
+        buscaNome(); 
     }
+     private void preencheCampos(){
+        
+        ModEnsinoDao mDao=new ModEnsinoDao();
+        modEnsinoList=mDao.pegarLista();
+        for(int i=0;i<modEnsinoList.size();i++){
+            cbModEnsino.addItem((modEnsinoList.get(i).getNmModEnsino()));
+        }
+        TurnoDao tDao= new TurnoDao();
+        turno=tDao.pegarLista();
+            for (clnTurno turno1 : turno) {
+                cbTurno.addItem(turno1.getNmTurno());
+            }
+        
+    }
+     private void buscaNome() {
+       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas        
+        TabelaCadAlunos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected,
+                        hasFocus, row, column);
+                return this;
+            }
+        });
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,36 +87,27 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
-        textField1 = new java.awt.TextField();
+        tfMatricula = new java.awt.TextField();
         jLabel29 = new javax.swing.JLabel();
-        textField7 = new java.awt.TextField();
+        tfAnoEgresso = new java.awt.TextField();
         jLabel33 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox();
-        jLabel34 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox();
+        cbModEnsino = new javax.swing.JComboBox();
         jLabel35 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
-        jComboBox8 = new javax.swing.JComboBox();
+        cbTurno = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenuCadastro = new javax.swing.JMenu();
-        jMenuConsultas = new javax.swing.JMenu();
-        jMenuRelatorios = new javax.swing.JMenu();
-        jMenuRelatorios1 = new javax.swing.JMenu();
+        TabelaCadAlunos = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ConsultarAluno.png"))); // NOI18N
 
         jPanel2.setBackground(new java.awt.Color(153, 102, 0));
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 1, 1, 2, new java.awt.Color(102, 51, 0)));
@@ -80,12 +129,17 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
         jLabel21.setText("Matricula*:");
         jLabel21.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        textField1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        textField1.setForeground(new java.awt.Color(153, 153, 153));
-        textField1.setText("Digite a Matricula");
-        textField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField1ActionPerformed(evt);
+        tfMatricula.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        tfMatricula.setForeground(new java.awt.Color(153, 153, 153));
+        tfMatricula.setText("Digite a Matricula");
+        tfMatricula.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfMatriculaMouseClicked(evt);
+            }
+        });
+        tfMatricula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfMatriculaKeyPressed(evt);
             }
         });
 
@@ -93,12 +147,17 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
         jLabel29.setText("Ano de Egresso*:");
         jLabel29.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        textField7.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        textField7.setForeground(new java.awt.Color(153, 153, 153));
-        textField7.setText("Digite o Ano");
-        textField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField7ActionPerformed(evt);
+        tfAnoEgresso.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        tfAnoEgresso.setForeground(new java.awt.Color(153, 153, 153));
+        tfAnoEgresso.setText("Digite o Ano");
+        tfAnoEgresso.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfAnoEgressoMouseClicked(evt);
+            }
+        });
+        tfAnoEgresso.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfAnoEgressoKeyPressed(evt);
             }
         });
 
@@ -106,19 +165,10 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
         jLabel33.setText("Modalidade de Ensino:");
         jLabel33.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jComboBox3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jComboBox3.setForeground(new java.awt.Color(153, 153, 153));
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite a Modalidade de Ensino" }));
-        jComboBox3.setPreferredSize(new java.awt.Dimension(100, 23));
-
-        jLabel34.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
-        jLabel34.setText("Turma:");
-        jLabel34.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        jComboBox4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jComboBox4.setForeground(new java.awt.Color(153, 153, 153));
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite a Turma" }));
-        jComboBox4.setPreferredSize(new java.awt.Dimension(100, 18));
+        cbModEnsino.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        cbModEnsino.setForeground(new java.awt.Color(153, 153, 153));
+        cbModEnsino.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite a Modalidade de Ensino" }));
+        cbModEnsino.setPreferredSize(new java.awt.Dimension(100, 23));
 
         jLabel35.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel35.setText("Turno:");
@@ -171,12 +221,12 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
             }
         });
 
-        jComboBox8.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jComboBox8.setForeground(new java.awt.Color(153, 153, 153));
-        jComboBox8.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite o Turno" }));
-        jComboBox8.setPreferredSize(new java.awt.Dimension(100, 18));
+        cbTurno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        cbTurno.setForeground(new java.awt.Color(153, 153, 153));
+        cbTurno.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite o Turno" }));
+        cbTurno.setPreferredSize(new java.awt.Dimension(100, 18));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TabelaCadAlunos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null}
             },
@@ -192,12 +242,12 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setColumnSelectionAllowed(true);
-        jScrollPane1.setViewportView(jTable1);
-        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(60);
-            jTable1.getColumnModel().getColumn(7).setMinWidth(100);
+        TabelaCadAlunos.setColumnSelectionAllowed(true);
+        jScrollPane1.setViewportView(TabelaCadAlunos);
+        TabelaCadAlunos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (TabelaCadAlunos.getColumnModel().getColumnCount() > 0) {
+            TabelaCadAlunos.getColumnModel().getColumn(0).setMaxWidth(60);
+            TabelaCadAlunos.getColumnModel().getColumn(7).setMinWidth(100);
         }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -213,25 +263,20 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel21)
-                                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tfMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(25, 25, 25)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel29, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(textField7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tfAnoEgresso, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel33)
-                                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(cbModEnsino, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel33))
+                                .addGap(18, 18, 18)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel34)
-                                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel35)
-                                        .addGap(80, 80, 80))
-                                    .addComponent(jComboBox8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel35)
+                                    .addComponent(cbTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(81, 81, 81))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                 .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(19, 19, 19)
@@ -244,29 +289,23 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(28, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textField7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfAnoEgresso, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel21)
                             .addComponent(jLabel29)
                             .addComponent(jLabel33))
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel34)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(tfMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
                         .addComponent(jLabel35)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbModEnsino, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(49, 49, 49)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -279,56 +318,33 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ConsultarAlunos.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(100, Short.MAX_VALUE))
         );
-
-        jMenuBar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jMenuBar1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-
-        jMenuCadastro.setBorder(null);
-        jMenuCadastro.setText("Inserir Aluno");
-        jMenuCadastro.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jMenuCadastro.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuCadastro);
-
-        jMenuConsultas.setText("Editar Aluno");
-        jMenuConsultas.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuConsultas);
-
-        jMenuRelatorios.setText("Consultar Aluno");
-        jMenuRelatorios.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuRelatorios);
-
-        jMenuRelatorios1.setText("Ativar/Desativar Aluno");
-        jMenuRelatorios1.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuRelatorios1);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -340,7 +356,7 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
 
         pack();
@@ -358,13 +374,29 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void textField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textField7ActionPerformed
+    private void tfMatriculaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfMatriculaKeyPressed
+        if(tfMatricula.getText().equals(("Digite a Matricula"))){ 
+            tfMatricula.setText("");
+        }
+    }//GEN-LAST:event_tfMatriculaKeyPressed
 
-    private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textField1ActionPerformed
+    private void tfMatriculaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfMatriculaMouseClicked
+        if(tfMatricula.getText().equals(("Digite a Matricula"))){ 
+            tfMatricula.setText("");
+        }
+    }//GEN-LAST:event_tfMatriculaMouseClicked
+
+    private void tfAnoEgressoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfAnoEgressoKeyPressed
+        if(tfAnoEgresso.getText().equals(("Digite o Ano"))){ 
+            tfAnoEgresso.setText("");
+        }
+    }//GEN-LAST:event_tfAnoEgressoKeyPressed
+
+    private void tfAnoEgressoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfAnoEgressoMouseClicked
+        if(tfAnoEgresso.getText().equals(("Digite o Ano"))){ 
+            tfAnoEgresso.setText("");
+        }
+    }//GEN-LAST:event_tfAnoEgressoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -410,30 +442,23 @@ public class frmCadAlunoConsultar extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TabelaCadAlunos;
+    private javax.swing.JComboBox cbModEnsino;
+    private javax.swing.JComboBox cbTurno;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
-    private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBox4;
-    private javax.swing.JComboBox jComboBox8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenu jMenuCadastro;
-    private javax.swing.JMenu jMenuConsultas;
-    private javax.swing.JMenu jMenuRelatorios;
-    private javax.swing.JMenu jMenuRelatorios1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private java.awt.TextField textField1;
-    private java.awt.TextField textField7;
+    private java.awt.TextField tfAnoEgresso;
+    private java.awt.TextField tfMatricula;
     // End of variables declaration//GEN-END:variables
 }

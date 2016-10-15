@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import selimjose.clnAluno;
 import selimjose.clnUsuario;
@@ -324,4 +325,31 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
         }
         return a;
     }
+     
+     public int pesquisar2(clnUsuario p) throws DaoException {
+        
+        int cRet=0;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR);  
+            ps.setString(1, p.getNmUsuario());
+            ps.setString(2,p.getDtNasc());
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet =(rs.getInt("CdUsuario"));
+            }
+                
+        } catch (Exception e) {
+            new DaoException("Funcionario nÃ£o inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }	
+        return cRet;
+    }
+
 }

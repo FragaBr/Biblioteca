@@ -5,6 +5,23 @@
  */
 package selimjose;
 
+import dao.AlunoDao;
+import dao.BairroDao;
+import dao.CidadeDao;
+import dao.DaoException;
+import dao.LogradouroDao;
+import dao.ModEnsinoDao;
+import dao.TurnoDao;
+import dao.UsuarioDao;
+import java.sql.Connection;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Rhay
@@ -14,9 +31,42 @@ public class frmCadAluno extends javax.swing.JDialog {
     /**
      * Creates new form frmCadAluno
      */
+    
+    static List<clnModEnsino> modEnsino;
+    static List<clnTurno>turno;
+    static List<clnBairro>bairroList;
+    static List<clnCidade>cidadeList;
+    static List<clnLogradouro>logradouroList;
+    
+    /*Modalidade de Ensino*/
+    public List<clnModEnsino> getModalidadeEnsino(){
+        return modEnsino;
+    }
+    public List<clnTurno> getTurno(){
+        return turno;
+    }
+    /**/
+    
+    
     public frmCadAluno(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        preencheCampos();
+    }
+    
+    private void preencheCampos(){
+        
+        ModEnsinoDao mDao=new ModEnsinoDao();
+        modEnsino=mDao.pegarLista();
+        for(int i=0;i<modEnsino.size();i++){
+            cbModalidadeEnsino.addItem((modEnsino.get(i).getNmModEnsino()));
+        }
+        TurnoDao tDao= new TurnoDao();
+        turno=tDao.pegarLista();
+            for (clnTurno turno1 : turno) {
+                cbTurno.addItem(turno1.getNmTurno());
+            }
+        
     }
 
     /**
@@ -41,20 +91,15 @@ public class frmCadAluno extends javax.swing.JDialog {
         jLabel31 = new javax.swing.JLabel();
         tfEmail = new java.awt.TextField();
         jLabel32 = new javax.swing.JLabel();
-        tfTelefone = new javax.swing.JFormattedTextField();
         jLabel33 = new javax.swing.JLabel();
         cbModalidadeEnsino = new javax.swing.JComboBox();
-        jButton6 = new javax.swing.JButton();
-        jLabel34 = new javax.swing.JLabel();
-        cbTurma = new javax.swing.JComboBox();
-        jButton7 = new javax.swing.JButton();
+        btModalidadeEnsino = new javax.swing.JButton();
         jLabel35 = new javax.swing.JLabel();
-        jButton8 = new javax.swing.JButton();
+        btTurno = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
         cbCidade = new javax.swing.JComboBox();
-        jButton9 = new javax.swing.JButton();
         jLabel38 = new javax.swing.JLabel();
         cbUF = new javax.swing.JComboBox();
         jLabel39 = new javax.swing.JLabel();
@@ -67,23 +112,28 @@ public class frmCadAluno extends javax.swing.JDialog {
         jLabel45 = new javax.swing.JLabel();
         tfLogin = new java.awt.TextField();
         jLabel46 = new javax.swing.JLabel();
-        tfSenha = new java.awt.TextField();
         jLabel47 = new javax.swing.JLabel();
-        tfSenhaAgain = new java.awt.TextField();
         jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
+        btNovo = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
         cbTurno = new javax.swing.JComboBox();
-        tfBairro = new javax.swing.JComboBox();
+        cbBairro = new javax.swing.JComboBox();
         jLabel43 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        rbMasc = new javax.swing.JRadioButton();
+        rbFem = new javax.swing.JRadioButton();
+        rbOutro = new javax.swing.JRadioButton();
+        jLabel34 = new javax.swing.JLabel();
+        tfDataNasc = new javax.swing.JFormattedTextField();
+        cbRua = new javax.swing.JComboBox();
+        jLabel44 = new javax.swing.JLabel();
+        tfTelefone = new java.awt.TextField();
+        tfSenha = new javax.swing.JPasswordField();
+        tfSenhaAgain = new javax.swing.JPasswordField();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenuCadastro = new javax.swing.JMenu();
-        jMenuConsultas = new javax.swing.JMenu();
-        jMenuRelatorios = new javax.swing.JMenu();
-        jMenuRelatorios1 = new javax.swing.JMenu();
+        MenuNovo = new javax.swing.JMenu();
+        MenuEditar = new javax.swing.JMenu();
+        MenuConsultar = new javax.swing.JMenu();
+        MenuAtiDes = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -109,96 +159,134 @@ public class frmCadAluno extends javax.swing.JDialog {
 
         jLabel21.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel21.setText("Matricula*:");
-        jLabel21.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel21.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         tfMatricula.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         tfMatricula.setForeground(new java.awt.Color(153, 153, 153));
         tfMatricula.setText("Digite a Matricula");
-        tfMatricula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfMatriculaActionPerformed(evt);
+        tfMatricula.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfMatriculaMouseClicked(evt);
+            }
+        });
+        tfMatricula.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfMatriculaFocusLost(evt);
+            }
+        });
+        tfMatricula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfMatriculaKeyPressed(evt);
             }
         });
 
         jLabel29.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
-        jLabel29.setText("Ano de Egresso*:");
-        jLabel29.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel29.setText("Ano de Engresso*:");
+        jLabel29.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         tfAnoEgresso.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         tfAnoEgresso.setForeground(new java.awt.Color(153, 153, 153));
         tfAnoEgresso.setText("Digite o Ano");
+        tfAnoEgresso.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfAnoEgressoMouseClicked(evt);
+            }
+        });
         tfAnoEgresso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfAnoEgressoActionPerformed(evt);
             }
         });
+        tfAnoEgresso.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfAnoEgressoFocusLost(evt);
+            }
+        });
+        tfAnoEgresso.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfAnoEgressoKeyPressed(evt);
+            }
+        });
 
         jLabel30.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel30.setText("Nome Completo*:");
-        jLabel30.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel30.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         tfNomeCompleto.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         tfNomeCompleto.setForeground(new java.awt.Color(153, 153, 153));
         tfNomeCompleto.setText("Digite o Nome Completo");
-        tfNomeCompleto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfNomeCompletoActionPerformed(evt);
+        tfNomeCompleto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfNomeCompletoMouseClicked(evt);
+            }
+        });
+        tfNomeCompleto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfNomeCompletoFocusLost(evt);
+            }
+        });
+        tfNomeCompleto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfNomeCompletoKeyPressed(evt);
             }
         });
 
         jLabel31.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel31.setText("E-mail:");
-        jLabel31.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel31.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         tfEmail.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         tfEmail.setForeground(new java.awt.Color(153, 153, 153));
         tfEmail.setText("Digite o E-mail");
-        tfEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfEmailActionPerformed(evt);
+        tfEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfEmailMouseClicked(evt);
+            }
+        });
+        tfEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfEmailFocusLost(evt);
+            }
+        });
+        tfEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfEmailKeyPressed(evt);
             }
         });
 
         jLabel32.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel32.setText("Telefone:");
-        jLabel32.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        try {
-            tfTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
+        jLabel32.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel33.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel33.setText("Modalidade de Ensino:");
-        jLabel33.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel33.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         cbModalidadeEnsino.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         cbModalidadeEnsino.setForeground(new java.awt.Color(153, 153, 153));
+        cbModalidadeEnsino.setMaximumRowCount(4);
         cbModalidadeEnsino.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite a Modalidade de Ensino" }));
         cbModalidadeEnsino.setPreferredSize(new java.awt.Dimension(100, 23));
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
-        jButton6.setPreferredSize(new java.awt.Dimension(49, 23));
-
-        jLabel34.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
-        jLabel34.setText("Turma:");
-        jLabel34.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        cbTurma.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        cbTurma.setForeground(new java.awt.Color(153, 153, 153));
-        cbTurma.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite a Turma" }));
-        cbTurma.setPreferredSize(new java.awt.Dimension(100, 18));
-
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
-        jButton7.setPreferredSize(new java.awt.Dimension(49, 23));
+        btModalidadeEnsino.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
+        btModalidadeEnsino.setPreferredSize(new java.awt.Dimension(49, 23));
+        btModalidadeEnsino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btModalidadeEnsinoActionPerformed(evt);
+            }
+        });
 
         jLabel35.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel35.setText("Turno:");
-        jLabel35.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel35.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
-        jButton8.setPreferredSize(new java.awt.Dimension(49, 23));
+        btTurno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
+        btTurno.setPreferredSize(new java.awt.Dimension(49, 23));
+        btTurno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btTurnoActionPerformed(evt);
+            }
+        });
 
         jPanel4.setBackground(new java.awt.Color(153, 102, 0));
         jPanel4.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 1, 1, 2, new java.awt.Color(102, 51, 0)));
@@ -216,62 +304,81 @@ public class frmCadAluno extends javax.swing.JDialog {
 
         jLabel36.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel36.setText("Endereço");
-        jLabel36.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel36.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel37.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel37.setText("CEP:");
-        jLabel37.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel37.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         cbCidade.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         cbCidade.setForeground(new java.awt.Color(153, 153, 153));
         cbCidade.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite a Cidade" }));
+        cbCidade.setEnabled(false);
         cbCidade.setPreferredSize(new java.awt.Dimension(100, 18));
-
-        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
-        jButton9.setPreferredSize(new java.awt.Dimension(49, 23));
 
         jLabel38.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel38.setText("UF:");
-        jLabel38.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel38.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         cbUF.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         cbUF.setForeground(new java.awt.Color(153, 153, 153));
-        cbUF.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite o UF" }));
+        cbUF.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite o UF", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
+        cbUF.setEnabled(false);
         cbUF.setPreferredSize(new java.awt.Dimension(100, 18));
 
         jLabel39.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel39.setText("Cidade:");
-        jLabel39.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel39.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel40.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel40.setText("Bairro:");
-        jLabel40.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel40.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel41.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel41.setText("Numero:");
-        jLabel41.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel41.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         tfNumero.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         tfNumero.setForeground(new java.awt.Color(153, 153, 153));
         tfNumero.setText("Digite o Numero");
-        tfNumero.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfNumeroActionPerformed(evt);
+        tfNumero.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfNumeroMouseClicked(evt);
+            }
+        });
+        tfNumero.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfNumeroFocusLost(evt);
+            }
+        });
+        tfNumero.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfNumeroKeyPressed(evt);
             }
         });
 
         tfCEP.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         tfCEP.setForeground(new java.awt.Color(153, 153, 153));
         tfCEP.setText("Digite o CEP");
-        tfCEP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfCEPActionPerformed(evt);
+        tfCEP.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfCEPMouseClicked(evt);
+            }
+        });
+        tfCEP.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfCEPFocusLost(evt);
+            }
+        });
+        tfCEP.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfCEPKeyPressed(evt);
             }
         });
 
         jLabel42.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel42.setText("Acesso");
-        jLabel42.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel42.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jPanel5.setBackground(new java.awt.Color(153, 102, 0));
         jPanel5.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 1, 1, 2, new java.awt.Color(102, 51, 0)));
@@ -289,42 +396,34 @@ public class frmCadAluno extends javax.swing.JDialog {
 
         jLabel45.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel45.setText("Login:");
-        jLabel45.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel45.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         tfLogin.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         tfLogin.setForeground(new java.awt.Color(153, 153, 153));
         tfLogin.setText("Digite o Login");
-        tfLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfLoginActionPerformed(evt);
+        tfLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfLoginMouseClicked(evt);
+            }
+        });
+        tfLogin.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfLoginFocusLost(evt);
+            }
+        });
+        tfLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfLoginKeyPressed(evt);
             }
         });
 
         jLabel46.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel46.setText("Senha:");
-        jLabel46.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        tfSenha.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        tfSenha.setForeground(new java.awt.Color(153, 153, 153));
-        tfSenha.setText("Digite a Senha");
-        tfSenha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfSenhaActionPerformed(evt);
-            }
-        });
+        jLabel46.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel47.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel47.setText("Senha Novamente");
-        jLabel47.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        tfSenhaAgain.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        tfSenhaAgain.setForeground(new java.awt.Color(153, 153, 153));
-        tfSenhaAgain.setText("Digite a Senha");
-        tfSenhaAgain.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfSenhaAgainActionPerformed(evt);
-            }
-        });
+        jLabel47.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jButton10.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_cancel.png"))); // NOI18N
@@ -337,14 +436,14 @@ public class frmCadAluno extends javax.swing.JDialog {
             }
         });
 
-        jButton11.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
-        jButton11.setText("Novo");
-        jButton11.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton11.setBorderPainted(false);
-        jButton11.addActionListener(new java.awt.event.ActionListener() {
+        btNovo.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add.png"))); // NOI18N
+        btNovo.setText("Novo");
+        btNovo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btNovo.setBorderPainted(false);
+        btNovo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
+                btNovoActionPerformed(evt);
             }
         });
 
@@ -364,20 +463,79 @@ public class frmCadAluno extends javax.swing.JDialog {
         cbTurno.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite o Turno" }));
         cbTurno.setPreferredSize(new java.awt.Dimension(100, 18));
 
-        tfBairro.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        tfBairro.setForeground(new java.awt.Color(153, 153, 153));
-        tfBairro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite o Bairro" }));
-        tfBairro.setPreferredSize(new java.awt.Dimension(100, 18));
+        cbBairro.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        cbBairro.setForeground(new java.awt.Color(153, 153, 153));
+        cbBairro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite o Bairro" }));
+        cbBairro.setEnabled(false);
+        cbBairro.setPreferredSize(new java.awt.Dimension(100, 18));
 
         jLabel43.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel43.setText("Sexo*:");
-        jLabel43.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel43.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jRadioButton1.setText("Masculino");
+        rbMasc.setText("Masculino");
+        rbMasc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbMascActionPerformed(evt);
+            }
+        });
 
-        jRadioButton2.setText("Feminino");
+        rbFem.setText("Feminino");
+        rbFem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbFemActionPerformed(evt);
+            }
+        });
 
-        jRadioButton3.setText("Outros");
+        rbOutro.setText("Outro");
+        rbOutro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbOutroActionPerformed(evt);
+            }
+        });
+
+        jLabel34.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
+        jLabel34.setText("Data de Nascimento");
+        jLabel34.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        try {
+            tfDataNasc.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        cbRua.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        cbRua.setForeground(new java.awt.Color(153, 153, 153));
+        cbRua.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite a Rua" }));
+        cbRua.setEnabled(false);
+        cbRua.setPreferredSize(new java.awt.Dimension(100, 18));
+
+        jLabel44.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
+        jLabel44.setText("Rua:");
+        jLabel44.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        tfTelefone.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        tfTelefone.setForeground(new java.awt.Color(153, 153, 153));
+        tfTelefone.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tfTelefoneMouseClicked(evt);
+            }
+        });
+        tfTelefone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfTelefoneActionPerformed(evt);
+            }
+        });
+        tfTelefone.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfTelefoneFocusLost(evt);
+            }
+        });
+        tfTelefone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfTelefoneKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -388,29 +546,25 @@ public class frmCadAluno extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel34)
                             .addComponent(jLabel31)
                             .addComponent(tfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel32)))
+                            .addComponent(jLabel32)
+                            .addComponent(tfTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(tfNomeCompleto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel33)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel33, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                         .addComponent(cbModalidadeEnsino, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel34)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(cbTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(btModalidadeEnsino, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tfDataNasc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(109, 193, Short.MAX_VALUE)))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -421,13 +575,13 @@ public class frmCadAluno extends javax.swing.JDialog {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                         .addComponent(cbTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(57, 57, 57)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButton1)
-                                    .addComponent(jRadioButton2)
-                                    .addComponent(jRadioButton3)))))
+                                    .addComponent(rbMasc)
+                                    .addComponent(rbFem)
+                                    .addComponent(rbOutro)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel21)
@@ -441,15 +595,10 @@ public class frmCadAluno extends javax.swing.JDialog {
                                 .addComponent(tfAnoEgresso, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(23, 23, 23))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 80, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(tfCEP, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel37)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -457,34 +606,33 @@ public class frmCadAluno extends javax.swing.JDialog {
                                 .addGap(34, 34, 34)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel40)
-                                    .addComponent(tfBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(cbBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfCEP, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel37))
+                                .addGap(46, 46, 46)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel38)
+                                    .addComponent(cbUF, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(20, 29, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel38)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel41)
-                            .addComponent(tfNumero, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                            .addComponent(cbUF, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(tfNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel44)
+                            .addComponent(cbRua, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel45)
                             .addComponent(tfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(50, 50, 50)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel46)
-                            .addComponent(tfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                        .addComponent(jLabel46)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel47)
-                            .addComponent(tfSenhaAgain, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(tfSenhaAgain, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)))
                 .addGap(23, 23, 23))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
-                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -496,6 +644,16 @@ public class frmCadAluno extends javax.swing.JDialog {
                         .addComponent(jLabel36)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
+                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -516,59 +674,64 @@ public class frmCadAluno extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(tfNomeCompleto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton1))
-                .addGap(0, 0, 0)
-                .addComponent(jRadioButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton3)
-                .addGap(10, 10, 10)
+                    .addComponent(rbMasc))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel31)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel32)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(rbFem)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rbOutro)
+                        .addGap(10, 10, 10)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel32)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tfTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(14, 14, 14)
+                                        .addComponent(jLabel31)
+                                        .addGap(1, 1, 1)
+                                        .addComponent(tfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(19, 19, 19)
                                 .addComponent(jLabel33)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btModalidadeEnsino, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cbModalidadeEnsino, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)))
+                            .addComponent(btTurno, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel34)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButton8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel35)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel35)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel34)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel37)
-                    .addComponent(jLabel38))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbUF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfCEP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel38, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel37))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tfCEP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbUF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel44)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbRua, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel39)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -579,23 +742,22 @@ public class frmCadAluno extends javax.swing.JDialog {
                     .addComponent(tfNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cbCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tfBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                        .addComponent(cbBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel47)
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(tfSenhaAgain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel47)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(tfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel46)
-                            .addGap(24, 24, 24))
+                            .addGap(2, 2, 2)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(tfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tfSenhaAgain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel45)
                             .addGap(2, 2, 2)
@@ -603,7 +765,7 @@ public class frmCadAluno extends javax.swing.JDialog {
                 .addGap(56, 56, 56)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50))
         );
@@ -632,30 +794,40 @@ public class frmCadAluno extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenuBar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jMenuBar1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
 
-        jMenuCadastro.setBorder(null);
-        jMenuCadastro.setText("Inserir Aluno");
-        jMenuCadastro.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jMenuCadastro.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuCadastro);
+        MenuNovo.setBorder(null);
+        MenuNovo.setText("Inserir Aluno");
+        MenuNovo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        MenuNovo.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+        jMenuBar1.add(MenuNovo);
 
-        jMenuConsultas.setText("Editar Aluno");
-        jMenuConsultas.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuConsultas);
+        MenuEditar.setText("Editar Aluno");
+        MenuEditar.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+        MenuEditar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MenuEditarMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(MenuEditar);
 
-        jMenuRelatorios.setText("Consultar Aluno");
-        jMenuRelatorios.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuRelatorios);
+        MenuConsultar.setText("Consultar Aluno");
+        MenuConsultar.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+        MenuConsultar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MenuConsultarMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(MenuConsultar);
 
-        jMenuRelatorios1.setText("Ativar/Desativar Aluno");
-        jMenuRelatorios1.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
-        jMenuBar1.add(jMenuRelatorios1);
+        MenuAtiDes.setText("Ativar/Desativar Aluno");
+        MenuAtiDes.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+        jMenuBar1.add(MenuAtiDes);
 
         setJMenuBar(jMenuBar1);
 
@@ -669,60 +841,458 @@ public class frmCadAluno extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 4, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfMatriculaActionPerformed
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfMatriculaActionPerformed
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void btNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNovoActionPerformed
+        if(MenuNovo.isEnabled()==true){
+            
+            String s1= String.valueOf(tfSenha.getPassword());
+            String s2= String.valueOf(tfSenhaAgain.getPassword());
+            
+                    
+            if(!(s1.equals(s2))){
+                 JOptionPane.showMessageDialog(this,"Senha Incorreta","Error",JOptionPane.ERROR_MESSAGE);
+            }
+          
+            else{
+            AlunoDao al= new AlunoDao();
+            UsuarioDao uDao=new UsuarioDao();
+            clnAluno alunoClass=new clnAluno();
+            clnModEnsino modEnsinoClass= new clnModEnsino();
+            clnTurno turnoClass=new clnTurno();
+            clnBairro bairroClass=new clnBairro();
+            clnCidade cidadeClass=new clnCidade();
+                   
+            
+            alunoClass.setMatricula(tfMatricula.getText());
+            alunoClass.setAnoEgresso(Integer.parseInt(tfAnoEgresso.getText()));
+            alunoClass.setNmUsuario(tfNomeCompleto.getText());
+            String sexo=null;
+
+            if(rbFem.isSelected()){
+                sexo="Feminino";
+            }else if(rbMasc.isSelected()){
+                sexo="Masculino";
+            }else if(rbOutro.isSelected()){
+                sexo="Outro";
+            }
+            alunoClass.setSexo(sexo);
+            
+            DateFormat fmt=new SimpleDateFormat("dd/MM/yyyy");
+            try{
+                java.sql.Date data= new java.sql.Date(fmt.parse(tfDataNasc.getText()).getTime());
+                alunoClass.setDtNasc(data);
+            }catch(ParseException e1){
+                e1.printStackTrace();
+            }
+            
+            alunoClass.setEmail(tfEmail.getText());
+            alunoClass.setTel(tfTelefone.getText());
+            
+            ModEnsinoDao mDao=new ModEnsinoDao();
+            try{
+                modEnsinoClass=mDao.pesquisar(cbModalidadeEnsino.getSelectedItem().toString());
+                alunoClass.setModEnsinoFK(modEnsinoClass.getCdModEnsino());
+            } catch (DaoException ex) {
+               Logger.getLogger(frmSugestoes.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            
+            TurnoDao tDao=new TurnoDao();
+            try{
+                turnoClass=tDao.pesquisar(cbTurno.getSelectedItem().toString());
+                alunoClass.setCdTurnoFK(turnoClass.getCdTurno());
+            } catch (DaoException ex) {
+               Logger.getLogger(frmSugestoes.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            
+           alunoClass.setLogin(tfLogin.getText());
+           alunoClass.setSenha(String.valueOf(tfSenha.getPassword()));
+           int status =1;
+           alunoClass.setStatus(status);
+           
+           alunoClass.setCEP(Integer.parseInt(tfCEP.getText()));
+           alunoClass.setCepFK(Integer.parseInt(tfCEP.getText()));
+           
+           alunoClass.setNumeroLogradouro(Integer.parseInt(tfNumero.getText()));
+           
+           
+           
+            CidadeDao cDao=new CidadeDao();
+            int codigoCidade=0;
+            cidadeClass=cDao.Exists2(cbCidade.getSelectedItem().toString(),cbUF.getSelectedItem().toString());
+
+            codigoCidade=cidadeClass.getCdCidade();
+            alunoClass.setCdCidades(codigoCidade);
+            alunoClass.setCidadeFK(codigoCidade);
+            
+            
+            BairroDao bDao=new BairroDao();
+            System.out.println("Codigo Cidade"+codigoCidade);
+            System.out.println("Bairro"+cbBairro.getSelectedItem().toString());
+            
+            
+            bairroClass=bDao.Exists2(codigoCidade,cbBairro.getSelectedItem().toString());
+
+            alunoClass.setCdBairros(bairroClass.getCdBairro());
+            alunoClass.setBairroFK(bairroClass.getCdBairro());
+            
+            int cdUser=0;
+            
+            try {
+                    uDao.inserir(alunoClass);
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmSugestoes.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                   cdUser=uDao.pesquisar2(alunoClass);
+                   System.out.println(cdUser);
+                    alunoClass.setCdUsuarioFK(cdUser);
+                    al.inserir(alunoClass);
+            
+            } catch (DaoException ex) {
+                    Logger.getLogger(frmSugestoes.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                    JOptionPane.showMessageDialog(null, "Cadastro Feito Com Sucesso!");
+                    
+                    
+                    tfMatricula.setText("Digite a Matricula");
+                    tfAnoEgresso.setText("Digite o Ano");
+                    tfNomeCompleto.setText("Digite o Nome Completo");
+                    rbFem.setSelected(false);
+                    rbMasc.setSelected(false);
+                    rbOutro.setSelected(false);
+                    tfEmail.setText("Digite o E-mail");
+                    tfTelefone.setText("");
+                    cbModalidadeEnsino.setSelectedIndex(0);
+                    cbModalidadeEnsino.setSelectedIndex(0);
+                    tfCEP.setText("Digite o CEP");
+                    cbUF.remove(1);
+                    cbUF.setSelectedIndex(0);
+                    cbRua.remove(1);
+                    cbRua.setSelectedIndex(0);
+                    cbCidade.remove(1);
+                    cbCidade.setSelectedIndex(0);
+                    cbBairro.remove(1);
+                    cbBairro.setSelectedIndex(0);
+                    tfNumero.setText("Digite o Numero");
+                    tfLogin.setText("Digite o Login");
+                    tfSenha.setText("");
+                    tfSenhaAgain.setText("");
+                    
+                    
+            }
+           
+          /*  System.out.println("Matricula"+alunoClass.getMatricula());
+            System.out.println("Ano Egresso"+alunoClass.getAnoEgresso());
+            System.out.println("Nome"+alunoClass.getNmUsuario());
+            System.out.println("Sexo"+alunoClass.getSexo());
+            System.out.println("Data"+alunoClass.getDtNasc());
+            System.out.println("E-mail"+alunoClass.getEmail());
+            System.out.println("Telefone"+alunoClass.getTel());
+            System.out.println("Mod. Ensino"+alunoClass.getModEnsinoFK());
+            System.out.println("Turno:"+alunoClass.getCdTurnoFK());
+            System.out.println("CEP:"+alunoClass.getCepFK());
+            System.out.println("Bairro"+alunoClass.getBairroFK());
+            System.out.println("Senha:"+alunoClass.getSenha());
+            System.out.println("Login:"+alunoClass.getLogin());
+*/    
+            
+        }
+        
+    }//GEN-LAST:event_btNovoActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+                    tfMatricula.setText("Digite a Matricula");
+                    tfAnoEgresso.setText("Digite o Ano");
+                    tfNomeCompleto.setText("Digite o Nome Completo");
+                    rbFem.setSelected(false);
+                    rbMasc.setSelected(false);
+                    rbOutro.setSelected(false);
+                    tfEmail.setText("Digite o E-mail");
+                    tfTelefone.setText("");
+                    cbModalidadeEnsino.setSelectedIndex(0);
+                    cbModalidadeEnsino.setSelectedIndex(0);
+                    tfCEP.setText("Digite o CEP");
+                    cbUF.remove(1);
+                    cbUF.setSelectedIndex(0);
+                    cbRua.remove(1);
+                    cbRua.setSelectedIndex(0);
+                    cbCidade.remove(1);
+                    cbCidade.setSelectedIndex(0);
+                    cbBairro.remove(1);
+                    cbBairro.setSelectedIndex(0);
+                    tfNumero.setText("Digite o Numero");
+                    tfLogin.setText("Digite o Login");
+                    tfSenha.setText("");
+                    tfSenhaAgain.setText("");
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void rbMascActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbMascActionPerformed
+        if(rbMasc.isSelected()){
+            rbFem.setSelected(false);
+            rbOutro.setSelected(false);
+        }
+    }//GEN-LAST:event_rbMascActionPerformed
+
+    private void rbFemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbFemActionPerformed
+        if(rbFem.isSelected()){
+            rbMasc.setSelected(false);
+            rbOutro.setSelected(false);
+        }
+    }//GEN-LAST:event_rbFemActionPerformed
+
+    private void rbOutroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbOutroActionPerformed
+         if(rbOutro.isSelected()){
+            rbFem.setSelected(false);
+            rbMasc.setSelected(false);
+        }
+    }//GEN-LAST:event_rbOutroActionPerformed
+
+    private void btModalidadeEnsinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModalidadeEnsinoActionPerformed
+        frmCadModEnsino cadME=new frmCadModEnsino();
+        cadME.setLocationRelativeTo(null);
+        cadME.setVisible(true);
+        
+         ModEnsinoDao mDao=new ModEnsinoDao();
+        modEnsino=mDao.pegarLista();
+        cbModalidadeEnsino.removeAllItems();
+        cbModalidadeEnsino.addItem("Digite a Modalidade de Ensino");
+        for(int i=1;i<modEnsino.size();i++){
+            cbModalidadeEnsino.addItem((modEnsino.get(i).getNmModEnsino()));
+        }
+        
+    }//GEN-LAST:event_btModalidadeEnsinoActionPerformed
+
+    private void btTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btTurnoActionPerformed
+        frmCadTurno cadAD=new frmCadTurno();
+        cadAD.setLocationRelativeTo(null);
+        cadAD.setVisible(true);
+        
+        TurnoDao tDao= new TurnoDao();
+        turno=tDao.PesquisarLista();
+        
+        cbTurno.removeAllItems();
+        cbTurno.addItem("Digite o Turno");
+        
+        for(int i=1;i<turno.size();i++){
+                cbTurno.addItem(turno.get(i).getNmTurno());
+        }
+        
+    }//GEN-LAST:event_btTurnoActionPerformed
+
+    private void tfCEPFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfCEPFocusLost
+            
+            LogradouroDao lDao = new LogradouroDao();
+            BairroDao bDao = new BairroDao();
+            CidadeDao cDao = new CidadeDao();
+            clnLogradouro l = new clnLogradouro();
+            clnLogradouro res = new clnLogradouro();
+            clnBairro b = new clnBairro();
+            clnCidade c = new clnCidade();
+
+            
+            if(!(tfCEP.getText().isEmpty())){
+                l.setCep(Integer.parseInt(tfCEP.getText()));
+                try {
+                    res = lDao.pesquisar(l.getCep());
+                    
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadAluno.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    b = bDao.pesquisar(res.getCdBairro());
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadAluno.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    c = cDao.pesquisar(b.getCdCidade());
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmCadAluno.class.getName()).log(Level.SEVERE, null, ex);
+                }
+         
+                //System.out.println(res.getNmLogradouro());
+                cbRua.addItem(res.getNmLogradouro());
+                cbRua.setSelectedIndex(1);
+                cbCidade.addItem(c.getNmCidade());
+                cbCidade.setSelectedIndex(1);
+                int index=0;
+                for(int i=0;i<cbUF.getItemCount();i++){
+                    if(cbUF.getItemAt(i).equals(c.getEstado())){
+                        index=i;
+                    }
+                }
+                cbUF.setSelectedIndex(index);
+                cbBairro.addItem(b.getNmBairro());
+                cbBairro.setSelectedIndex(1);
+                
+            }
+        
+    }//GEN-LAST:event_tfCEPFocusLost
+
+    private void tfMatriculaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfMatriculaKeyPressed
+       if((tfMatricula.getText()).equals("Digite a Matricula")){
+        tfMatricula.setText("");   
+       }
+        
+    }//GEN-LAST:event_tfMatriculaKeyPressed
+
+    private void tfMatriculaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfMatriculaMouseClicked
+       if((tfMatricula.getText()).equals("Digite a Matricula")){
+        tfMatricula.setText("");   
+       }
+    }//GEN-LAST:event_tfMatriculaMouseClicked
+
+    private void tfAnoEgressoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfAnoEgressoKeyPressed
+        if((tfAnoEgresso.getText()).equals("Digite o Ano")){
+            tfAnoEgresso.setText("");   
+       }
+    }//GEN-LAST:event_tfAnoEgressoKeyPressed
+
+    private void tfAnoEgressoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfAnoEgressoMouseClicked
+        if((tfAnoEgresso.getText()).equals("Digite o Ano")){
+            tfAnoEgresso.setText("");   
+       }
+    }//GEN-LAST:event_tfAnoEgressoMouseClicked
+
+    private void tfMatriculaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfMatriculaFocusLost
+        if((tfMatricula.getText()).isEmpty()){
+            tfMatricula.setText("Digite a Matricula");
+        }
+    }//GEN-LAST:event_tfMatriculaFocusLost
+
+    private void tfAnoEgressoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfAnoEgressoFocusLost
+        if((tfAnoEgresso.getText()).isEmpty()){
+            tfAnoEgresso.setText("Digite o Ano");
+        }
+    }//GEN-LAST:event_tfAnoEgressoFocusLost
+
+    private void tfNomeCompletoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNomeCompletoKeyPressed
+          if((tfNomeCompleto.getText()).equals("Digite o Nome Completo")){
+            tfNomeCompleto.setText("");   
+       }
+    }//GEN-LAST:event_tfNomeCompletoKeyPressed
+
+    private void tfNomeCompletoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfNomeCompletoMouseClicked
+        if((tfNomeCompleto.getText()).equals("Digite o Nome Completo")){
+            tfNomeCompleto.setText("");   
+       }
+    }//GEN-LAST:event_tfNomeCompletoMouseClicked
+
+    private void tfNomeCompletoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNomeCompletoFocusLost
+        if((tfNomeCompleto.getText()).isEmpty()){
+                    tfNomeCompleto.setText("Digite o Nome Completo");
+                }
+    }//GEN-LAST:event_tfNomeCompletoFocusLost
+
+    private void tfCEPKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCEPKeyPressed
+        if((tfCEP.getText()).equals("Digite o CEP")){
+            tfCEP.setText("");   
+       }
+    }//GEN-LAST:event_tfCEPKeyPressed
+
+    private void tfCEPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfCEPMouseClicked
+        if((tfCEP.getText()).equals("Digite o CEP")){
+            tfCEP.setText("");   
+       }
+    }//GEN-LAST:event_tfCEPMouseClicked
+
+    private void tfNumeroFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNumeroFocusLost
+        if((tfNumero.getText()).isEmpty()){
+            tfNumero.setText("Digite o Numero");
+        }
+    }//GEN-LAST:event_tfNumeroFocusLost
+
+    private void tfNumeroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNumeroKeyPressed
+           
+       if((tfNumero.getText()).equals("Digite o Numero")){
+            tfNumero.setText("");   
+       }
+    }//GEN-LAST:event_tfNumeroKeyPressed
+
+    private void tfNumeroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfNumeroMouseClicked
+        
+       if((tfNumero.getText()).equals("Digite o Numero")){
+            tfNumero.setText("");   
+       }
+    }//GEN-LAST:event_tfNumeroMouseClicked
+
+    private void tfLoginFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfLoginFocusLost
+        if((tfLogin.getText()).isEmpty()){
+            tfLogin.setText("Digite o Login");
+        }
+    }//GEN-LAST:event_tfLoginFocusLost
+
+    private void tfLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLoginKeyPressed
+        
+        if((tfLogin.getText()).equals("Digite o Login")){
+            tfLogin.setText("");   
+       }
+    }//GEN-LAST:event_tfLoginKeyPressed
+
+    private void tfLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfLoginMouseClicked
+        if((tfLogin.getText()).equals("Digite o Login")){
+            tfLogin.setText("");   
+       }
+    }//GEN-LAST:event_tfLoginMouseClicked
+
+    private void tfEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfEmailFocusLost
+        if((tfEmail.getText()).isEmpty()){
+            tfEmail.setText("Digite o E-mail");
+        }
+    }//GEN-LAST:event_tfEmailFocusLost
+
+    private void tfEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEmailKeyPressed
+        
+        if((tfEmail.getText()).equals("Digite o E-mail")){
+            tfEmail.setText("");   
+       }
+    }//GEN-LAST:event_tfEmailKeyPressed
+
+    private void tfEmailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfEmailMouseClicked
+        if((tfEmail.getText()).equals("Digite o E-mail")){
+            tfEmail.setText("");   
+       }
+    }//GEN-LAST:event_tfEmailMouseClicked
 
     private void tfAnoEgressoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfAnoEgressoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfAnoEgressoActionPerformed
 
-    private void tfNomeCompletoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNomeCompletoActionPerformed
+    private void tfTelefoneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfTelefoneMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfNomeCompletoActionPerformed
+    }//GEN-LAST:event_tfTelefoneMouseClicked
 
-    private void tfEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfEmailActionPerformed
+    private void tfTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfTelefoneActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfEmailActionPerformed
+    }//GEN-LAST:event_tfTelefoneActionPerformed
 
-    private void tfNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNumeroActionPerformed
+    private void tfTelefoneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfTelefoneFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfNumeroActionPerformed
+    }//GEN-LAST:event_tfTelefoneFocusLost
 
-    private void tfCEPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCEPActionPerformed
+    private void tfTelefoneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfTelefoneKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfCEPActionPerformed
+    }//GEN-LAST:event_tfTelefoneKeyPressed
 
-    private void tfLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfLoginActionPerformed
+    private void MenuEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MenuEditarMouseClicked
+       
+    }//GEN-LAST:event_MenuEditarMouseClicked
 
-    private void tfSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfSenhaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfSenhaActionPerformed
+    private void MenuConsultarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MenuConsultarMouseClicked
+         frmCadAlunoConsultar cadAD=new frmCadAlunoConsultar(new javax.swing.JFrame(),true);
+        cadAD.setLocationRelativeTo(null);
+        cadAD.setVisible(true);
+    }//GEN-LAST:event_MenuConsultarMouseClicked
 
-    private void tfSenhaAgainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfSenhaAgainActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfSenhaAgainActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
-
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton11ActionPerformed
-
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton12ActionPerformed
-
+    
     /**
      * @param args the command line arguments
      */
@@ -767,18 +1337,21 @@ public class frmCadAluno extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu MenuAtiDes;
+    private javax.swing.JMenu MenuConsultar;
+    private javax.swing.JMenu MenuEditar;
+    private javax.swing.JMenu MenuNovo;
+    private javax.swing.JButton btModalidadeEnsino;
+    private javax.swing.JButton btNovo;
+    private javax.swing.JButton btTurno;
+    private javax.swing.JComboBox cbBairro;
     private javax.swing.JComboBox cbCidade;
     private javax.swing.JComboBox cbModalidadeEnsino;
-    private javax.swing.JComboBox cbTurma;
+    private javax.swing.JComboBox cbRua;
     private javax.swing.JComboBox cbTurno;
     private javax.swing.JComboBox cbUF;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel29;
@@ -796,32 +1369,29 @@ public class frmCadAluno extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenu jMenuCadastro;
-    private javax.swing.JMenu jMenuConsultas;
-    private javax.swing.JMenu jMenuRelatorios;
-    private javax.swing.JMenu jMenuRelatorios1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton rbFem;
+    private javax.swing.JRadioButton rbMasc;
+    private javax.swing.JRadioButton rbOutro;
     private java.awt.TextField tfAnoEgresso;
-    private javax.swing.JComboBox tfBairro;
     private java.awt.TextField tfCEP;
+    private javax.swing.JFormattedTextField tfDataNasc;
     private java.awt.TextField tfEmail;
     private java.awt.TextField tfLogin;
     private java.awt.TextField tfMatricula;
     private java.awt.TextField tfNomeCompleto;
     private java.awt.TextField tfNumero;
-    private java.awt.TextField tfSenha;
-    private java.awt.TextField tfSenhaAgain;
-    private javax.swing.JFormattedTextField tfTelefone;
+    private javax.swing.JPasswordField tfSenha;
+    private javax.swing.JPasswordField tfSenhaAgain;
+    private java.awt.TextField tfTelefone;
     // End of variables declaration//GEN-END:variables
 }

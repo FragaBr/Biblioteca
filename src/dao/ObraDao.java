@@ -22,13 +22,13 @@ import selimjose.clnObra;
 public class ObraDao extends Dao implements DbDao<clnObra> {
      
     public static final String SQL_INSERIR =  
-    "INSERT INTO `obra` (`Titulo`, `Edicao`,`Ano`,`Volume`, `ISBN`,`Editora_CdEditora`, `Autor_CdAutor` ) VALUES (?,?,?,?,?,?,?)";
+    "INSERT INTO `obra` (`Titulo`, `Edicao`,`Ano`,`Volume`, `ISBN`,`Editora_CdEditora`, `Autor_CdAutor`,`Sugestao` ) VALUES (?,?,?,?,?,?,?,?)";
     
     public static final String SQL_EXCLUIR =
-    "DELETE FROM `obra` WHERE `CdObra`=? ";
+    "UPDATE `obra` SET `Sugestao` = -1 WHERE `CdObra` = ?";
     
     public static final String SQL_ALTERAR = 
-    "UPDATE `obra` SET `Titulo` = ? WHERE `CdObra` = ?";
+    "UPDATE `obra` SET `Titulo` = ?, `Edicao` = ? ,`Ano` = ?,`Volume` = ?, `ISBN` = ? WHERE `CdObra` = ?";
       
     public static final String SQL_PESQUISAR =
     "SELECT * FROM `obra` WHERE `Titulo` = ? ";
@@ -38,7 +38,7 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
             + " where Titulo = ?  ";
     
     public static final String SQL_SUG =
-    "SELECT * FROM `obra`, `exemplar` WHERE NOT `CdObra` = `Obra_CdObra` ";
+    "SELECT * FROM `obra` WHERE `Sugestao` = 1 ";
 
     @Override
     public int inserir(clnObra Obj) throws DaoException {
@@ -59,6 +59,7 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
             ps.setString(5,Obj.getISBN());
             ps.setInt(6,Obj.getCdEditora());
             ps.setInt(7,Obj.getCdAutor());
+            ps.setInt(8,Obj.getSugestao());
             
             ps.execute();
             rs = ps.getGeneratedKeys();
@@ -135,9 +136,14 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
         
         try {
             con = getConnection();
-            ps = con.prepareStatement(SQL_ALTERAR);  
-            ps.setString(1,Obj.getTitulo());
-            ps.setInt(2, Obj.getCdObra());
+            ps = con.prepareStatement(SQL_ALTERAR); 
+            ps.setString(1,Obj.getTitulo());   
+            ps.setInt(2,Obj.getEdicao());
+            ps.setInt(3,Obj.getAno());
+            ps.setString(4,Obj.getVolume());
+            ps.setString(5,Obj.getISBN());
+            
+            ps.setInt(6, Obj.getCdObra());
             int qtd = ps.executeUpdate();            
             if (qtd>0)
                 ret = true;
@@ -188,7 +194,7 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
 
         try {
             con = getConnection();
-            ps = con.prepareStatement("select * from obra");
+            ps = con.prepareStatement("select * from obra where `Sugestao` = 0 ");
             rs = ps.executeQuery();
 
             while (rs.next()) {
