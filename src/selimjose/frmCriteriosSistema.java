@@ -5,12 +5,22 @@
  */
 package selimjose;
 
+import com.mxrck.autocompleter.TextAutoCompleter;
+import dao.DaoException;
+import dao.DiasDao;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 /**
  *
  * @author Bruna
  */
 public class frmCriteriosSistema extends javax.swing.JFrame {
-
+    
+    private List<clnDia> ListDia;
     /**
      * Creates new form frmCriteriosSistema
      */
@@ -19,6 +29,16 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setVisible(true);
+        
+        DiasDao d = new DiasDao();
+        int[] dia;
+        
+        ListDia = d.listar(new TextAutoCompleter(new JTextField()));
+        dia = new int[2];
+        dia[0]= ListDia.get(0).getDiaA();
+        dia[1]= ListDia.get(0).getDiaR();
+        dias1.setValue(dia[1]);
+        dias2.setValue(dia[0]);
     }
 
     /**
@@ -36,8 +56,8 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel24 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jSpinner3 = new javax.swing.JSpinner();
+        dias1 = new javax.swing.JSpinner();
+        dias2 = new javax.swing.JSpinner();
         jButton5 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -231,11 +251,11 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel21)
                                         .addGap(60, 60, 60)
-                                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(dias1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel23)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(dias2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(42, 42, 42)
@@ -265,12 +285,12 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dias1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel21)
                             .addComponent(jLabel25))
                         .addGap(29, 29, 29)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dias2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel23)
                             .addComponent(jLabel22))))
                 .addGap(58, 58, 58)
@@ -482,7 +502,19 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        //Salvar os novos periodos de emprestimo
+        DiasDao d = new DiasDao();
+        clnDia dia = new clnDia();
+        dia.setDiaA(Integer.parseInt(dias2.getValue().toString()));
+        dia.setDiaR(Integer.parseInt(dias1.getValue().toString()));
+                
+        try {
+            d.alterar(dia);
+        } catch (DaoException ex) {
+            Logger.getLogger(frmCriteriosSistema.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(this, "O Período de Emprestimo regular foi alterado com sucesso!", "Critérios", JOptionPane.INFORMATION_MESSAGE);
+         
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
@@ -601,6 +633,8 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSpinner dias1;
+    private javax.swing.JSpinner dias2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -636,7 +670,5 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuRelatorios;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner3;
     // End of variables declaration//GEN-END:variables
 }

@@ -35,7 +35,10 @@ public class ModEnsinoDao extends Dao implements DbDao<clnModEnsino> {
     public static final String SQL_EXISTS
             = " select * from modensino "
             + " where NmModalidade = ?  ";
-
+    
+    public static final String SQL_LISTTUDO
+            = " select * from modensino "
+            + " order by NmModalidade";
     @Override
     public int inserir(clnModEnsino Obj) throws DaoException {
         
@@ -78,10 +81,9 @@ public class ModEnsinoDao extends Dao implements DbDao<clnModEnsino> {
             
             if (rs.next()) {
                 cRet = new clnModEnsino();
-                cRet.setNmModEnsino(rs.getString("NmModEnsino"));    
+                cRet.setNmModEnsino(rs.getString("NmModalidade"));    
                 cRet.setCdModEnsino(rs.getInt("CdModEnsino")); 
-            }
-                
+            }  
         } catch (Exception e) {
             new DaoException("Modalidade nao inserido "+ e.getMessage()).printStackTrace();;
         }finally{
@@ -224,6 +226,36 @@ public class ModEnsinoDao extends Dao implements DbDao<clnModEnsino> {
 
         return a;
     }
+     
+     public ArrayList<clnModEnsino> pegarLista() {
+        ArrayList<clnModEnsino> a = new ArrayList<>();
+        clnModEnsino cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_LISTTUDO);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnModEnsino();
+                cRet.setCdModEnsino(rs.getInt("CdModEnsino"));
+                cRet.setNmModEnsino(rs.getString("NmModalidade"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Modalidade nao inserida " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+
     
     
 }

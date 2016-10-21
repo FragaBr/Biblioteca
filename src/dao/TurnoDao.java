@@ -35,7 +35,12 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
     
     public static final String SQL_EXISTS
             = " select * from turno "
-            + " where NmTurno = ?  ";
+            + " where NmTurno = ?  ";    
+    
+    public static final String SQL_LISTTUDO
+            = " select * from turno "
+            + " order by NmTurno";
+
 
     @Override
     public int inserir(clnTurno Obj) throws DaoException {
@@ -196,7 +201,7 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         return a;
     }
       
-     public List<clnTurno> PesquisarLista(TextAutoCompleter c, clnTurno p) {
+    public List<clnTurno> PesquisarLista(TextAutoCompleter c, clnTurno p) {
         ArrayList<clnTurno> a = new ArrayList<>();
         clnTurno cRet = null;
 
@@ -225,5 +230,36 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
 
         return a;
     }
+
+     
+    public ArrayList<clnTurno> pegarLista() {
+        ArrayList<clnTurno> a = new ArrayList<>();
+        clnTurno cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_LISTTUDO);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnTurno();
+                cRet.setCdTurno(rs.getInt("CdTurno"));
+                cRet.setNmTurno(rs.getString("NmTurno"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Turno nao inserida " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+
     
 }

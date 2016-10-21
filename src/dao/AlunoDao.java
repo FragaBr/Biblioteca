@@ -9,6 +9,7 @@ import com.mxrck.autocompleter.TextAutoCompleter;
 import dao.Dao;
 import dao.DaoException;
 import dao.DbDao;
+import static dao.FuncionarioDao.SQL_LOGAR;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,6 +48,9 @@ public class AlunoDao extends Dao implements DbDao<clnAluno> {
     public static final String SQL_EXISTS
             = " select * from obra "
             + " where Titulo = ?  ";
+    
+    public static final String SQL_LOGAR =
+    "SELECT * FROM `usuario`, `aluno` WHERE `CdUsuario` = `Usuario_CdUsuario` and `Login` = ? and `Senha` = ?  ";
 
     
     @Override
@@ -81,7 +85,7 @@ public class AlunoDao extends Dao implements DbDao<clnAluno> {
         return autoNum;
         
     }
-
+    
     @Override
     public clnAluno pesquisar(String id) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -96,5 +100,34 @@ public class AlunoDao extends Dao implements DbDao<clnAluno> {
     public boolean alterar(clnAluno Obj) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+     public clnAluno Logar(clnAluno Obj) throws DaoException {
+        
+        clnAluno cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_LOGAR);  
+            ps.setString(1,Obj.getLogin());  
+            ps.setString(2,Obj.getSenha());
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnAluno();
+                cRet.setCdAlunos(rs.getInt("CdAlunos"));    
+                cRet.setCdUsuario(rs.getInt("Usuario_CdUsuario"));
+                cRet.setMatricula(rs.getString("Matricula")); 
+            }
+                
+        } catch (Exception e) {
+            new DaoException("Funcionario não inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }	
+        return cRet;
+    }
+   
      
 }

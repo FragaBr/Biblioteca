@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +38,7 @@ public class frmCadAluno extends javax.swing.JDialog {
     static List<clnBairro>bairroList;
     static List<clnCidade>cidadeList;
     static List<clnLogradouro>logradouroList;
+    ArrayList<clnTurno> aturno = new ArrayList<>();
     
     /*Modalidade de Ensino*/
     public List<clnModEnsino> getModalidadeEnsino(){
@@ -462,6 +464,11 @@ public class frmCadAluno extends javax.swing.JDialog {
         cbTurno.setForeground(new java.awt.Color(153, 153, 153));
         cbTurno.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Digite o Turno" }));
         cbTurno.setPreferredSize(new java.awt.Dimension(100, 18));
+        cbTurno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbTurnoActionPerformed(evt);
+            }
+        });
 
         cbBairro.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         cbBairro.setForeground(new java.awt.Color(153, 153, 153));
@@ -870,10 +877,11 @@ public class frmCadAluno extends javax.swing.JDialog {
             clnTurno turnoClass=new clnTurno();
             clnBairro bairroClass=new clnBairro();
             clnCidade cidadeClass=new clnCidade();
-                   
+            ModEnsinoDao mDao=new ModEnsinoDao();       
+            TurnoDao tDao=new TurnoDao();
             
             alunoClass.setMatricula(tfMatricula.getText());
-            alunoClass.setAnoEgresso(Integer.parseInt(tfAnoEgresso.getText()));
+            //alunoClass.setAnoEgresso(Integer.parseInt(tfAnoEgresso.getText()));
             alunoClass.setNmUsuario(tfNomeCompleto.getText());
             String sexo=null;
 
@@ -885,33 +893,24 @@ public class frmCadAluno extends javax.swing.JDialog {
                 sexo="Outro";
             }
             alunoClass.setSexo(sexo);
-            
-            DateFormat fmt=new SimpleDateFormat("dd/MM/yyyy");
-            try{
-                java.sql.Date data= new java.sql.Date(fmt.parse(tfDataNasc.getText()).getTime());
-                alunoClass.setDtNasc(data);
-            }catch(ParseException e1){
-                e1.printStackTrace();
-            }
-            
+            alunoClass.setDtNasc(tfDataNasc.getText());            
             alunoClass.setEmail(tfEmail.getText());
             alunoClass.setTel(tfTelefone.getText());
             
-            ModEnsinoDao mDao=new ModEnsinoDao();
-            try{
-                modEnsinoClass=mDao.pesquisar(cbModalidadeEnsino.getSelectedItem().toString());
-                alunoClass.setModEnsinoFK(modEnsinoClass.getCdModEnsino());
+            //Mod Ensino
+            try {
+                alunoClass.setModEnsinoFK(mDao.pesquisar(cbModalidadeEnsino.getSelectedItem().toString()).getCdModEnsino());
+                //u.setCdCargo(cDao.pesquisar(combocargo.getSelectedItem().toString()).getCdCargo());
             } catch (DaoException ex) {
-               Logger.getLogger(frmSugestoes.class.getName()).log(Level.SEVERE, null, ex);
-           }
-            
-            TurnoDao tDao=new TurnoDao();
-            try{
-                turnoClass=tDao.pesquisar(cbTurno.getSelectedItem().toString());
-                alunoClass.setCdTurnoFK(turnoClass.getCdTurno());
+                Logger.getLogger(frmCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            //Turno
+            try {
+                alunoClass.setCdTurnoFK(tDao.pesquisar(cbTurno.getSelectedItem().toString()).getCdTurno());
+                //u.setCdCargo(cDao.pesquisar(combocargo.getSelectedItem().toString()).getCdCargo());
             } catch (DaoException ex) {
-               Logger.getLogger(frmSugestoes.class.getName()).log(Level.SEVERE, null, ex);
-           }
+                Logger.getLogger(frmCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            } 
             
            alunoClass.setLogin(tfLogin.getText());
            alunoClass.setSenha(String.valueOf(tfSenha.getPassword()));
@@ -1077,13 +1076,13 @@ public class frmCadAluno extends javax.swing.JDialog {
         cadAD.setVisible(true);
         
         TurnoDao tDao= new TurnoDao();
-        turno=tDao.PesquisarLista();
+        //aturno = tDao.PesquisarLista();
         
         cbTurno.removeAllItems();
         cbTurno.addItem("Digite o Turno");
         
-        for(int i=1;i<turno.size();i++){
-                cbTurno.addItem(turno.get(i).getNmTurno());
+        for(int i=1;i<aturno.size();i++){
+                cbTurno.addItem(aturno.get(i).getNmTurno());
         }
         
     }//GEN-LAST:event_btTurnoActionPerformed
@@ -1291,6 +1290,10 @@ public class frmCadAluno extends javax.swing.JDialog {
         cadAD.setLocationRelativeTo(null);
         cadAD.setVisible(true);
     }//GEN-LAST:event_MenuConsultarMouseClicked
+
+    private void cbTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTurnoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbTurnoActionPerformed
 
     
     /**
