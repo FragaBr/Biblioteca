@@ -330,8 +330,10 @@ public class frmRecupera extends javax.swing.JFrame {
             A.setResizable(true);
             A.setVisible(true);            
         }else{
+                clnAluno a = new clnAluno();
+                a.setLogin(txtLogin.getText());
                 this.setVisible(false);
-                frmCadLoginAluno A = new frmCadLoginAluno();
+                frmCadLoginAluno A = new frmCadLoginAluno(a,0);
                 A.setLocationRelativeTo(null);
                 A.setResizable(true);
                 A.setVisible(true);

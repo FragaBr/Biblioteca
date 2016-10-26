@@ -31,6 +31,9 @@ public class DiasDao extends Dao implements DbDao{
     public static final String SQL_INSERIR =  
     "INSERT INTO `dias` (`periodoAnual`, `periodoRegular`) VALUES (?,?)";
     
+    public static final String SQL_PESQUISAR =
+    "SELECT * FROM `dias` WHERE `CdDia` = 1";
+    
      public boolean alterar(clnDia Obj) throws DaoException {
        boolean ret = false;        
         PreparedStatement ps = null;
@@ -82,9 +85,31 @@ public class DiasDao extends Dao implements DbDao{
         return a;
     }
 
-    @Override
-    public Object pesquisar(String id) throws DaoException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public clnDia pesquisar2() throws DaoException {
+        clnDia cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnDia();
+                cRet.setDiaA(rs.getInt("CdDia"));
+                cRet.setDiaA(rs.getInt("periodoAnual"));
+                cRet.setDiaR(rs.getInt("periodoRegular")); 
+            }
+                
+        } catch (Exception e) {
+            new DaoException(" Cargo nao inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }        
+	
+        return cRet;
     }
 
     @Override
@@ -101,6 +126,11 @@ public class DiasDao extends Dao implements DbDao{
 
     @Override
     public boolean alterar(Object Obj) throws DaoException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object pesquisar(String id) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

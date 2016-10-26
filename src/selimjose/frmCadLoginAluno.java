@@ -19,14 +19,19 @@ import selimjose.clnAluno;
  */
 public class frmCadLoginAluno extends javax.swing.JFrame {
 
+    private final int i;
+
     /**
      * Creates new form frmCadLoginAluno
      */
-    public frmCadLoginAluno() {
+    public frmCadLoginAluno(clnAluno a,int i) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setVisible(true);
+        txtUsuario.setText(a.getLogin());
+        txtUsuario.setEnabled(false);
+        this.i=i;
     }
 
     /**
@@ -47,6 +52,7 @@ public class frmCadLoginAluno extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        jButton8 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,6 +123,15 @@ public class frmCadLoginAluno extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jButton8.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ic_action_goleft.png"))); // NOI18N
+        jButton8.setText("Voltar");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -135,6 +150,10 @@ public class frmCadLoginAluno extends javax.swing.JFrame {
                         .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addGap(50, 50, 50))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(131, 131, 131)
+                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,7 +171,9 @@ public class frmCadLoginAluno extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addGap(32, 32, 32)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54))
+                .addGap(34, 34, 34)
+                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
 
         pack();
@@ -165,7 +186,8 @@ public class frmCadLoginAluno extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         // Criando o Login de Aluno
-        clnAluno u = new clnAluno();
+        final clnAluno u = new clnAluno();
+        clnAluno a = new clnAluno();
         String senha = (txtPassword.getText());
         String login = txtUsuario.getText();
         if (login.equals("") || senha.equals("")) {
@@ -177,20 +199,24 @@ public class frmCadLoginAluno extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Coloque a senha do Usuario", "Login", JOptionPane.WARNING_MESSAGE);
                 txtPassword.requestFocus();
             }
-        } else {
-            
+        } else {            
             AlunoDao alunoDAO = new AlunoDao();
+            
             u.setLogin(login);
             u.setSenha(senha);            
-
+            try {
+                a = alunoDAO.Logar(u);
+            } catch (DaoException ex) {
+                Logger.getLogger(frmCadLoginAluno.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            u.setCdUsuario(a.getCdUsuario());
+            System.out.println(u.getCdUsuario());
             try {
                 if (alunoDAO.Logar(u) != null) {
                     
                     java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {                            
-                            
-
-                            //frmPrincipal m = new frmPrincipal(new javax.swing.JFrame(), true);
+                        public void run() {
+                            frmMovimentacaoFinal m = new frmMovimentacaoFinal(u,i);
                             m.setLocationRelativeTo(null);
                             m.setResizable(true);
                             m.setVisible(true);                            
@@ -216,6 +242,10 @@ public class frmCadLoginAluno extends javax.swing.JFrame {
         A.setResizable(true);
         A.setVisible(true);        
     }//GEN-LAST:event_jLabel4MouseClicked
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -247,13 +277,15 @@ public class frmCadLoginAluno extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmCadLoginAluno().setVisible(true);
+                clnAluno a =new clnAluno();
+                new frmCadLoginAluno(a,1).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

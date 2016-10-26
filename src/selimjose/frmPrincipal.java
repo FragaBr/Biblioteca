@@ -681,7 +681,7 @@ public void setHora(Date date) {
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
         //movimentacoes
         this.setVisible(false);
-        frmMovimentacoes P = new frmMovimentacoes();
+        frmMovimentacaoGeral P = new frmMovimentacaoGeral();
         P.setLocationRelativeTo(null);
         P.setResizable(true);
         P.setVisible(true);
@@ -690,7 +690,7 @@ public void setHora(Date date) {
     private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
         // TODO add your handling code here:
         this.setVisible(false);
-        frmMovimentacoes P = new frmMovimentacoes();
+        frmMovimentacaoGeral P = new frmMovimentacaoGeral();
         P.setLocationRelativeTo(null);
         P.setResizable(true);
         P.setVisible(true);

@@ -33,10 +33,10 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
     "UPDATE `usuario` SET `Senha` = ? WHERE `CdUsuario` = ?"; 
     
     public static final String SQL_PESQUISAR =
-    "SELECT * FROM `usuario` WHERE (`NmUsuario`, `DtNasc`) = (?,?)";
+    "SELECT * FROM `usuario` WHERE (`Login`) = (?)";
     
     public static final String SQL_CONSULTA =
-    "SELECT * FROM `usuario` WHERE `NmUsuario` = ? ";
+    "SELECT * FROM `usuario` WHERE `NmUsuario` = ? or `Login` = ? ";
     
     public static final String SQL_RECUPERA =
     "SELECT * FROM `usuario` WHERE (`Login`, `DtNasc`) = (?,?)";
@@ -58,8 +58,8 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
         try {
             con = getConnection();
             ps = con.prepareStatement(SQL_PESQUISAR);
-            ps.setString(1, p.getNmUsuario());
-            ps.setString(2, p.getDtNasc());
+            ps.setString(1, p.getLogin());
+            //ps.setString(2, p.getDtNasc());
 
             rs = ps.executeQuery();
 
@@ -245,6 +245,7 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
             con = getConnection();
             ps = con.prepareStatement(SQL_CONSULTA);
             ps.setString(1, p.getNmUsuario());
+            ps.setString(2, p.getLogin());
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -254,6 +255,36 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
                 cRet.setEmail(rs.getString("Email"));
                 cRet.setTel(rs.getString("Tel"));
                 cRet.setStatus(rs.getInt("Status"));
+                cRet.setLogin(rs.getString("Login"));
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+        new DaoException("Funcionario não inserido " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
+    }
+    public List<clnAluno> PesquisarLista2(TextAutoCompleter c, clnAluno p) {
+        ArrayList<clnAluno> a = new ArrayList<>();
+        clnAluno cRet = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_CONSULTA);
+            ps.setString(1, p.getNmUsuario());
+            ps.setString(2, p.getLogin());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                cRet = new clnAluno();
+                cRet.setCdUsuario(rs.getInt("CdUsuario"));
+                cRet.setNmUsuario(rs.getString("NmUsuario"));
+                cRet.setEmail(rs.getString("Email"));
+                cRet.setTel(rs.getString("Tel"));
+                cRet.setStatus(rs.getInt("Status"));
+                cRet.setLogin(rs.getString("Login"));
                 a.add(cRet);
             }
         } catch (Exception e) {

@@ -116,8 +116,7 @@ public class BairroDao extends Dao implements DbDao<clnBairro> {
     }
     
     public clnBairro Exists(int Cidades_cdCidades, String nmBairro) {
-    
-       
+        
         clnBairro cRet = null;
 
         PreparedStatement ps = null;
@@ -144,13 +143,11 @@ public class BairroDao extends Dao implements DbDao<clnBairro> {
         } finally {
             close(con, ps, rs);
         }
-
         return cRet;
     }
        
     public clnBairro Exists2(int Cidades_cdCidades, String nmBairro) {
-    
-       
+        
         clnBairro cRet = null;
 
         PreparedStatement ps = null;

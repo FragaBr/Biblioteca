@@ -1164,6 +1164,9 @@ public class frmCadAluno extends javax.swing.JDialog {
     private void tfMatriculaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfMatriculaFocusLost
         if((tfMatricula.getText()).isEmpty()){
             tfMatricula.setText("Digite a Matricula");
+        }else{
+            tfLogin.setText(tfMatricula.getText());
+            tfLogin.setEnabled(false);
         }
     }//GEN-LAST:event_tfMatriculaFocusLost
 

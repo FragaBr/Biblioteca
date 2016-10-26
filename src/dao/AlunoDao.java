@@ -43,14 +43,14 @@ public class AlunoDao extends Dao implements DbDao<clnAluno> {
     "UPDATE `obra` SET `Titulo` = ? WHERE `CdObra` = ?";
       
     public static final String SQL_PESQUISAR =
-    "SELECT * FROM `obra` WHERE `Titulo` = ? ";
+    "SELECT * FROM `usuario` WHERE `Login` = ? and `Senha` = ?  ";
     
     public static final String SQL_EXISTS
             = " select * from obra "
             + " where Titulo = ?  ";
     
     public static final String SQL_LOGAR =
-    "SELECT * FROM `usuario`, `aluno` WHERE `CdUsuario` = `Usuario_CdUsuario` and `Login` = ? and `Senha` = ?  ";
+    "SELECT * FROM `usuario` WHERE `Login` = ? and `Senha` = ?  ";
 
     
     @Override
@@ -86,12 +86,7 @@ public class AlunoDao extends Dao implements DbDao<clnAluno> {
         
     }
     
-    @Override
-    public clnAluno pesquisar(String id) throws DaoException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
+      @Override
     public boolean excluir(int id) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -115,10 +110,8 @@ public class AlunoDao extends Dao implements DbDao<clnAluno> {
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                cRet = new clnAluno();
-                cRet.setCdAlunos(rs.getInt("CdAlunos"));    
-                cRet.setCdUsuario(rs.getInt("Usuario_CdUsuario"));
-                cRet.setMatricula(rs.getString("Matricula")); 
+                cRet = new clnAluno();    
+                cRet.setCdUsuario(rs.getInt("CdUsuario"));
             }
                 
         } catch (Exception e) {
@@ -127,6 +120,11 @@ public class AlunoDao extends Dao implements DbDao<clnAluno> {
             close(con, ps, rs);
         }	
         return cRet;
+    }
+
+    @Override
+    public clnAluno pesquisar(String id) throws DaoException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
    
      
