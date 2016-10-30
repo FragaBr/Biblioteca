@@ -552,7 +552,12 @@ public class frmMovimentacaoLocatario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+        //
+        this.setVisible(false);
+        frmMovimentacaoGeral P = new frmMovimentacaoGeral();
+        P.setLocationRelativeTo(null);
+        P.setResizable(true);
+        P.setVisible(true);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     /**

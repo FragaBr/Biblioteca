@@ -38,7 +38,7 @@ public class EmprestimoDao extends Dao implements DbDao<clnEmprestimo>{
     "SELECT * FROM `reserva` WHERE `CdBairros` = ? ";
     
     
-    public clnEmprestimo inserirR(clnEmprestimo Obj) throws DaoException {
+    public int inserirR(clnEmprestimo Obj) throws DaoException {
         int autoNum = -1;
         clnEmprestimo cr = new clnEmprestimo();
 
@@ -63,7 +63,7 @@ public class EmprestimoDao extends Dao implements DbDao<clnEmprestimo>{
         } finally {
             close(con, ps, rs);
         }
-        return cr;
+        return autoNum;
     }
     
     public int inserirEmprestimoEx(clnEmprestimo Obj, clnExemplar Eobj) throws DaoException { //reserva o exemplar - tabela exemplar_has_reserva

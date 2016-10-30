@@ -36,7 +36,7 @@ public class ReservaDao extends Dao implements DbDao<clnReserva>{
     "SELECT * FROM `reserva` WHERE `CdBairros` = ? ";
     
     
-    public clnReserva inserirR(clnReserva Obj) throws DaoException {
+    public int inserirR(clnReserva Obj) throws DaoException {
         int autoNum = -1;
         clnReserva cr = new clnReserva();
 
@@ -60,7 +60,7 @@ public class ReservaDao extends Dao implements DbDao<clnReserva>{
         } finally {
             close(con, ps, rs);
         }
-        return cr;
+        return autoNum;
     }
     
     public int inserirReservaEx(clnReserva Obj, clnExemplar Eobj) throws DaoException { //reserva o exemplar - tabela exemplar_has_reserva

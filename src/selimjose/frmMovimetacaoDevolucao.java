@@ -34,8 +34,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Bruna
  */
-public class frmMovimentacaoFinal extends javax.swing.JFrame {
-
+public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
     private DefaultTableModel tabelaLista = new DefaultTableModel();
     private DefaultTableModel tabelaLista2 = new DefaultTableModel();
     private List<clnAutor> AutorList;
@@ -43,33 +42,21 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
     ArrayList<clnObra> ObraList = null;
     ArrayList<clnExemplar> ExList = null;
     ArrayList<clnExemplar> ExList2 = null;
-    private final int i;
-    private final clnAluno aluno;
+    
     /**
-     * Creates new form frmMovimentacaoFinal
+     * Creates new form frmMovimetacaoDevolucao
      */
-    public frmMovimentacaoFinal(clnAluno aluno, int i) {
-        
+    public frmMovimetacaoDevolucao() {
         initComponents();
         ExList = new ArrayList<>();
         ExList2 = new ArrayList<>();
         tabelaLista = (DefaultTableModel) tabelaObra.getModel();
         tabelaLista2 = (DefaultTableModel) tabelaObra2.getModel();
         buscaNome();
-        //Thread clockThread = new Thread(new frmMovimentacaoFinal.ClockRunnable(), "Clock thread");
-        //clockThread.setDaemon(true);
-        //clockThread.start();
         this.setLocationRelativeTo(null);
         this.setResizable(true);
-        this.setVisible(true);  
-        this.i = i;
-        this.aluno=aluno;    
-        if(i == 1){
-            rbAnual.setEnabled(false);
-            rbRegular.setEnabled(false);
-        }
+        this.setVisible(true);
     }
-    
     private String[] initAutores() {
         String[] autorS;
         AutorDao cDAO = new AutorDao();
@@ -109,36 +96,8 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
                 tabelaLista.addRow(new Object[]{p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
             } 
     }
-    private void AtualizaTabela() {
     
-        
-        ExemplarDao aDao = new ExemplarDao();
-        clnExemplar a = new clnExemplar();
-        tabelaLista.setRowCount(0);
-        tabelaLista.fireTableDataChanged();
-        
-        if(!ExList.isEmpty())
-        {
-            tabelaLista.setRowCount(0);
-            tabelaLista.fireTableDataChanged();
-            ExList.clear();
-            ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
-            for (clnExemplar p : ExList) {
-                tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
-                tabelaLista.addRow(new Object[]{p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
-            }
-            
-        }
-        else{
-            ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
-            for (clnExemplar p : ExList) {
-                tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
-                tabelaLista.addRow(new Object[]{p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
-            }
-        }
-    }
-    
- private static final Date date = new Date();
+     private static final Date date = new Date();
 
     static String dia() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -160,7 +119,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        TIpoEmp = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
@@ -182,9 +140,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         jLabel24 = new javax.swing.JLabel();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        jLabel26 = new javax.swing.JLabel();
-        rbAnual = new javax.swing.JRadioButton();
-        rbRegular = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuCadastro = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
@@ -363,16 +318,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
             }
         });
 
-        jLabel26.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
-        jLabel26.setText("Tipo de Empréstimo:");
-        jLabel26.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        TIpoEmp.add(rbAnual);
-        rbAnual.setText("Empréstimo Anual");
-
-        TIpoEmp.add(rbRegular);
-        rbRegular.setText("Empréstimo Regular");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -387,7 +332,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
                             .addComponent(jLabel25)
                             .addComponent(jLabel21)
                             .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(comboautor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,12 +342,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
                                 .addComponent(jLabel22)
                                 .addGap(46, 46, 46))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(rbAnual)
-                                .addGap(18, 18, 18)
-                                .addComponent(rbRegular))
-                            .addComponent(jLabel26))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(56, 56, 56))
@@ -461,18 +400,9 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
                                 .addComponent(comboautor, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(30, 30, 30)))
                         .addComponent(comboeditora, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton5)
-                        .addGap(54, 54, 54))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel26)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rbRegular)
-                            .addComponent(rbAnual))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(jButton5)
+                .addGap(54, 54, 54)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -572,7 +502,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuCadastro);
 
-        jMenuRelatorios.setText("                                                                                                                                           ");
+        jMenuRelatorios.setText("                                                                                                                                  ");
         jMenuRelatorios.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
         jMenuBar1.add(jMenuRelatorios);
 
@@ -669,6 +599,65 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         ExList2.clear();
     }//GEN-LAST:event_jButton10ActionPerformed
 
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        //Botao voltar
+        this.setVisible(false);
+        frmMovimentacaoGeral A = new frmMovimentacaoGeral();
+        A.setLocationRelativeTo(null);
+        A.setResizable(true);
+        A.setVisible(true);
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        //Devolucao
+        if( this.i == 1){
+            //Reserva
+            ReservaDao rDao = new ReservaDao();
+            ExemplarDao exDao = new ExemplarDao();
+            clnReserva r = new clnReserva();
+            clnReserva r2 = new clnReserva();
+            r.setCdUsuario(aluno.getCdUsuario());
+            r.setDtReserva(dia());
+
+            if(ExList2 != null){
+                try {
+                    int cdReserva = rDao.inserirR(r);
+                    r.setCdReserva(cdReserva);
+                } catch (DaoException ex1) {
+                    Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+
+                for (clnExemplar p : ExList2) {
+                    p.getCdExemplar();
+                    p.getCdEditora();
+                    p.getCdAutor();
+                    p.getCdObra();
+                    p.setCdSituacao(2);
+                    try {
+                        exDao.alterar(p);
+                    } catch (DaoException ex) {
+                        Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    try {
+                        //System.out.println(p.getCdExemplar());
+                        //System.out.println(p.getCdObra());
+                        //System.out.println(p.getCdEditora());
+                        //System.out.println(p.getCdAutor());
+                        //System.out.println(p.getCdSituacao());
+                        //System.out.println(r.getCdReserva());
+                        //System.out.println(r.getCdUsuario());
+
+                        //System.out.println(d);
+                        rDao.inserirReservaEx(r, p);
+                    } catch (DaoException ex1) {
+                        Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+                JOptionPane.showMessageDialog(this, " Reserva feita com Sucesso!!", "Reserva", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // Cadastro aluno
         this.setVisible(false);
@@ -741,124 +730,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         A.setVisible(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        //Botao voltar
-        this.setVisible(false);
-        frmMovimentacaoLocatario A = new frmMovimentacaoLocatario(i);
-        A.setLocationRelativeTo(null);
-        A.setResizable(true);
-        A.setVisible(true);
-    }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        //Finalizar
-        
-        if( this.i == 1){
-            //Reserva
-            ReservaDao rDao = new ReservaDao();
-            ExemplarDao exDao = new ExemplarDao();
-            clnReserva r = new clnReserva();
-            clnReserva r2 = new clnReserva();
-            r.setCdUsuario(aluno.getCdUsuario());
-            r.setDtReserva(dia());
-            
-            if(ExList2 != null){
-            try {
-            int cdReserva = rDao.inserirR(r);
-            r.setCdReserva(cdReserva);
-            } catch (DaoException ex1) {
-                Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-            
-            for (clnExemplar p : ExList2) {
-                    p.getCdExemplar();
-                    p.getCdEditora();
-                    p.getCdAutor();
-                    p.getCdObra();
-                    p.setCdSituacao(2);
-                    try {
-                        exDao.alterar(p);
-                    } catch (DaoException ex) {
-                       Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    try {
-                    //System.out.println(p.getCdExemplar());
-                    //System.out.println(p.getCdObra());
-                    //System.out.println(p.getCdEditora());
-                    //System.out.println(p.getCdAutor());
-                    //System.out.println(p.getCdSituacao());
-                    //System.out.println(r.getCdReserva());
-                    //System.out.println(r.getCdUsuario());
-                    
-                    //System.out.println(d);
-                    rDao.inserirReservaEx(r, p);
-                } catch (DaoException ex1) {
-                    Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex1);
-                }
-                }
-            
-                JOptionPane.showMessageDialog(this, " Reserva feita com Sucesso!!", "Reserva", JOptionPane.INFORMATION_MESSAGE);
-            }
-            
-            
-        }else if(this.i == 2){
-            //Faz emprestimo
-            DiasDao dia = new DiasDao();
-            clnDia d = new clnDia();
-            Date a = new Date(); 
-            ExemplarDao exDao = new ExemplarDao();
-            EmprestimoDao eDao = new EmprestimoDao();
-            clnEmprestimo e = new clnEmprestimo();
-            clnEmprestimo e2 = new clnEmprestimo();
-            
-            try {
-                d = dia.pesquisar2();
-            } catch (DaoException ex) {
-                Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            e.setCdUsuario(aluno.getCdUsuario());
-            e.setDtEmprestimo(dia());
-            if(rbAnual.isSelected()){
-                a.setDate(a.getDate()+ d.getDiaA());
-            }else if(rbRegular.isSelected()){
-                a.setDate(a.getDate()+ d.getDiaR());
-            }else{
-                JOptionPane.showMessageDialog(this, "Selecione uma opcao de Emprestimo!", "Emprestimo", JOptionPane.WARNING_MESSAGE);
-            }
-            e.setDtDevolucao(diaformatado(a));
-            System.out.println(d);
-            System.out.println(e.getDtDevolucao());
-            
-            if((ExList2 != null) && (rbAnual.isSelected() || rbRegular.isSelected())){
-                
-                try {
-                int cdEmprestimo = eDao.inserirR(e);
-                e.setCdEmprestimo(cdEmprestimo);
-                } catch (DaoException ex) {
-                    Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                for (clnExemplar p : ExList2) {
-                p.getCdExemplar();
-                p.getCdEditora();
-                p.getCdAutor();
-                p.getCdObra();
-                p.setCdSituacao(3);
-                try {
-                    exDao.alterar(p);
-                } catch (DaoException ex) {
-                    Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                try {
-                eDao.inserirEmprestimoEx(e, p);
-                } catch (DaoException ex1) {
-                Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex1);
-                }
-                }
-                JOptionPane.showMessageDialog(this, " Empréstimo feito com Sucesso!!", "Emprestimo", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_jButton9ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -876,27 +747,25 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmMovimetacaoDevolucao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmMovimetacaoDevolucao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmMovimetacaoDevolucao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmMovimetacaoDevolucao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                clnAluno aluno = new clnAluno();
-                new frmMovimentacaoFinal(aluno,1).setVisible(true);
+                new frmMovimetacaoDevolucao().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup TIpoEmp;
     private javax.swing.JComboBox<String> comboautor;
     private javax.swing.JComboBox comboeditora;
     private javax.swing.JButton jButton10;
@@ -910,7 +779,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -932,8 +800,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JRadioButton rbAnual;
-    private javax.swing.JRadioButton rbRegular;
     private javax.swing.JTable tabelaObra;
     private javax.swing.JTable tabelaObra2;
     private java.awt.TextField txtCodigo;
