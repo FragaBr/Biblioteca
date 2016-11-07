@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -89,7 +89,7 @@ public class CidadeDao extends Dao implements DbDao<clnCidade> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<clnCidade> listar(TextAutoCompleter c) {
+    public List<clnCidade> listar() {
         ArrayList<clnCidade> a = new ArrayList<>();
         clnCidade cRet = null;
         PreparedStatement ps = null;

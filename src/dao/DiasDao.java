@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import dao.Dao;
 import dao.DaoException;
 import dao.DbDao;
@@ -56,7 +56,7 @@ public class DiasDao extends Dao implements DbDao{
         return ret;
     }
     
-    public List<clnDia> listar(TextAutoCompleter c) {
+    public List<clnDia> listar() {
         ArrayList<clnDia> a = new ArrayList<>();
         clnDia cRet = null;
 

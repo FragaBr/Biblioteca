@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
 import selimjose.clnAutor;
 /**
@@ -55,7 +54,7 @@ private void buscaNome() {
 
         AutorDao aDAO = new AutorDao();
        
-            arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayaut = (ArrayList<clnAutor>) aDAO.listar();
             for (clnAutor p : arrayaut) {
             TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
@@ -70,7 +69,7 @@ private void AtualizaTabela() {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             arrayaut.clear();
-            arrayaut = (ArrayList<clnAutor>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayaut = (ArrayList<clnAutor>) aDAO.listar();
             for (clnAutor p : arrayaut) {
             TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});
@@ -555,7 +554,7 @@ private void AtualizaTabela() {
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
         arrayaut.clear();
-        arrayaut = (ArrayList<clnAutor>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        arrayaut = (ArrayList<clnAutor>) aDao.PesquisarLista(a);
         for (clnAutor p : arrayaut) {
             TabelaAutor.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdAutor(), p.getNmAutor()});

@@ -5,7 +5,6 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -19,7 +19,7 @@ import selimjose.clnFuncionario;
 public class frmLogin extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmLogin
+     * Creates new form f   rmLogin
      */
     public frmLogin() {
         initComponents();

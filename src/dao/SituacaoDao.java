@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -166,7 +166,7 @@ public class SituacaoDao extends Dao implements DbDao<clnSituacao> {
         return cRet;
     }
       
-      public List<clnSituacao> listar(TextAutoCompleter c) {
+      public List<clnSituacao> listar() {
         ArrayList<clnSituacao> a = new ArrayList<>();
         clnSituacao cRet = null;
 
@@ -194,7 +194,7 @@ public class SituacaoDao extends Dao implements DbDao<clnSituacao> {
         return a;
     }
       
-      public List<clnSituacao> listarMod(TextAutoCompleter c) {
+      public List<clnSituacao> listarMod() {
         ArrayList<clnSituacao> a = new ArrayList<>();
         clnSituacao cRet = null;
 
@@ -222,7 +222,7 @@ public class SituacaoDao extends Dao implements DbDao<clnSituacao> {
         return a;
     }
       
-     public List<clnSituacao> PesquisarLista(TextAutoCompleter c, clnSituacao p) {
+     public List<clnSituacao> PesquisarLista(clnSituacao p) {
         ArrayList<clnSituacao> a = new ArrayList<>();
         clnSituacao cRet = null;
 

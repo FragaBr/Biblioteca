@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -29,13 +29,16 @@ public class EmprestimoDao extends Dao implements DbDao<clnEmprestimo>{
     
     public static final String SQL_INSERIR_EX =  
     "INSERT INTO `exemplar_has_emprestimo` (`Exemplar_CdExemplar`,`Exemplar_Obra_CdObra`,`Exemplar_Obra_Editora_CdEditora`,`Exemplar_Obra_Autor_CdAutor`,"
-            + "`Exemplar_Situacao_CdSituacao`,`Emprestimo_CdEmprestimo`,`Emprestimo_Usuario_CdUsuario`) VALUES (?,?,?,?,?,?,?)";
+            + "`Emprestimo_CdEmprestimo`,`Emprestimo_Usuario_CdUsuario`) VALUES (?,?,?,?,?,?)";
     
     public static final String SQL_EXCLUIR =
-    "DELETE FROM `reserva` WHERE `CdReserva`=? ";
+    "DELETE FROM `emprestimo` WHERE `CdEmprestimo`=? ";
     
     public static final String SQL_PESQUISAR =
-    "SELECT * FROM `reserva` WHERE `CdBairros` = ? ";
+    "SELECT * FROM  `emprestimo` INNER JOIN `exemplar_has_emprestimo` on `CdEmprestimo` = `Emprestimo_CdEmprestimo` AND `DtDevolucaoEfetiva` is NULL AND `Exemplar_CdExemplar` = ?";
+    
+    public static final String SQL_ALTERAR = 
+    "UPDATE `emprestimo` INNER JOIN `exemplar_has_emprestimo` on `CdEmprestimo`= `Emprestimo_CdEmprestimo` and `Exemplar_CdExemplar` = ? SET `DtDevolucaoEfetiva` = ? ";
     
     
     public int inserirR(clnEmprestimo Obj) throws DaoException {
@@ -79,10 +82,9 @@ public class EmprestimoDao extends Dao implements DbDao<clnEmprestimo>{
             ps.setInt(1,Eobj.getCdExemplar());
             ps.setInt(2,Eobj.getCdObra());
             ps.setInt(3,Eobj.getCdEditora());
-            ps.setInt(4,Eobj.getCdAutor());
-            ps.setInt(5,Eobj.getCdSituacao());  
-            ps.setInt(6,Obj.getCdEmprestimo()); 
-            ps.setInt(7,Obj.getCdUsuario());
+            ps.setInt(4,Eobj.getCdAutor());  
+            ps.setInt(5,Obj.getCdEmprestimo()); 
+            ps.setInt(6,Obj.getCdUsuario());
             ps.execute();
             rs = ps.getGeneratedKeys();
             
@@ -101,9 +103,33 @@ public class EmprestimoDao extends Dao implements DbDao<clnEmprestimo>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public clnEmprestimo pesquisar(String id) throws DaoException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public clnEmprestimo pesquisar( clnExemplar ex ) throws DaoException {
+        
+        clnEmprestimo cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR);
+            ps.setInt(1,ex.getCdExemplar());
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnEmprestimo();
+                cRet.setCdEmprestimo(rs.getInt("CdEmprestimo"));    
+                cRet.setDtEmprestimo(rs.getString("DtEmprestimo"));     
+                cRet.setDtDevolucao(rs.getString("DtDevolucao"));
+                cRet.setCdUsuario(rs.getInt("Usuario_CdUsuario"));
+            }  
+        } catch (Exception e) {
+            new DaoException(" Emprestimo nao inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }      
+        return cRet;
+        
     }
 
     @Override
@@ -111,8 +137,35 @@ public class EmprestimoDao extends Dao implements DbDao<clnEmprestimo>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public boolean alterarEmprestimo(clnEmprestimo Obj,clnExemplar  Ex) throws DaoException {
+       boolean ret = false;        
+        PreparedStatement ps = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_ALTERAR);  
+            ps.setInt(1,Ex.getCdExemplar());
+            ps.setString(2, Obj.getDtDevolucaoEfetiva());
+            int qtd = ps.executeUpdate();            
+            if (qtd>0)
+                ret = true;
+            
+        } catch (Exception e) {
+        	 new DaoException(" Alteração não efetuada."+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps);
+        }        
+        return ret;
+    }
+
     @Override
     public boolean alterar(clnEmprestimo Obj) throws DaoException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public clnEmprestimo pesquisar(String id) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

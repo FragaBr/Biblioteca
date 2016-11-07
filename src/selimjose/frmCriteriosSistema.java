@@ -5,7 +5,7 @@
  */
 package selimjose;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import dao.DaoException;
 import dao.DiasDao;
 import java.util.List;
@@ -33,7 +33,7 @@ public class frmCriteriosSistema extends javax.swing.JFrame {
         DiasDao d = new DiasDao();
         int[] dia;
         
-        ListDia = d.listar(new TextAutoCompleter(new JTextField()));
+        ListDia = d.listar();
         dia = new int[2];
         dia[0]= ListDia.get(0).getDiaA();
         dia[1]= ListDia.get(0).getDiaR();

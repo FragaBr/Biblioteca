@@ -7,7 +7,7 @@ package dao;
 
 import selimjose.clnLogradouro;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -87,7 +87,7 @@ public class LogradouroDao extends Dao implements DbDao<clnLogradouro> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<clnLogradouro> listar(TextAutoCompleter c) {
+    public List<clnLogradouro> listar() {
         ArrayList<clnLogradouro> a = new ArrayList<>();
         clnLogradouro cRet = null;
         PreparedStatement ps = null;

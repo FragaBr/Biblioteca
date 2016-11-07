@@ -5,7 +5,6 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -27,7 +26,7 @@ public class ReservaDao extends Dao implements DbDao<clnReserva>{
     
     public static final String SQL_INSERIR_EX =  
     "INSERT INTO `exemplar_has_reserva` (`Exemplar_CdExemplar`,`Exemplar_Obra_CdObra`,`Exemplar_Obra_Editora_CdEditora`,`Exemplar_Obra_Autor_CdAutor`,"
-            + "`Exemplar_Situacao_CdSituacao`,`Reserva_CdReserva`,`Reserva_Usuario_CdUsuario`) VALUES (?,?,?,?,?,?,?)";
+            + "`Reserva_CdReserva`,`Reserva_Usuario_CdUsuario`) VALUES (?,?,?,?,?,?)";
     
     public static final String SQL_EXCLUIR =
     "DELETE FROM `reserva` WHERE `CdReserva`=? ";
@@ -76,10 +75,9 @@ public class ReservaDao extends Dao implements DbDao<clnReserva>{
             ps.setInt(1,Eobj.getCdExemplar());
             ps.setInt(2,Eobj.getCdObra());
             ps.setInt(3,Eobj.getCdEditora());
-            ps.setInt(4,Eobj.getCdAutor());
-            ps.setInt(5,Eobj.getCdSituacao());  
-            ps.setInt(6,Obj.getCdReserva()); 
-            ps.setInt(7,Obj.getCdUsuario());
+            ps.setInt(4,Eobj.getCdAutor());  
+            ps.setInt(5,Obj.getCdReserva()); 
+            ps.setInt(6,Obj.getCdUsuario());
             ps.execute();
             rs = ps.getGeneratedKeys();
             

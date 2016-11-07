@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import dao.UsuarioDao;
 import javax.swing.table.DefaultTableModel;
 import selimjose.clnUsuario;
@@ -49,7 +48,7 @@ public class frmRelatorioUsuario extends javax.swing.JFrame {
 
         UsuarioDao aDAO = new UsuarioDao();
        
-            array = (ArrayList<clnFuncionario>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            array = (ArrayList<clnFuncionario>) aDAO.listar();
             for (clnFuncionario p : array) {
             TabelaUsuario.setSelectionBackground(Color.LIGHT_GRAY);
             if(p.isStatus() == 1){
@@ -68,7 +67,7 @@ public class frmRelatorioUsuario extends javax.swing.JFrame {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             array.clear();
-            array = (ArrayList<clnFuncionario>) aDao.listar(new TextAutoCompleter(new JTextField()));
+            array = (ArrayList<clnFuncionario>) aDao.listar();
             for (clnFuncionario p : array) {
                 TabelaUsuario.setSelectionBackground(Color.LIGHT_GRAY);
                 if(p.isStatus() == 1){
@@ -79,7 +78,7 @@ public class frmRelatorioUsuario extends javax.swing.JFrame {
             }                  
         }
         else{
-            array = (ArrayList<clnFuncionario>) aDao.listar(new TextAutoCompleter(new JTextField()));
+            array = (ArrayList<clnFuncionario>) aDao.listar();
             for (clnFuncionario p : array) {
             TabelaUsuario.setSelectionBackground(Color.LIGHT_GRAY);
                 if(p.isStatus() == 1){
@@ -446,14 +445,14 @@ public class frmRelatorioUsuario extends javax.swing.JFrame {
         if(array != null && (a.isStatus() == -1)){
             
             array.clear();
-            array = (ArrayList<clnFuncionario>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+            array = (ArrayList<clnFuncionario>) aDao.PesquisarLista(a);
             for (clnFuncionario p : array) {
             TabelaUsuario.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdUsuario(), p.getNmUsuario(),p.getEmail(),p.getTel()});
          }            
         }else if(array != null && (a.isStatus() != -1)){
             array.clear();
-            array = (ArrayList<clnFuncionario>) aDao.PesquisaStatus(new TextAutoCompleter(new JTextField()),a);
+            array = (ArrayList<clnFuncionario>) aDao.PesquisaStatus(a);
             for (clnFuncionario p : array) {
             TabelaUsuario.setSelectionBackground(Color.LIGHT_GRAY);
             if(p.isStatus() == 1){

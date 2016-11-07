@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -88,7 +88,7 @@ public class BairroDao extends Dao implements DbDao<clnBairro> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<clnBairro> listar(TextAutoCompleter c) {
+    public List<clnBairro> listar() {
         ArrayList<clnBairro> a = new ArrayList<>();
         clnBairro cRet = null;
         PreparedStatement ps = null;

@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
 import dao.SerieDao;
 import selimjose.clnSerie;
@@ -52,7 +51,7 @@ public class frmCadSeries extends javax.swing.JFrame {
 
         SerieDao aDAO = new SerieDao();
        
-            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayser = (ArrayList<clnSerie>) aDAO.listar();
             for (clnSerie p : arrayser) {
             TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
@@ -67,7 +66,7 @@ public class frmCadSeries extends javax.swing.JFrame {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             arrayser.clear();
-            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayser = (ArrayList<clnSerie>) aDAO.listar();
             for (clnSerie p : arrayser) {
             TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
@@ -75,7 +74,7 @@ public class frmCadSeries extends javax.swing.JFrame {
             }                     
         }
         else{
-            arrayser = (ArrayList<clnSerie>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayser = (ArrayList<clnSerie>) aDAO.listar();
             for (clnSerie p : arrayser) {
             TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});
@@ -388,7 +387,7 @@ public class frmCadSeries extends javax.swing.JFrame {
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
         arrayser.clear();
-        arrayser = (ArrayList<clnSerie>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        arrayser = (ArrayList<clnSerie>) aDao.PesquisarLista(a);
         for (clnSerie p : arrayser) {
             TabelaSerie.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdSerie(), p.getNmSerie()});

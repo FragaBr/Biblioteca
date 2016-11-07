@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
 import dao.SituacaoDao;
 import selimjose.clnSituacao;
@@ -52,7 +51,7 @@ public class frmCadSituacao extends javax.swing.JFrame {
 
         SituacaoDao aDAO = new SituacaoDao();
        
-            arraysit = (ArrayList<clnSituacao>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arraysit = (ArrayList<clnSituacao>) aDAO.listar();
             for (clnSituacao p : arraysit) {
             TabelaSituacao.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdSituacao(), p.getNmSituacao()});
@@ -67,7 +66,7 @@ public class frmCadSituacao extends javax.swing.JFrame {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             arraysit.clear();
-            arraysit = (ArrayList<clnSituacao>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arraysit = (ArrayList<clnSituacao>) aDAO.listar();
             for (clnSituacao p : arraysit) {
             TabelaSituacao.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdSituacao(), p.getNmSituacao()});
@@ -75,7 +74,7 @@ public class frmCadSituacao extends javax.swing.JFrame {
             }                     
         }
         else{
-            arraysit = (ArrayList<clnSituacao>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arraysit = (ArrayList<clnSituacao>) aDAO.listar();
             for (clnSituacao p : arraysit) {
             TabelaSituacao.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdSituacao(), p.getNmSituacao()});
@@ -546,7 +545,7 @@ public class frmCadSituacao extends javax.swing.JFrame {
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
         arraysit.clear();
-        arraysit = (ArrayList<clnSituacao>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        arraysit = (ArrayList<clnSituacao>) aDao.PesquisarLista(a);
         for (clnSituacao p : arraysit) {
             TabelaSituacao.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdSituacao(), p.getNmSituacao()});

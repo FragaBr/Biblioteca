@@ -5,7 +5,7 @@
  */
 package selimjose;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import dao.AutorDao;
 import dao.DaoException;
 import dao.DiasDao;
@@ -14,10 +14,13 @@ import dao.EmprestimoDao;
 import dao.ExemplarDao;
 import dao.ObraDao;
 import dao.ReservaDao;
+import dao.UsuarioDao;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import static java.sql.JDBCType.NULL;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,7 +51,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
     /**
      * Creates new form frmMovimentacaoFinal
      */
-    public frmMovimentacaoFinal(clnAluno aluno, int i) {
+    public frmMovimentacaoFinal(clnAluno aluno, int i) throws DaoException {
         
         initComponents();
         ExList = new ArrayList<>();
@@ -56,9 +59,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         tabelaLista = (DefaultTableModel) tabelaObra.getModel();
         tabelaLista2 = (DefaultTableModel) tabelaObra2.getModel();
         buscaNome();
-        //Thread clockThread = new Thread(new frmMovimentacaoFinal.ClockRunnable(), "Clock thread");
-        //clockThread.setDaemon(true);
-        //clockThread.start();
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setVisible(true);  
@@ -68,12 +68,45 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
             rbAnual.setEnabled(false);
             rbRegular.setEnabled(false);
         }
+        if( verificaPendencia(aluno) == true){
+            jButton5.setEnabled(false);
+            jButton7.setEnabled(false);
+            jButton9.setEnabled(false);            
+        }
+        
     }
+    static Date revDia(String StringData) throws ParseException{
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = (Date)formatter.parse(StringData);
+        return date;
+    }
+    
+    private boolean verificaPendencia(clnAluno aluno) throws DaoException, ParseException{
+        
+        UsuarioDao aDao = new UsuarioDao();
+        aluno = aDao.pesquisarPendente(aluno);
+        Date diaHoje = new Date();
+        Date diaBloqueio = new Date();
+        diaBloqueio = revDia(aluno.getFimBloqueio());    
+        
+        if(diaHoje.before(diaBloqueio)){  //Usuario ainda esta bloqueado.
+            if(aluno.Status == 2){
+            JOptionPane.showMessageDialog(this, " O Usuário se encontra bloqueado! ", " Bloqueio ", JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            }else{
+                return false;
+            }
+        }else{ // Usuario já está liberado.
+            //Alterar status do Usuario e tirar a data de bloqueio.
+                        
+        }       
+    }
+            
     
     private String[] initAutores() {
         String[] autorS;
         AutorDao cDAO = new AutorDao();
-        AutorList = cDAO.listar(new TextAutoCompleter(new JTextField()));
+        AutorList = cDAO.listar();
         autorS = new String[AutorList.size()];
         for (int i = 0; i < AutorList.size(); i++) {
             autorS[i] = AutorList.get(i).getNmAutor();            
@@ -83,7 +116,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
     private String[] initEditora() {
         String[] editoraS;
         EditoraDao cDAO = new EditoraDao();
-        EditoraList = cDAO.listar(new TextAutoCompleter(new JTextField()));
+        EditoraList = cDAO.listar();
         editoraS = new String[EditoraList.size()];
         for (int i = 0; i < EditoraList.size(); i++) {
             editoraS[i] = EditoraList.get(i).getNmEditora();
@@ -103,14 +136,13 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         });
 
          ExemplarDao aDao = new ExemplarDao();       
-            ExList = (ArrayList<clnExemplar>) aDao.listarDisponiveis(new TextAutoCompleter(new JTextField()));
+            ExList = (ArrayList<clnExemplar>) aDao.listarDisponiveis();
             for (clnExemplar p : ExList) {
                 tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
                 tabelaLista.addRow(new Object[]{p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
             } 
     }
     private void AtualizaTabela() {
-    
         
         ExemplarDao aDao = new ExemplarDao();
         clnExemplar a = new clnExemplar();
@@ -122,7 +154,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             ExList.clear();
-            ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+            ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista(a);
             for (clnExemplar p : ExList) {
                 tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
                 tabelaLista.addRow(new Object[]{p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
@@ -130,7 +162,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
             
         }
         else{
-            ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+            ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista(a);
             for (clnExemplar p : ExList) {
                 tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
                 tabelaLista.addRow(new Object[]{p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
@@ -162,7 +194,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
 
         TIpoEmp = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         txtTitulo = new java.awt.TextField();
         jLabel22 = new javax.swing.JLabel();
@@ -185,6 +216,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         jLabel26 = new javax.swing.JLabel();
         rbAnual = new javax.swing.JRadioButton();
         rbRegular = new javax.swing.JRadioButton();
+        jLabel9 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuCadastro = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
@@ -206,8 +238,6 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/LogoCObras.png"))); // NOI18N
 
         jLabel21.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel21.setText("Título*:");
@@ -373,6 +403,8 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         TIpoEmp.add(rbRegular);
         rbRegular.setText("Empréstimo Regular");
 
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Movimentacao.gif"))); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -407,14 +439,11 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(56, 56, 56))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGap(54, 54, 54)
-                                .addComponent(jLabel1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jButton10)
@@ -422,23 +451,21 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
                                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(86, 86, 86)
                                         .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel24)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel24))
                             .addComponent(jScrollPane1)
-                            .addComponent(jScrollPane2))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(jLabel9)))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -635,7 +662,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
 
-        ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista(a);
         for (clnExemplar p : ExList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
@@ -644,6 +671,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         int b = tabelaObra.getSelectedRow();
+        
         if (b >= 0) {
             tabelaLista.removeRow(b);
 
@@ -663,10 +691,12 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         txtCodigo.setText("");
         txtTitulo.setText("");
-        buscaNome();
+        tabelaLista.setRowCount(0);
         tabelaLista2.setRowCount(0);
         ExList.clear();
         ExList2.clear();
+        buscaNome();        
+        //AtualizaTabela();        
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -782,13 +812,13 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
                        Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     try {
-                    //System.out.println(p.getCdExemplar());
-                    //System.out.println(p.getCdObra());
-                    //System.out.println(p.getCdEditora());
-                    //System.out.println(p.getCdAutor());
+                    System.out.println(p.getCdExemplar());
+                    System.out.println(p.getCdObra());
+                    System.out.println(p.getCdEditora());
+                    System.out.println(p.getCdAutor());
                     //System.out.println(p.getCdSituacao());
-                    //System.out.println(r.getCdReserva());
-                    //System.out.println(r.getCdUsuario());
+                    System.out.println(r.getCdReserva());
+                    System.out.println(r.getCdUsuario());
                     
                     //System.out.println(d);
                     rDao.inserirReservaEx(r, p);
@@ -890,7 +920,11 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 clnAluno aluno = new clnAluno();
-                new frmMovimentacaoFinal(aluno,1).setVisible(true);
+                try {
+                    new frmMovimentacaoFinal(aluno,1).setVisible(true);
+                } catch (DaoException ex) {
+                    Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -904,13 +938,13 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;

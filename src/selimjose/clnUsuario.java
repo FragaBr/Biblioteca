@@ -20,6 +20,15 @@ public abstract class clnUsuario {
     protected String Login;
     protected String Senha;
     protected int Status;
+    protected String FimBloqueio;
+
+    public String getFimBloqueio() {
+        return FimBloqueio;
+    }
+
+    public void setFimBloqueio(String fimBloqueio) {
+        this.FimBloqueio = fimBloqueio;
+    }
     protected int CEP;
     protected int CdBairros;
     protected int CdCidades;    

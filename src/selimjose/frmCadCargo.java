@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
 import selimjose.clnCargo;
 /**
@@ -53,7 +52,7 @@ public class frmCadCargo extends javax.swing.JFrame {
 
         CargoDao aDAO = new CargoDao();
        
-            arraycar = (ArrayList<clnCargo>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arraycar = (ArrayList<clnCargo>) aDAO.listar();
             for (clnCargo p : arraycar) {
             TabelaCargo.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()});
@@ -68,13 +67,13 @@ private void AtualizaTabela() {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             arraycar.clear();
-            arraycar = (ArrayList<clnCargo>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arraycar = (ArrayList<clnCargo>) aDAO.listar();
             for (clnCargo p : arraycar) {
             TabelaCargo.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()});            
             }                       
         }else{
-            arraycar = (ArrayList<clnCargo>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arraycar = (ArrayList<clnCargo>) aDAO.listar();
             for (clnCargo p : arraycar) {
             TabelaCargo.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()}); 
@@ -452,7 +451,7 @@ private void AtualizaTabela() {
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
         arraycar.clear();
-        arraycar = (ArrayList<clnCargo>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        arraycar = (ArrayList<clnCargo>) aDao.PesquisarLista(a);
         for (clnCargo p : arraycar) {
             TabelaCargo.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdCargo(), p.getNmCargo()});

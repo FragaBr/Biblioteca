@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
 import dao.ModEnsinoDao;
 import selimjose.clnModEnsino;
@@ -51,7 +50,7 @@ public class frmCadModEnsino extends javax.swing.JFrame {
 
         ModEnsinoDao aDAO = new ModEnsinoDao();
        
-            arraymodensino = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arraymodensino = (ArrayList<clnModEnsino>) aDAO.listar();
             for (clnModEnsino p : arraymodensino) {
             TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
@@ -66,7 +65,7 @@ public class frmCadModEnsino extends javax.swing.JFrame {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             arraymodensino.clear();
-            arraymodensino = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arraymodensino = (ArrayList<clnModEnsino>) aDAO.listar();
             for (clnModEnsino p : arraymodensino) {
             TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
@@ -74,7 +73,7 @@ public class frmCadModEnsino extends javax.swing.JFrame {
             }                     
         }
         else{
-            arraymodensino = (ArrayList<clnModEnsino>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arraymodensino = (ArrayList<clnModEnsino>) aDAO.listar();
             for (clnModEnsino p : arraymodensino) {
             TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});
@@ -524,7 +523,7 @@ public class frmCadModEnsino extends javax.swing.JFrame {
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
         arraymodensino.clear();
-        arraymodensino = (ArrayList<clnModEnsino>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        arraymodensino = (ArrayList<clnModEnsino>) aDao.PesquisarLista(a);
         for (clnModEnsino p : arraymodensino) {
             TabelaModEnsino.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdModEnsino(), p.getNmModEnsino()});

@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
 import selimjose.clnObra;
 import dao.ObraDao;
@@ -49,7 +48,7 @@ public class frmCadObras extends javax.swing.JDialog {
      private String[] initAutores() {
         String[] autorS;
         AutorDao cDAO = new AutorDao();
-        AutorList = cDAO.listar(new TextAutoCompleter(new JTextField()));
+        AutorList = cDAO.listar();
         autorS = new String[AutorList.size()];
         for (int i = 0; i < AutorList.size(); i++) {
             autorS[i] = AutorList.get(i).getNmAutor();            
@@ -59,7 +58,7 @@ public class frmCadObras extends javax.swing.JDialog {
     private String[] initEditora() {
         String[] editoraS;
         EditoraDao cDAO = new EditoraDao();
-        EditoraList = cDAO.listar(new TextAutoCompleter(new JTextField()));
+        EditoraList = cDAO.listar();
         editoraS = new String[EditoraList.size()];
         for (int i = 0; i < EditoraList.size(); i++) {
             editoraS[i] = EditoraList.get(i).getNmEditora();
@@ -74,7 +73,7 @@ public class frmCadObras extends javax.swing.JDialog {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             ObraList.clear();
-            ObraList = (ArrayList<clnObra>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            ObraList = (ArrayList<clnObra>) aDAO.listar();
             for (clnObra p : ObraList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdObra(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
@@ -82,7 +81,7 @@ public class frmCadObras extends javax.swing.JDialog {
             }                     
         }
         else{
-            ObraList = (ArrayList<clnObra>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            ObraList = (ArrayList<clnObra>) aDAO.listar();
             for (clnObra p : ObraList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdObra(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
@@ -104,7 +103,7 @@ public class frmCadObras extends javax.swing.JDialog {
 
          ObraDao aDAO = new ObraDao();
        
-            ObraList = (ArrayList<clnObra>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            ObraList = (ArrayList<clnObra>) aDAO.listar();
             for (clnObra p : ObraList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdObra(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
@@ -831,7 +830,7 @@ public class frmCadObras extends javax.swing.JDialog {
         tabelaLista.fireTableDataChanged();
         ObraList.clear();
         
-        ObraList = (ArrayList<clnObra>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        ObraList = (ArrayList<clnObra>) aDao.PesquisarLista(a);
             for (clnObra p : ObraList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdObra(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});

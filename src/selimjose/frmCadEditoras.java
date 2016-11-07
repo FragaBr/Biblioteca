@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
 import selimjose.clnEditora;
 
@@ -404,7 +403,7 @@ public class frmCadEditoras extends javax.swing.JFrame {
 
         EditoraDao aDAO = new EditoraDao();
        
-            arrayaut = (ArrayList<clnEditora>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayaut = (ArrayList<clnEditora>) aDAO.listar();
             for (clnEditora p : arrayaut) {
             TabelaEditora.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdEditora(), p.getNmEditora()});
@@ -419,7 +418,7 @@ public class frmCadEditoras extends javax.swing.JFrame {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             arrayaut.clear();
-            arrayaut = (ArrayList<clnEditora>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayaut = (ArrayList<clnEditora>) aDAO.listar();
             for (clnEditora p : arrayaut) {
             TabelaEditora.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdEditora(), p.getNmEditora()});            

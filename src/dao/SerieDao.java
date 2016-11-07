@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -166,7 +166,7 @@ public class SerieDao extends Dao implements DbDao<clnSerie> {
         return cRet;
     }
       
-      public List<clnSerie> listar(TextAutoCompleter c) {
+      public List<clnSerie> listar() {
         ArrayList<clnSerie> a = new ArrayList<>();
         clnSerie cRet = null;
 
@@ -195,7 +195,7 @@ public class SerieDao extends Dao implements DbDao<clnSerie> {
         return a;
     }
       
-     public List<clnSerie> PesquisarLista(TextAutoCompleter c, clnSerie p) {
+     public List<clnSerie> PesquisarLista( clnSerie p) {
         ArrayList<clnSerie> a = new ArrayList<>();
         clnSerie cRet = null;
 

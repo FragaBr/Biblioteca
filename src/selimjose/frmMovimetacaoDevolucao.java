@@ -5,7 +5,10 @@
  */
 package selimjose;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+import dao.AlunoDao;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+
 import dao.AutorDao;
 import dao.DaoException;
 import dao.DiasDao;
@@ -14,10 +17,12 @@ import dao.EmprestimoDao;
 import dao.ExemplarDao;
 import dao.ObraDao;
 import dao.ReservaDao;
+import dao.UsuarioDao;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,7 +65,7 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
     private String[] initAutores() {
         String[] autorS;
         AutorDao cDAO = new AutorDao();
-        AutorList = cDAO.listar(new TextAutoCompleter(new JTextField()));
+        AutorList = cDAO.listar();
         autorS = new String[AutorList.size()];
         for (int i = 0; i < AutorList.size(); i++) {
             autorS[i] = AutorList.get(i).getNmAutor();            
@@ -70,7 +75,7 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
     private String[] initEditora() {
         String[] editoraS;
         EditoraDao cDAO = new EditoraDao();
-        EditoraList = cDAO.listar(new TextAutoCompleter(new JTextField()));
+        EditoraList = cDAO.listar();
         editoraS = new String[EditoraList.size()];
         for (int i = 0; i < EditoraList.size(); i++) {
             editoraS[i] = EditoraList.get(i).getNmEditora();
@@ -90,7 +95,7 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
         });
 
          ExemplarDao aDao = new ExemplarDao();       
-            ExList = (ArrayList<clnExemplar>) aDao.listarDisponiveis(new TextAutoCompleter(new JTextField()));
+            ExList = (ArrayList<clnExemplar>) aDao.listarEmprestados();
             for (clnExemplar p : ExList) {
                 tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
                 tabelaLista.addRow(new Object[]{p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
@@ -109,6 +114,13 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
         SimpleDateFormat DataFormatada = new SimpleDateFormat(formato);       
         return DataFormatada.format(a);
     }
+    static Date revDia(String StringData) throws ParseException{
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = (Date)formatter.parse(StringData);
+        return date;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -162,7 +174,7 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/LogoCObras.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Devolucao.gif"))); // NOI18N
 
         jLabel21.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel21.setText("Título*:");
@@ -214,6 +226,11 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
         txtCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCodigoActionPerformed(evt);
+            }
+        });
+        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyPressed(evt);
             }
         });
 
@@ -341,17 +358,12 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel22)
                                 .addGap(46, 46, 46))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(56, 56, 56))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGap(54, 54, 54)
-                                .addComponent(jLabel1))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -361,15 +373,18 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
                                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(86, 86, 86)
                                         .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel24)))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addContainerGap()
-                            .addComponent(jLabel24)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jScrollPane1)
+                                .addComponent(jScrollPane2))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jScrollPane2))))
+                        .addGap(161, 161, 161)
+                        .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -377,7 +392,7 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -400,7 +415,7 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
                                 .addComponent(comboautor, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(30, 30, 30)))
                         .addComponent(comboeditora, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton5)
                 .addGap(54, 54, 54)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -562,10 +577,12 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
         ExemplarDao aDao = new ExemplarDao();
         clnExemplar a = new clnExemplar();
         a.setTitulo(txtTitulo.getText());
+        a.setCdExemplar(Integer.parseInt(txtCodigo.getText()));
+        
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
 
-        ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        ExList = (ArrayList<clnExemplar>) aDao.PesquisarLista3(a);
         for (clnExemplar p : ExList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdEditora(),p.getCdAutor()});
@@ -593,10 +610,11 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         txtCodigo.setText("");
         txtTitulo.setText("");
-        buscaNome();
+        tabelaLista.setRowCount(0);
         tabelaLista2.setRowCount(0);
         ExList.clear();
         ExList2.clear();
+        buscaNome();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -610,52 +628,72 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         //Devolucao
-        if( this.i == 1){
-            //Reserva
-            ReservaDao rDao = new ReservaDao();
+        
+            EmprestimoDao rDao = new EmprestimoDao();
             ExemplarDao exDao = new ExemplarDao();
-            clnReserva r = new clnReserva();
-            clnReserva r2 = new clnReserva();
-            r.setCdUsuario(aluno.getCdUsuario());
-            r.setDtReserva(dia());
-
+            UsuarioDao aDao = new UsuarioDao();
+            clnAluno aluno = new clnAluno();
+            clnEmprestimo e = new clnEmprestimo();
+            clnEmprestimo consulta = new clnEmprestimo();
+            Date diaDevolucao = new Date();
+            Date diaHoje = new Date();
+            Date diaBloqueio = new Date();
+            e.setDtDevolucaoEfetiva(dia());          //Coloca o dia da devolucao.
+            int diasBloqueados;
+            
+            
             if(ExList2 != null){
-                try {
-                    int cdReserva = rDao.inserirR(r);
-                    r.setCdReserva(cdReserva);
-                } catch (DaoException ex1) {
-                    Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex1);
-                }
-
+                
                 for (clnExemplar p : ExList2) {
                     p.getCdExemplar();
-                    p.getCdEditora();
-                    p.getCdAutor();
-                    p.getCdObra();
-                    p.setCdSituacao(2);
+                    p.setCdSituacao(1); //seta a situacao para disponivel.
                     try {
-                        exDao.alterar(p);
+                        //Verifica a data de devolução.
+                        consulta = rDao.pesquisar(p);       // volta se o livro foi emprestado e nao devolvido e os dados do emprestimo.
+                        try {
+                            diaDevolucao = revDia(consulta.getDtDevolucao());
+                            if( diaHoje.after(diaDevolucao)){
+                                //Livro esta atrasado
+                                //Aplica-se multa
+                                //Bloqueia usuario
+                                aluno.setCdUsuario(consulta.getCdUsuario()); //Acha Aluno;
+                                aluno.setStatus(2);   //Bloqueia
+                                //Calcula multa
+                                diasBloqueados = (int) ((diaHoje.getTime() - diaDevolucao.getTime()) / 86400000L);
+                                System.out.println(diasBloqueados);
+                                diasBloqueados = diasBloqueados * 2;
+                                diaBloqueio.setDate(diaBloqueio.getDate()+ diasBloqueados);
+                                
+                                aluno.setFimBloqueio(diaformatado(diaBloqueio));
+                                
+                                System.out.println(aluno.getFimBloqueio());
+                                aDao.alteraStatus(aluno);
+                                JOptionPane.showMessageDialog(this, "O usuário está bloqueado até: \n" + aluno.getFimBloqueio() , "Devolucão", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                            
+                        } catch (ParseException ex) {
+                            Logger.getLogger(frmMovimetacaoDevolucao.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                                
                     } catch (DaoException ex) {
-                        Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(frmMovimetacaoDevolucao.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
                     try {
-                        //System.out.println(p.getCdExemplar());
-                        //System.out.println(p.getCdObra());
-                        //System.out.println(p.getCdEditora());
-                        //System.out.println(p.getCdAutor());
-                        //System.out.println(p.getCdSituacao());
-                        //System.out.println(r.getCdReserva());
-                        //System.out.println(r.getCdUsuario());
-
-                        //System.out.println(d);
-                        rDao.inserirReservaEx(r, p);
+                        exDao.disponibiliza(p);
+                        
                     } catch (DaoException ex1) {
-                        Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex1);
+                        Logger.getLogger(frmMovimetacaoDevolucao.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                    try {                    
+                        rDao.alterarEmprestimo(e, p);
+                    } catch (DaoException ex1) {
+                        Logger.getLogger(frmMovimetacaoDevolucao.class.getName()).log(Level.SEVERE, null, ex1);
                     }
                 }
-                JOptionPane.showMessageDialog(this, " Reserva feita com Sucesso!!", "Reserva", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, " Devolução realizada com Sucesso!!", "Devolucão", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -729,6 +767,11 @@ public class frmMovimetacaoDevolucao extends javax.swing.JFrame {
         A.setResizable(true);
         A.setVisible(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void txtCodigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyPressed
+        // TODO add your handling code here:
+        txtCodigo.setText("");
+    }//GEN-LAST:event_txtCodigoKeyPressed
 
     /**
      * @param args the command line arguments

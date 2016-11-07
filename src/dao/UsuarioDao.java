@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,6 +47,11 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
     public static final String SQL_STATUS =
     "SELECT * FROM `usuario` WHERE `Status` = ? ";
     
+    public static final String SQL_VERIFICA =
+    "SELECT * FROM `usuario` WHERE (`Login`, `Senha`) = (?,?)";
+    
+    public static final String SQL_ALTERA_STATUS=
+    "UPDATE `usuario` SET `Status` = ?, `FimBloqueio` = ? WHERE `CdUsuario` = ?";
   
     public clnUsuario Exists(clnUsuario p) {
           
@@ -233,7 +238,7 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public List<clnFuncionario> PesquisarLista(TextAutoCompleter c, clnFuncionario p) {
+    public List<clnFuncionario> PesquisarLista(clnFuncionario p) {
         ArrayList<clnFuncionario> a = new ArrayList<>();
         clnFuncionario cRet = null;
 
@@ -265,7 +270,7 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
         }
         return a;
     }
-    public List<clnAluno> PesquisarLista2(TextAutoCompleter c, clnAluno p) {
+    public List<clnAluno> PesquisarLista2(clnAluno p) {
         ArrayList<clnAluno> a = new ArrayList<>();
         clnAluno cRet = null;
         PreparedStatement ps = null;
@@ -295,7 +300,7 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
         return a;
     }
     
-    public List<clnFuncionario> listar(TextAutoCompleter c) {
+    public List<clnFuncionario> listar() {
         ArrayList<clnFuncionario> a = new ArrayList<>();
         clnFuncionario cRet = null;
 
@@ -326,7 +331,7 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
         return a;
     }
     
-     public List<clnFuncionario> PesquisaStatus(TextAutoCompleter c, clnFuncionario p) {
+     public List<clnFuncionario> PesquisaStatus(clnFuncionario p) {
         ArrayList<clnFuncionario> a = new ArrayList<>();
         clnFuncionario cRet = null;
 
@@ -382,5 +387,55 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
         }	
         return cRet;
     }
+     
+     public clnAluno pesquisarPendente(clnAluno p) throws DaoException {
+        clnAluno cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_VERIFICA);  
+            ps.setString(1, p.getLogin());
+            ps.setString(2, p.getSenha());
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnAluno();
+                cRet.setCdUsuario(rs.getInt("CdUsuario"));
+                cRet.setNmUsuario(rs.getString("NmUsuario"));  
+                cRet.setStatus(rs.getInt("Status"));
+                cRet.setFimBloqueio(rs.getString("FimBloqueio"));
+            }
+                
+        } catch (Exception e) {
+            new DaoException("Aluno não Bloqueado "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }	
+        return cRet;
+    }
+     
+    public boolean alteraStatus(clnAluno Obj) throws DaoException {
+        boolean ret = false;        
+        PreparedStatement ps = null;
+        Connection con = null;        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_ALTERA_STATUS);  
+            ps.setInt(1,Obj.isStatus());
+            ps.setString(2,Obj.getFimBloqueio());
+            ps.setInt(3, Obj.getCdUsuario());
+            int qtd = ps.executeUpdate();            
+            if (qtd>0)
+                ret = true;            
+        } catch (Exception e) {
+        	 new DaoException(" Alteração não efetuada."+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps);
+        }        
+        return ret;
+    } 
 
 }

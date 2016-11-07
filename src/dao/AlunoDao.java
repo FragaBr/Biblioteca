@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import dao.Dao;
 import dao.DaoException;
 import dao.DbDao;

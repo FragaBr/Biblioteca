@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
 import selimjose.clnObra;
 import dao.ObraDao;
@@ -50,7 +49,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
     private String[] initAutores() {
         String[] autorS;
         AutorDao cDAO = new AutorDao();
-        AutorList = cDAO.listar(new TextAutoCompleter(new JTextField()));
+        AutorList = cDAO.listar();
         autorS = new String[AutorList.size()];
         for (int i = 0; i < AutorList.size(); i++) {
             autorS[i] = AutorList.get(i).getNmAutor();            
@@ -60,7 +59,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
     private String[] initSit() {
         String[] autorS;
         SituacaoDao cDAO = new SituacaoDao();
-        SitList = cDAO.listarMod(new TextAutoCompleter(new JTextField()));
+        SitList = cDAO.listarMod();
         autorS = new String[SitList.size()];
         for (int i = 0; i < SitList.size(); i++) {
             autorS[i] = SitList.get(i).getNmSituacao();            
@@ -70,7 +69,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
     private String[] initEditora() {
         String[] editoraS;
         EditoraDao cDAO = new EditoraDao();
-        EditoraList = cDAO.listar(new TextAutoCompleter(new JTextField()));
+        EditoraList = cDAO.listar();
         editoraS = new String[EditoraList.size()];
         for (int i = 0; i < EditoraList.size(); i++) {
             editoraS[i] = EditoraList.get(i).getNmEditora();
@@ -85,7 +84,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             ObraList.clear();
-            ObraList = (ArrayList<clnExemplar>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            ObraList = (ArrayList<clnExemplar>) aDAO.listar();
             for (clnExemplar p : ObraList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdSituacao()});
@@ -93,7 +92,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
             }                     
         }
         else{
-            ObraList = (ArrayList<clnExemplar>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            ObraList = (ArrayList<clnExemplar>) aDAO.listar();
             for (clnExemplar p : ObraList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdSituacao()});
@@ -115,7 +114,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
 
          ExemplarDao aDAO = new ExemplarDao();
        
-            ObraList = (ArrayList<clnExemplar>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            ObraList = (ArrayList<clnExemplar>) aDAO.listar();
             for (clnExemplar p : ObraList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdSituacao()});
@@ -639,7 +638,7 @@ public class frmCadObrasAtivDesativ extends javax.swing.JDialog {
         tabelaLista.fireTableDataChanged();
         ObraList.clear();
         
-        ObraList = (ArrayList<clnExemplar>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        ObraList = (ArrayList<clnExemplar>) aDao.PesquisarLista(a);
             for (clnExemplar p : ObraList) {
             tabelaObra.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),p.getCdSituacao()});

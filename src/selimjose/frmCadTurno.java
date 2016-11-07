@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import com.mxrck.autocompleter.TextAutoCompleter;
 import javax.swing.table.DefaultTableModel;
 import dao.TurnoDao;
 import selimjose.clnTurno;
@@ -50,7 +49,7 @@ public class frmCadTurno extends javax.swing.JFrame {
         });
 
         TurnoDao aDAO = new TurnoDao();       
-            arrayser = (ArrayList<clnTurno>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayser = (ArrayList<clnTurno>) aDAO.listar();
             for (clnTurno p : arrayser) {
             TabelaTurno.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdTurno(), p.getNmTurno()});
@@ -65,14 +64,14 @@ public class frmCadTurno extends javax.swing.JFrame {
             tabelaLista.setRowCount(0);
             tabelaLista.fireTableDataChanged();
             arrayser.clear();
-            arrayser = (ArrayList<clnTurno>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayser = (ArrayList<clnTurno>) aDAO.listar();
             for (clnTurno p : arrayser) {
             TabelaTurno.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdTurno(), p.getNmTurno()});            
             }                     
         }
         else{
-            arrayser = (ArrayList<clnTurno>) aDAO.listar(new TextAutoCompleter(new JTextField()));
+            arrayser = (ArrayList<clnTurno>) aDAO.listar();
             for (clnTurno p : arrayser) {
             TabelaTurno.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdTurno(), p.getNmTurno()});
@@ -517,7 +516,7 @@ public class frmCadTurno extends javax.swing.JFrame {
         tabelaLista.setRowCount(0);
         tabelaLista.fireTableDataChanged();
         arrayser.clear();
-        arrayser = (ArrayList<clnTurno>) aDao.PesquisarLista(new TextAutoCompleter(new JTextField()),a);
+        arrayser = (ArrayList<clnTurno>) aDao.PesquisarLista(a);
         for (clnTurno p : arrayser) {
             TabelaTurno.setSelectionBackground(Color.LIGHT_GRAY);
             tabelaLista.addRow(new Object[]{p.getCdTurno(), p.getNmTurno()});

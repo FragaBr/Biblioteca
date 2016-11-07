@@ -6,7 +6,7 @@
 package dao;
 
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -167,7 +167,7 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
         return cRet;
     }
       
-      public List<clnEditora> listar(TextAutoCompleter c) {
+      public List<clnEditora> listar() {
         ArrayList<clnEditora> a = new ArrayList<>();
         clnEditora cRet = null;
 
@@ -195,7 +195,7 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
 
         return a;
     }
-      public List<clnEditora> PesquisarLista(TextAutoCompleter c, clnEditora p) {
+      public List<clnEditora> PesquisarLista(clnEditora p) {
         ArrayList<clnEditora> a = new ArrayList<>();
         clnEditora cRet = null;
 

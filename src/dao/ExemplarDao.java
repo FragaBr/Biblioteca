@@ -5,7 +5,6 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,9 +34,15 @@ public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
     public static final String SQL_PESQUISAR2 =
     "SELECT * FROM `exemplar` WHERE `Obra_CdObra` = ? ";
     
+    public static final String SQL_PESQUISAR3=
+    "SELECT * FROM `obra`,`exemplar` WHERE `CdExemplar` = ? and CdObra = Obra_CdObra and Situacao_CdSituacao = 3  ";
+    
     public static final String SQL_EXISTS
             = " select * from exemplar "
             + " where CdExemplar = ?  ";
+    
+    public static final String SQL_Disponibilizar =
+    "UPDATE `exemplar` SET `Situacao_CdSituacao` = 1 WHERE `CdExemplar` = ?";
 
     @Override
     public int inserir(clnExemplar Obj) throws DaoException {
@@ -174,7 +179,7 @@ public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
         return cRet;
     }
       
-     public List<clnExemplar> listar(TextAutoCompleter c) {
+     public List<clnExemplar> listar() {
         ArrayList<clnExemplar> a = new ArrayList<>();
         clnExemplar cRet = null;
         PreparedStatement ps = null;
@@ -208,7 +213,7 @@ public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
         }
         return a;
     }
-     public List<clnExemplar> listarDisponiveis(TextAutoCompleter c) {
+     public List<clnExemplar> listarDisponiveis() {
         ArrayList<clnExemplar> a = new ArrayList<>();
         clnExemplar cRet = null;
         PreparedStatement ps = null;
@@ -242,7 +247,42 @@ public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
         }
         return a;
     } 
-     public List<clnExemplar> PesquisarLista(TextAutoCompleter c, clnExemplar p) {
+     
+     public List<clnExemplar> listarEmprestados() {
+        ArrayList<clnExemplar> a = new ArrayList<>();
+        clnExemplar cRet = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            ps = con.prepareStatement("select `CdExemplar`,`Obra_CdObra`,`Titulo`,`Edicao`,`Ano`,`Volume`,`ISBN`,`Situacao_CdSituacao`,`Editora_CdEditora`,`Autor_CdAutor` from `exemplar`,`obra` WHERE CdObra = Obra_CdObra and `Situacao_CdSituacao` = 3 ");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                cRet = new clnExemplar();            
+                cRet.setCdExemplar(rs.getInt("CdExemplar"));
+                cRet.setCdObra(rs.getInt("Obra_CdObra"));
+                cRet.setCdEditora(rs.getInt("Editora_CdEditora"));
+                cRet.setCdAutor(rs.getInt("Autor_CdAutor"));
+                cRet.setTitulo(rs.getString("Titulo"));
+                cRet.setEdicao(rs.getInt("Edicao"));
+                cRet.setAno(rs.getInt("Ano"));
+                cRet.setVolume(rs.getString("Volume"));
+                cRet.setISBN(rs.getString("ISBN"));
+                cRet.setCdSituacao(rs.getInt("Situacao_CdSituacao"));
+                
+                //cRet.setCdEditora(rs.getInt("Obra_Editora_CdEditora"));
+                //cRet.setCdAutor(rs.getInt("Obra_Autor_CdAutor"));
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Exemplar nao inserido" + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
+    } 
+    public List<clnExemplar> PesquisarLista(clnExemplar p) {
         ArrayList<clnExemplar> a = new ArrayList<>();
         clnExemplar cRet = null;
 
@@ -278,7 +318,7 @@ public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
         return a;
     }
      
-     public List<clnExemplar> PesquisarLista2(TextAutoCompleter c, clnExemplar p) {
+     public List<clnExemplar> PesquisarLista2(clnExemplar p) {
         ArrayList<clnExemplar> a = new ArrayList<>();
         clnExemplar cRet = null;
 
@@ -308,10 +348,66 @@ public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
         }
         return a;
     }
+    
+      public List<clnExemplar> PesquisarLista3(clnExemplar p) {
+        ArrayList<clnExemplar> a = new ArrayList<>();
+        clnExemplar cRet = null;
 
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR3);
+            ps.setInt(1, p.getCdExemplar());
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnExemplar();            
+                cRet.setCdExemplar(rs.getInt("CdExemplar"));
+                cRet.setCdObra(rs.getInt("Obra_CdObra"));
+                cRet.setTitulo(rs.getString("Titulo"));
+                cRet.setEdicao(rs.getInt("Edicao"));
+                cRet.setAno(rs.getInt("Ano"));
+                cRet.setVolume(rs.getString("Volume"));
+                cRet.setISBN(rs.getString("ISBN"));
+                cRet.setCdEditora(rs.getInt("Obra_Editora_CdEditora"));
+                cRet.setCdAutor(rs.getInt("Obra_Autor_CdAutor"));
+                cRet.setCdSituacao(rs.getInt("Situacao_CdSituacao"));                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+        new DaoException("Exemplar não inserido " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
+    }
     @Override
     public clnExemplar pesquisar(String id) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public boolean disponibiliza(clnExemplar Obj) throws DaoException {
+        
+        boolean ret = false;        
+        PreparedStatement ps = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_Disponibilizar); 
+            ps.setInt(1, Obj.getCdExemplar());
+            int qtd = ps.executeUpdate();            
+            if (qtd>0)
+                ret = true;
+            
+        } catch (Exception e) {
+        	 new DaoException(" Alteração não efetuada."+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps);
+        }        
+        return ret;
+    }
 }

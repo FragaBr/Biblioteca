@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -172,7 +172,7 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         return cRet;
     }
       
-      public List<clnTurno> listar(TextAutoCompleter c) {
+      public List<clnTurno> listar() {
         ArrayList<clnTurno> a = new ArrayList<>();
         clnTurno cRet = null;
 
@@ -201,7 +201,7 @@ public class TurnoDao extends Dao implements DbDao<clnTurno> {
         return a;
     }
       
-    public List<clnTurno> PesquisarLista(TextAutoCompleter c, clnTurno p) {
+    public List<clnTurno> PesquisarLista(clnTurno p) {
         ArrayList<clnTurno> a = new ArrayList<>();
         clnTurno cRet = null;
 

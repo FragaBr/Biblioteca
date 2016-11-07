@@ -5,7 +5,6 @@
  */
 package dao;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -168,7 +167,7 @@ public class ModEnsinoDao extends Dao implements DbDao<clnModEnsino> {
         return cRet;
     }
       
-      public List<clnModEnsino> listar(TextAutoCompleter c) {
+      public List<clnModEnsino> listar() {
         ArrayList<clnModEnsino> a = new ArrayList<>();
         clnModEnsino cRet = null;
 
@@ -197,7 +196,7 @@ public class ModEnsinoDao extends Dao implements DbDao<clnModEnsino> {
         return a;
     }
       
-     public List<clnModEnsino> PesquisarLista(TextAutoCompleter c, clnModEnsino p) {
+     public List<clnModEnsino> PesquisarLista(clnModEnsino p) {
         ArrayList<clnModEnsino> a = new ArrayList<>();
         clnModEnsino cRet = null;
 
