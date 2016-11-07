@@ -8,6 +8,7 @@ package selimjose;
 import dao.DaoException;
 import dao.FuncionarioDao;
 import dao.AlunoDao;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -219,10 +220,15 @@ public class frmCadLoginAluno extends javax.swing.JFrame {
                         public void run() {
                             frmMovimentacaoFinal m;
                             try {
-                                m = new frmMovimentacaoFinal(u,i);
-                                m.setLocationRelativeTo(null);
-                                m.setResizable(true);
-                                m.setVisible(true);
+                                try {
+                                    m = new frmMovimentacaoFinal(u,i);
+                                    m.setLocationRelativeTo(null);
+                                    m.setResizable(true);
+                                    m.setVisible(true);
+                                } catch (ParseException ex) {
+                                    Logger.getLogger(frmCadLoginAluno.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                
                             } catch (DaoException ex) {
                                 Logger.getLogger(frmCadLoginAluno.class.getName()).log(Level.SEVERE, null, ex);
                             }

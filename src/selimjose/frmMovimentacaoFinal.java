@@ -51,7 +51,7 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
     /**
      * Creates new form frmMovimentacaoFinal
      */
-    public frmMovimentacaoFinal(clnAluno aluno, int i) throws DaoException {
+    public frmMovimentacaoFinal(clnAluno aluno, int i) throws DaoException, ParseException {
         
         initComponents();
         ExList = new ArrayList<>();
@@ -96,9 +96,14 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
             }else{
                 return false;
             }
-        }else{ // Usuario já está liberado.
-            //Alterar status do Usuario e tirar a data de bloqueio.
-                        
+        }else{  // Usuario já está liberado.
+                //Alterar status do Usuario e tirar a data de bloqueio.
+                aDao.pesquisar(aluno);
+                aluno.setStatus(1); //Ativa o Usuario Novamente.
+                aluno.setFimBloqueio(null);
+                aDao.alteraStatus(aluno);
+                
+                return false;
         }       
     }
             
@@ -921,7 +926,11 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
             public void run() {
                 clnAluno aluno = new clnAluno();
                 try {
-                    new frmMovimentacaoFinal(aluno,1).setVisible(true);
+                    try {
+                        new frmMovimentacaoFinal(aluno,1).setVisible(true);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } catch (DaoException ex) {
                     Logger.getLogger(frmMovimentacaoFinal.class.getName()).log(Level.SEVERE, null, ex);
                 }

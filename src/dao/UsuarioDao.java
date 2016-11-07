@@ -381,7 +381,7 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
             }
                 
         } catch (Exception e) {
-            new DaoException("Funcionario nÃ£o inserido "+ e.getMessage()).printStackTrace();;
+            new DaoException("Funcionario não inserido "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps, rs);
         }	
