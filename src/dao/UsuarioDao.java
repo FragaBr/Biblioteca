@@ -52,6 +52,9 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
     
     public static final String SQL_ALTERA_STATUS=
     "UPDATE `usuario` SET `Status` = ?, `FimBloqueio` = ? WHERE `CdUsuario` = ?";
+    
+    public static final String SQL_BLOCK = 
+    "UPDATE `usuario` SET `Status` = ? WHERE `CdUsuario` = ?";
   
     public clnUsuario Exists(clnUsuario p) {
           
@@ -327,7 +330,6 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
         } finally {
             close(con, ps, rs);
         }
-
         return a;
     }
     
@@ -426,7 +428,7 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
             ps = con.prepareStatement(SQL_ALTERA_STATUS);  
             ps.setInt(1,Obj.isStatus());
             ps.setString(2,Obj.getFimBloqueio());
-            ps.setInt(3, Obj.getCdUsuario());
+            ps.setInt(3,Obj.getCdUsuario());
             int qtd = ps.executeUpdate();            
             if (qtd>0)
                 ret = true;            
@@ -436,6 +438,26 @@ public class UsuarioDao extends Dao implements DbDao<clnUsuario> {
             close(con, ps);
         }        
         return ret;
-    } 
+    }
+    public boolean Block(clnUsuario Obj) throws DaoException {
+        boolean ret = false;        
+        PreparedStatement ps = null;
+        Connection con = null;        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_BLOCK);  
+            ps.setInt(1,Obj.isStatus());
+            ps.setInt(2, Obj.getCdUsuario());
+            int qtd = ps.executeUpdate();            
+            if (qtd>0)
+                ret = true;
+            
+        } catch (Exception e) {
+        	 new DaoException(" Alteração não efetuada."+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps);
+        }        
+        return ret;
+    }  
 
 }

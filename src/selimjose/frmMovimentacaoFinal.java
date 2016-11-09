@@ -98,15 +98,12 @@ public class frmMovimentacaoFinal extends javax.swing.JFrame {
             }
         }else{  // Usuario já está liberado.
                 //Alterar status do Usuario e tirar a data de bloqueio.
-                aDao.pesquisar(aluno);
                 aluno.setStatus(1); //Ativa o Usuario Novamente.
                 aluno.setFimBloqueio(null);
-                aDao.alteraStatus(aluno);
-                
+                aDao.alteraStatus(aluno);                
                 return false;
         }       
-    }
-            
+    }            
     
     private String[] initAutores() {
         String[] autorS;

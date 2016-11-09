@@ -870,6 +870,11 @@ public class frmCadFuncionario extends javax.swing.JFrame {
 
         jMenuRelatorios4.setText("Ativar/Desativar");
         jMenuRelatorios4.setFont(new java.awt.Font("Candara", 1, 20)); // NOI18N
+        jMenuRelatorios4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuRelatorios4MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenuRelatorios4);
 
         jMenuRelatorios8.setText("                         ");
@@ -1299,6 +1304,15 @@ public class frmCadFuncionario extends javax.swing.JFrame {
         A.setResizable(true);
         A.setVisible(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuRelatorios4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuRelatorios4MouseClicked
+        // Ativar - Desativar Funcionario
+        dispose();
+        frmCadFuncionarioAtivDesativ A = new frmCadFuncionarioAtivDesativ();
+        A.setLocationRelativeTo(null);
+        A.setResizable(true);
+        A.setVisible(true);        
+    }//GEN-LAST:event_jMenuRelatorios4MouseClicked
 
     /**
      * @param args the command line arguments
