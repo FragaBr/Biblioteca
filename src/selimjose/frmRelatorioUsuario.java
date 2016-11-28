@@ -435,7 +435,7 @@ public class frmRelatorioUsuario extends javax.swing.JFrame {
         if(combostatus.getSelectedItem().toString().equals("Ativo")){
                 a.setStatus(1);
         }else if(combostatus.getSelectedItem().toString().equals("Bloqueado")){ 
-                a.setStatus(0);            
+                a.setStatus(2);            
         }else{
                 a.setStatus(-1);
             

@@ -6,8 +6,8 @@
 package selimjose;
 
 import dao.AlunoDao;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
+//import org.joda.time.DateTime;
+//import org.joda.time.Duration;
 
 import dao.AutorDao;
 import dao.DaoException;
