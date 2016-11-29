@@ -32,6 +32,9 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
     public static final String SQL_PESQUISAR_AUTOR =
     "SELECT * FROM `autor` WHERE `NmAutor` = ? ";
     
+    public static final String SQL_PESQUISAR_AUTOR2 =
+    "SELECT * FROM `autor` WHERE `CdAutor` = ? ";
+    
     public static final String SQL_EXISTS
             = " select * from autor "
             + " where NmAutor = ?  ";
@@ -88,6 +91,29 @@ public class AutorDao extends Dao implements DbDao<clnAutor> {
             close(con, ps, rs);
         }        
 	
+        return cRet;
+    }
+    public clnAutor pesquisarNome(int cd) throws DaoException {
+        
+        clnAutor cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR_AUTOR2);  
+            ps.setInt (1, cd);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                cRet = new clnAutor();
+                cRet.setNmAutor(rs.getString("NmAutor"));    
+                cRet.setCdAutor(rs.getInt("CdAutor")); 
+            }  
+        } catch (Exception e) {
+            new DaoException("Autor nao inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }  
         return cRet;
     }
 

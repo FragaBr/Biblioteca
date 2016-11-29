@@ -32,6 +32,9 @@ public class SituacaoDao extends Dao implements DbDao<clnSituacao> {
     public static final String SQL_PESQUISAR =
     "SELECT * FROM `situacao` WHERE `NmSituacao` = ? ";
     
+    public static final String SQL_PESQUISAR2 =
+    "SELECT * FROM `situacao` WHERE `CdSituacao` = ? ";
+    
     public static final String SQL_EXISTS
             = " select * from situacao "
             + " where NmSituacao = ?  ";
@@ -86,8 +89,34 @@ public class SituacaoDao extends Dao implements DbDao<clnSituacao> {
             new DaoException("Situacao nao inserida "+ e.getMessage()).printStackTrace();;
         }finally{
             close(con, ps, rs);
-        }        
-	
+        } 
+        return cRet;
+    }
+    
+    public clnSituacao pesquisarNome(int c) throws DaoException {
+        
+        clnSituacao cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR2);  
+            ps.setInt(1, c);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnSituacao();
+                cRet.setNmSituacao(rs.getString("NmSituacao"));    
+                cRet.setCdSituacao(rs.getInt("CdSituacao")); 
+            }
+                
+        } catch (Exception e) {
+            new DaoException("Situacao nao inserida "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        } 
         return cRet;
     }
 

@@ -33,6 +33,12 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
     public static final String SQL_PESQUISAR =
     "SELECT * FROM `obra` WHERE `Titulo` = ? ";
     
+    public static final String SQL_PESQUISAR2 =
+    "SELECT * FROM `obra` WHERE `Titulo` = ? and `Sugestao` = ? ";
+    
+    public static final String SQL_PESQUISAR3 =
+    "SELECT * FROM `obra` WHERE `Sugestao` = ? ";
+    
     public static final String SQL_EXISTS
             = " select * from obra "
             + " where Titulo = ?  ";
@@ -40,6 +46,10 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
     public static final String SQL_SUG =
     "SELECT * FROM `obra` WHERE `Sugestao` = 1 ";
 
+    public static final String SQL_LISTANOME =
+    "select a.CdObra,a.Titulo,a.Edicao,a.Ano,a.Volume,a.ISBN,a.Editora_CdEditora,a.Autor_CdAutor,a.Sugestao,b.NmAutor,c.NmEditora from obra a "
+            + "inner join autor b on a.Autor_CdAutor = b.CdAutor inner join editora c on a.Editora_CdEditora = c.CdEditora";
+    
     @Override
     public int inserir(clnObra Obj) throws DaoException {
         
@@ -283,6 +293,113 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
             }
         } catch (Exception e) {
             new DaoException("Obra nao inserida" + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+    
+     public List<clnObra> listarNomeAE() {
+        ArrayList<clnObra> a = new ArrayList<>();
+        clnObra cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_LISTANOME);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnObra();
+                cRet.setCdObra(rs.getInt("CdObra"));
+                cRet.setTitulo(rs.getString("Titulo"));
+                cRet.setEdicao(rs.getInt("Edicao"));
+                cRet.setAno(rs.getInt("Ano"));
+                cRet.setVolume(rs.getString("Volume"));
+                cRet.setISBN(rs.getString("ISBN"));
+                cRet.setCdEditora(rs.getInt("NmEditora"));
+                cRet.setCdAutor(rs.getInt("NmAutor"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Obra nao inserida" + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+     
+     public List<clnObra> PesquisarListaSugestao( clnObra p) {
+        ArrayList<clnObra> a = new ArrayList<>();
+        clnObra cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR3);
+            ps.setInt(1,p.getSugestao());
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnObra();
+                cRet.setCdObra(rs.getInt("CdObra"));
+                cRet.setTitulo(rs.getString("Titulo"));
+                cRet.setEdicao(rs.getInt("Edicao"));
+                cRet.setAno(rs.getInt("Ano"));
+                cRet.setVolume(rs.getString("Volume"));
+                cRet.setISBN(rs.getString("ISBN"));
+                cRet.setCdEditora(rs.getInt("Editora_CdEditora"));
+                cRet.setCdAutor(rs.getInt("Autor_CdAutor"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+        new DaoException("Obra não inserida " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return a;
+    }
+    public List<clnObra> PesquisarListaNomeSugestao( clnObra p) {
+        ArrayList<clnObra> a = new ArrayList<>();
+        clnObra cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR2);
+            ps.setString(1, p.getTitulo());
+            ps.setInt(2, p.getSugestao());
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnObra();
+                cRet.setCdObra(rs.getInt("CdObra"));
+                cRet.setTitulo(rs.getString("Titulo"));
+                cRet.setEdicao(rs.getInt("Edicao"));
+                cRet.setAno(rs.getInt("Ano"));
+                cRet.setVolume(rs.getString("Volume"));
+                cRet.setISBN(rs.getString("ISBN"));
+                cRet.setCdEditora(rs.getInt("Editora_CdEditora"));
+                cRet.setCdAutor(rs.getInt("Autor_CdAutor"));
+                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+        new DaoException("Obra não inserida " + e.getMessage()).printStackTrace();;
         } finally {
             close(con, ps, rs);
         }

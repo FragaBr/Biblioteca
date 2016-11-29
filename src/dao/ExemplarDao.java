@@ -37,6 +37,11 @@ public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
     public static final String SQL_PESQUISAR3=
     "SELECT * FROM `obra`,`exemplar` WHERE `CdExemplar` = ? and CdObra = Obra_CdObra and Situacao_CdSituacao = 3  ";
     
+    public static final String SQL_PESQUISARLISTASITUACAO=
+    "SELECT * FROM `obra`,`exemplar` WHERE CdObra = Obra_CdObra and Situacao_CdSituacao = ?";
+    public static final String SQL_PESQUISARLISTASITUACAO2=
+    "SELECT * FROM `obra` inner join `exemplar` on CdObra = Obra_CdObra and (Situacao_CdSituacao = 1 or Situacao_CdSituacao = 2 or Situacao_CdSituacao = 3 or Situacao_CdSituacao = 4)";
+    
     public static final String SQL_EXISTS
             = " select * from exemplar "
             + " where CdExemplar = ?  ";
@@ -187,7 +192,7 @@ public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
         Connection con = null;
         try {
             con = getConnection();
-            ps = con.prepareStatement("select `CdExemplar`,`Obra_CdObra`,`Titulo`,`Edicao`,`Ano`,`Volume`,`ISBN`,`Situacao_CdSituacao`,`Editora_CdEditora`,`Autor_CdAutor` from `exemplar`,`obra` WHERE CdObra = Obra_CdObra");
+            ps = con.prepareStatement("select `CdExemplar`,`Obra_CdObra`,`Titulo`,`Edicao`,`Ano`,`Volume`,`ISBN`,`Situacao_CdSituacao`,`Editora_CdEditora`,`Autor_CdAutor` from `exemplar`,`obra` WHERE CdObra = Obra_CdObra and `Sugestao` = 0");
             rs = ps.executeQuery();
             while (rs.next()) {
                 cRet = new clnExemplar();            
@@ -409,5 +414,75 @@ public class ExemplarDao extends Dao implements DbDao<clnExemplar> {
             close(con, ps);
         }        
         return ret;
+    }
+    
+    public List<clnExemplar> PesquisarListaSituacao(clnExemplar p) {
+        ArrayList<clnExemplar> a = new ArrayList<>();
+        clnExemplar cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISARLISTASITUACAO);
+            ps.setInt(1, p.getCdSituacao());
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnExemplar();            
+                cRet.setCdExemplar(rs.getInt("CdExemplar"));
+                cRet.setCdObra(rs.getInt("Obra_CdObra"));
+                cRet.setTitulo(rs.getString("Titulo"));
+                cRet.setEdicao(rs.getInt("Edicao"));
+                cRet.setAno(rs.getInt("Ano"));
+                cRet.setVolume(rs.getString("Volume"));
+                cRet.setISBN(rs.getString("ISBN"));
+                cRet.setCdEditora(rs.getInt("Obra_Editora_CdEditora"));
+                cRet.setCdAutor(rs.getInt("Obra_Autor_CdAutor"));
+                cRet.setCdSituacao(rs.getInt("Situacao_CdSituacao"));                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+        new DaoException("Exemplar não inserido " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
+    }
+    public List<clnExemplar> PesquisarBomEstado() {
+        ArrayList<clnExemplar> a = new ArrayList<>();
+        clnExemplar cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISARLISTASITUACAO2);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnExemplar();            
+                cRet.setCdExemplar(rs.getInt("CdExemplar"));
+                cRet.setCdObra(rs.getInt("Obra_CdObra"));
+                cRet.setTitulo(rs.getString("Titulo"));
+                cRet.setEdicao(rs.getInt("Edicao"));
+                cRet.setAno(rs.getInt("Ano"));
+                cRet.setVolume(rs.getString("Volume"));
+                cRet.setISBN(rs.getString("ISBN"));
+                cRet.setCdEditora(rs.getInt("Obra_Editora_CdEditora"));
+                cRet.setCdAutor(rs.getInt("Obra_Autor_CdAutor"));
+                cRet.setCdSituacao(rs.getInt("Situacao_CdSituacao"));                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+        new DaoException("Exemplar não inserido " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
     }
 }

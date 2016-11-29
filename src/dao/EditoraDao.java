@@ -34,6 +34,9 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
     public static final String SQL_PESQUISAR =
     "SELECT * FROM `editora` WHERE `NmEditora` = ? ";
     
+    public static final String SQL_PESQUISAR2 =
+    "SELECT * FROM `editora` WHERE `CdEditora` = ? ";
+    
     public static final String SQL_EXISTS
             = " select * from editora "
             + " where NmEditora = ?  ";
@@ -91,7 +94,32 @@ public class EditoraDao extends Dao implements DbDao<clnEditora> {
 	
         return cRet;
     }
+    
+   
+    public clnEditora pesquisarNome(int cd) throws DaoException {
 
+        clnEditora cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISAR2);  
+            ps.setInt (1, cd);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                cRet = new clnEditora();
+                cRet.setNmEditora(rs.getString("NmEditora"));    
+                cRet.setCdEditora(rs.getInt("CdEditora")); 
+            }   
+        } catch (Exception e) {
+            new DaoException("Editora nao inserida "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }  
+        return cRet;
+    }
+    
     @Override
     public boolean excluir(int id) throws DaoException {
         boolean ret = false;        

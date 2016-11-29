@@ -8,6 +8,7 @@ package selimjose;
 import dao.AutorDao;
 import dao.DaoException;
 import dao.EditoraDao;
+import dao.EmprestimoDao;
 import dao.ExemplarDao;
 import dao.ObraDao;
 import dao.SituacaoDao;
@@ -33,12 +34,14 @@ public class frmConsultaObras extends javax.swing.JFrame {
 
     private int mod;
     private List<clnSituacao> SituacaoList;
+    private DefaultTableModel tabelaEmprestimo = new DefaultTableModel();
     private DefaultTableModel tabelaLista = new DefaultTableModel();
     private DefaultTableModel tabelaListaEx = new DefaultTableModel();
     private DefaultTableModel tabelaListaSituacao = new DefaultTableModel();
     private List<clnAutor> AutorList;
     private List<clnEditora> EditoraList;
     private List<clnExemplar> ExemplarList;
+    private List<clnEmprestimo> EmprestimoList;
     ArrayList<clnObra> ObraList = null;
     
     /**
@@ -47,9 +50,11 @@ public class frmConsultaObras extends javax.swing.JFrame {
     public frmConsultaObras() throws DaoException {
         initComponents();
         tabelaExemplar.setEnabled(false);
+        
         tabelaLista = (DefaultTableModel) tabelaObra.getModel();
         tabelaListaEx = (DefaultTableModel) tabelaExemplar.getModel();
         tabelaListaSituacao = (DefaultTableModel) tabelaSituacao.getModel();
+        
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setVisible(true);   
@@ -155,8 +160,12 @@ public class frmConsultaObras extends javax.swing.JFrame {
         panelExemplar = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tabelaExemplar = new javax.swing.JTable();
-        jScrollPane4 = new javax.swing.JScrollPane();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
         tabelaSituacao = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tabelaEmprestimo = new javax.swing.JTable();
         jLabel26 = new javax.swing.JLabel();
         comboCategoria = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -227,6 +236,16 @@ public class frmConsultaObras extends javax.swing.JFrame {
         });
 
         comboSituacao.setModel(new javax.swing.DefaultComboBoxModel<>(initSituacao()));
+        comboSituacao.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                comboSituacaoFocusLost(evt);
+            }
+        });
+        comboSituacao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comboSituacaoMouseClicked(evt);
+            }
+        });
 
         jLabel22.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel22.setText("Situação:");
@@ -404,10 +423,57 @@ public class frmConsultaObras extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(tabelaSituacao);
+        jScrollPane5.setViewportView(tabelaSituacao);
         tabelaSituacao.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        jtObra.addTab("Situação", jScrollPane4);
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1166, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 489, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        jtObra.addTab("Situação", jPanel5);
+
+        tabelaEmprestimo.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Codigo Emprestimo", "Codigo Usuario", "Usuário", "Título", "Data Requisicão", "Data Devolução", "Data Devolução Efetiva"
+            }
+        ));
+        jScrollPane2.setViewportView(tabelaEmprestimo);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1166, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+        );
+
+        jtObra.addTab("Movimentação", jPanel3);
 
         jLabel26.setFont(new java.awt.Font("Century Gothic", 1, 16)); // NOI18N
         jLabel26.setText("Categoria:");
@@ -435,41 +501,46 @@ public class frmConsultaObras extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel24)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(checkSim)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(checkNao)))
-                                .addGap(92, 92, 92)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(comboSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel22))
-                                .addGap(64, 64, 64)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtDataI, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel23)
-                                        .addGap(87, 87, 87)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel25)
-                                            .addComponent(txtDataF, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addComponent(jLabel24)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(checkSim)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(checkNao)))
+                                        .addGap(92, 92, 92)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(comboSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel22))
+                                        .addGap(64, 64, 64)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtDataI, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel23)
+                                                .addGap(87, 87, 87)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel25)
+                                                    .addComponent(txtDataF, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel21)
+                                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(44, 44, 44)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(comboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel26)))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel21)
-                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(44, 44, 44)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(comboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel26)))))
+                                .addGap(108, 108, 108)
+                                .addComponent(jLabel1)))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(108, 108, 108)
-                        .addComponent(jLabel1)))
-                .addContainerGap(287, Short.MAX_VALUE))
-            .addComponent(jtObra)
+                        .addContainerGap()
+                        .addComponent(jtObra)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -515,9 +586,9 @@ public class frmConsultaObras extends javax.swing.JFrame {
                                 .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jtObra, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -698,10 +769,16 @@ public class frmConsultaObras extends javax.swing.JFrame {
         ExemplarDao eDao = new ExemplarDao();
         EditoraDao editoraDao = new EditoraDao();
         AutorDao autorDao = new AutorDao();
+        SituacaoDao sDao = new SituacaoDao();
+        EmprestimoDao empDao = new EmprestimoDao();
+        
+        
         clnObra a = new clnObra();
         clnExemplar e = new clnExemplar();
         clnEditora editora = new clnEditora();
+        clnSituacao s = new clnSituacao();
         clnAutor autor = new clnAutor();
+        clnAluno aluno = new clnAluno();
          
         a.setTitulo(txtNome.getText());
         
@@ -807,6 +884,9 @@ public class frmConsultaObras extends javax.swing.JFrame {
                 if(e.getCdSituacao() == 7){ //Exemplares em bom estado
                     tabelaListaEx.setRowCount(0);
                     tabelaListaEx.fireTableDataChanged();
+                    tabelaListaSituacao.setRowCount(0);
+                    tabelaListaSituacao.fireTableDataChanged();
+                    
                     ExemplarList = (ArrayList<clnExemplar>) eDao.PesquisarBomEstado();
                     for (clnExemplar p : ExemplarList) {
                         try {
@@ -819,35 +899,93 @@ public class frmConsultaObras extends javax.swing.JFrame {
                         } catch (DaoException ex) {
                             Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        try {
+                            s= sDao.pesquisarNome(p.getCdSituacao());
+                        } catch (DaoException ex) {
+                            Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         tabelaExemplar.setSelectionBackground(Color.LIGHT_GRAY);
                         tabelaListaEx.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),editora.getNmEditora(),autor.getNmAutor()});
-                }
+                        tabelaListaSituacao.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),editora.getNmEditora(),autor.getNmAutor(),s.getNmSituacao()});
+                    }
                     
                 }else{
+                        
+                        if(e.getCdSituacao() == 2 ){ //Reservado
+                        tabelaEmprestimo.setRowCount(0);
+                        tabelaEmprestimo.fireTableDataChanged();   
                         tabelaListaEx.setRowCount(0);
                         tabelaListaEx.fireTableDataChanged();
-                        System.out.println(e.getCdSituacao());
+                        tabelaListaSituacao.setRowCount(0);
+                        tabelaListaSituacao.fireTableDataChanged();
                         ExemplarList = (ArrayList<clnExemplar>) eDao.PesquisarListaSituacao(e);
-                    for (clnExemplar p : ExemplarList) {
-                        try {
-                            autor = autorDao.pesquisarNome(p.getCdAutor());
-                        } catch (DaoException ex) {
-                            Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                        for (clnExemplar p : ExemplarList) {
+                            try {
+                                autor = autorDao.pesquisarNome(p.getCdAutor());
+                            } catch (DaoException ex) {
+                                Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            try { 
+                                editora = editoraDao.pesquisarNome(p.getCdEditora());
+                            } catch (DaoException ex) {
+                                Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            try {
+                                s= sDao.pesquisarNome(p.getCdSituacao());
+                            } catch (DaoException ex) {
+                                Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            tabelaExemplar.setSelectionBackground(Color.LIGHT_GRAY);
+                            tabelaListaEx.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),editora.getNmEditora(),autor.getNmAutor()});
+                            tabelaListaSituacao.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),editora.getNmEditora(),autor.getNmAutor(),s.getNmSituacao()});                             
                         }
-                        try { 
-                            editora = editoraDao.pesquisarNome(p.getCdEditora());
-                        } catch (DaoException ex) {
-                            Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                        
+                        EmprestimoList = (ArrayList<clnEmprestimo>) empDao.PesquisarLista();
+                        for (clnEmprestimo emprestimo : EmprestimoList) {
+                            
+                            tabelaExemplar.setSelectionBackground(Color.LIGHT_GRAY);
+                            tabelaEmprestimo.addRow(new Object[]{emprestimo.getCdEmprestimo(),emprestimo.getCdUsuario()}); 
                         }
-                        tabelaExemplar.setSelectionBackground(Color.LIGHT_GRAY);
-                        tabelaListaEx.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),editora.getNmEditora(),autor.getNmAutor()});
+                            
+                        }else if(e.getCdSituacao() == 3){ //Emprestado
+                            
+                        }else{
+                            
+                                tabelaListaEx.setRowCount(0);
+                                tabelaListaEx.fireTableDataChanged();
+                                tabelaListaSituacao.setRowCount(0);
+                                tabelaListaSituacao.fireTableDataChanged();
+                                ExemplarList = (ArrayList<clnExemplar>) eDao.PesquisarListaSituacao(e);
+                                for (clnExemplar p : ExemplarList) {
+                                try {
+                                autor = autorDao.pesquisarNome(p.getCdAutor());
+                                } catch (DaoException ex) {
+                                    Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                try { 
+                                editora = editoraDao.pesquisarNome(p.getCdEditora());
+                                } catch (DaoException ex) {
+                                    Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                                }      
+                                try {
+                                    s= sDao.pesquisarNome(p.getCdSituacao());
+                                } catch (DaoException ex) {
+                                    Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                tabelaExemplar.setSelectionBackground(Color.LIGHT_GRAY);
+                                tabelaListaEx.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),editora.getNmEditora(),autor.getNmAutor()});
+                                tabelaListaSituacao.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),editora.getNmEditora(),autor.getNmAutor(),s.getNmSituacao()}); 
                     }
+                            
+                            
+                            
+                        }
                 }
                 
                 
                 
                 
-            }else{ // Caso nao tenha selecionado uma obra em específico                
+            }else{ // Caso tenha selecionado uma obra em específico                
                 
             }
         }else if(checkNao.isSelected()){ //Se o Usuario nao quiser ver os exemplares...   
@@ -1016,6 +1154,15 @@ public class frmConsultaObras extends javax.swing.JFrame {
         txtDataF.setEnabled(false);
     }//GEN-LAST:event_checkNaoMouseClicked
 
+    private void comboSituacaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_comboSituacaoFocusLost
+        // Combo focus lost
+        
+    }//GEN-LAST:event_comboSituacaoFocusLost
+
+    private void comboSituacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboSituacaoMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSituacaoMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1094,13 +1241,17 @@ public class frmConsultaObras extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuRelatorios6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jtObra;
     private javax.swing.JPanel panelExemplar;
     private javax.swing.JPanel panelObra;
+    private javax.swing.JTable tabelaEmprestimo;
     private javax.swing.JTable tabelaExemplar;
     private javax.swing.JTable tabelaObra;
     private javax.swing.JTable tabelaSituacao;

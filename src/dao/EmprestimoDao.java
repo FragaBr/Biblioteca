@@ -14,9 +14,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import selimjose.clnAluno;
 import selimjose.clnExemplar;
 import selimjose.clnEmprestimo;
 import selimjose.clnExemplar;
+import selimjose.clnObra;
 
 /**
  *
@@ -40,6 +42,12 @@ public class EmprestimoDao extends Dao implements DbDao<clnEmprestimo>{
     public static final String SQL_ALTERAR = 
     "UPDATE `emprestimo` INNER JOIN `exemplar_has_emprestimo` on `CdEmprestimo`= `Emprestimo_CdEmprestimo` and `Exemplar_CdExemplar` = ? SET `DtDevolucaoEfetiva` = ? ";
     
+    public static final String SQL_COMPLEXA =
+    "select a.Emprestimo_CdEmprestimo,b.Usuario_CdUsuario,c.NmUsuario,d.Titulo,b.DtEmprestimo, b.DtDevolucao,a.DtDevolucaoEfetiva\n" +
+    "from exemplar_has_emprestimo a\n" +
+    "inner join emprestimo b on a.Emprestimo_CdEmprestimo = b.CdEmprestimo\n" +
+    "inner join usuario c on b.Usuario_CdUsuario = c.CdUsuario\n" +
+    "inner join obra d on a.Exemplar_Obra_CdObra = d.CdObra";
     
     public int inserirR(clnEmprestimo Obj) throws DaoException {
         int autoNum = -1;
@@ -169,5 +177,35 @@ public class EmprestimoDao extends Dao implements DbDao<clnEmprestimo>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public List<clnEmprestimo> PesquisarLista() {
+        ArrayList<clnEmprestimo> array = new ArrayList<>();
+        clnEmprestimo cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_COMPLEXA);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnEmprestimo();
+                cRet.setCdEmprestimo(rs.getInt("Emprestimo_CdEmprestimo"));
+                cRet.setCdUsuario(rs.getInt("Usuario_CdUsuario"));
+                cRet.setDtEmprestimo(rs.getString("DtEmprestimo"));
+                cRet.setDtDevolucao(rs.getString("DtDevolucao"));
+                cRet.setDtDevolucaoEfetiva(rs.getString("DtDevolucaoEfetiva"));
+                array.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Emprestimo nao inserido " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return array;
+    }
     
 }
