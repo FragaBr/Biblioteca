@@ -34,6 +34,12 @@ public class ReservaDao extends Dao implements DbDao<clnReserva>{
     public static final String SQL_PESQUISAR =
     "SELECT * FROM `reserva` WHERE `CdBairros` = ? ";
     
+    public static final String SQL_COMPLEXA =
+    "select a.Reserva_CdReserva,b.Usuario_CdUsuario,c.NmUsuario,d.Titulo,b.DtReserva\n" +
+    "from exemplar_has_reserva a\n" +
+    "inner join reserva b on a.Reserva_CdReserva = b.CdReserva\n" +
+    "inner join usuario c on b.Usuario_CdUsuario = c.CdUsuario\n" +
+    "inner join obra d on a.Exemplar_Obra_CdObra = d.CdObra";
     
     public int inserirR(clnReserva Obj) throws DaoException {
         int autoNum = -1;
@@ -109,6 +115,35 @@ public class ReservaDao extends Dao implements DbDao<clnReserva>{
     @Override
     public int inserir(clnReserva Obj) throws DaoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public List<clnReserva> PesquisarLista() {
+        ArrayList<clnReserva> array = new ArrayList<>();
+        clnReserva cRet = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_COMPLEXA);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnReserva();
+                cRet.setCdReserva(rs.getInt("Reserva_CdReserva"));
+                cRet.setCdUsuario(rs.getInt("Usuario_CdUsuario"));
+                cRet.setDtReserva(rs.getString("DtReserva"));
+                array.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Reserva nao inserido " + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+
+        return array;
     }
     
 }

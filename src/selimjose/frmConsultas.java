@@ -4,6 +4,19 @@
  * and open the template in the editor.
  */
 package selimjose;
+import dao.DaoException;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import dao.UsuarioDao;
+import javax.swing.table.DefaultTableModel;
+import selimjose.clnUsuario;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -12,11 +25,15 @@ package selimjose;
 public class frmConsultas extends javax.swing.JFrame {
 
     private int mod;
+    private DefaultTableModel tabelaLista = new DefaultTableModel();
+    ArrayList<clnFuncionario> array = null;
     /**
      * Creates new form frmConsulta
      */
     public frmConsultas() {
         initComponents();
+        tabelaLista = (DefaultTableModel) TabelaUsuario.getModel();
+        buscaNome();
     }
 
     /**
@@ -392,7 +409,63 @@ public class frmConsultas extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void buscaNome() {
+       // int totalLinhas = TabelaAutor.getRowCount();//pega numero total de linhas
+        
+        TabelaUsuario.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected,
+                        hasFocus, row, column);
+                return this;
+            }
+        });
 
+        UsuarioDao aDAO = new UsuarioDao();
+       
+            array = (ArrayList<clnFuncionario>) aDAO.listar();
+            for (clnFuncionario p : array) {
+            TabelaUsuario.setSelectionBackground(Color.LIGHT_GRAY);
+            if(p.isStatus() == 1){
+                     tabelaLista.addRow(new Object[]{p.getCdUsuario(), p.getNmUsuario(),p.getEmail(),p.getTel(),"Ativo"});
+            }else{
+                     tabelaLista.addRow(new Object[]{p.getCdUsuario(), p.getNmUsuario(),p.getEmail(),p.getTel(),"Bloqueado"});
+            }
+            }  
+    }
+    
+    private void AtualizaTabela() {
+    
+        UsuarioDao aDao = new UsuarioDao();
+        if(!array.isEmpty())
+        {
+            tabelaLista.setRowCount(0);
+            tabelaLista.fireTableDataChanged();
+            array.clear();
+            array = (ArrayList<clnFuncionario>) aDao.listar();
+            for (clnFuncionario p : array) {
+                TabelaUsuario.setSelectionBackground(Color.LIGHT_GRAY);
+                if(p.isStatus() == 1){
+                        tabelaLista.addRow(new Object[]{p.getCdUsuario(), p.getNmUsuario(),p.getEmail(),p.getTel(),"Ativo"});
+                }else{
+                     tabelaLista.addRow(new Object[]{p.getCdUsuario(), p.getNmUsuario(),p.getEmail(),p.getTel(),"Bloqueado"});
+                }
+            }                  
+        }
+        else{
+            array = (ArrayList<clnFuncionario>) aDao.listar();
+            for (clnFuncionario p : array) {
+            TabelaUsuario.setSelectionBackground(Color.LIGHT_GRAY);
+                if(p.isStatus() == 1){
+                        tabelaLista.addRow(new Object[]{p.getCdUsuario(), p.getNmUsuario(),p.getEmail(),p.getTel(),"Ativo"});
+                }else{
+                         tabelaLista.addRow(new Object[]{p.getCdUsuario(), p.getNmUsuario(),p.getEmail(),p.getTel(),"Bloqueado"});
+                }
+            }            
+        }
+    }
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         this.setVisible(false);
@@ -550,10 +623,16 @@ public class frmConsultas extends javax.swing.JFrame {
     private void jMenuRelatoriosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuRelatoriosMouseClicked
         //Menu Obras
         this.setVisible(false);
-        frmConsultaObras P = new frmConsultaObras();
-        P.setLocationRelativeTo(null);
-        P.setResizable(true);
-        P.setVisible(true);
+        frmConsultaObras P;
+        try {
+            P = new frmConsultaObras();
+            P.setLocationRelativeTo(null);
+            P.setResizable(true);
+            P.setVisible(true);
+        } catch (DaoException ex) {
+            Logger.getLogger(frmConsultas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jMenuRelatoriosMouseClicked
 
     private void jMenuRelatorios3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuRelatorios3MouseClicked

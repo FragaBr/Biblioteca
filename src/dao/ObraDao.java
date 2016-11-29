@@ -55,7 +55,12 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
 "inner join emprestimo b on a.Emprestimo_CdEmprestimo = b.CdEmprestimo\n" +
 "inner join usuario c on b.Usuario_CdUsuario = c.CdUsuario\n" +
 "inner join obra d on a.Exemplar_Obra_CdObra = d.CdObra";
-    
+    public static final String SQL_RESERVADOS =
+    "select a.Reserva_CdReserva,b.Usuario_CdUsuario,c.NmUsuario,d.Titulo,b.DtReserva\n" +
+    "from exemplar_has_reserva a\n" +
+    "inner join reserva b on a.Reserva_CdReserva = b.CdReserva\n" +
+    "inner join usuario c on b.Usuario_CdUsuario = c.CdUsuario\n" +
+    "inner join obra d on a.Exemplar_Obra_CdObra = d.CdObra";
     @Override
     public int inserir(clnObra Obj) throws DaoException {
         
@@ -142,6 +147,32 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
                // cRet.setISBN(rs.getString("ISBN"));
                 //cRet.setCdEditora(rs.getInt("Editora_CdEditora"));
                // cRet.setCdAutor(rs.getInt("Autor_CdAutor"));                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Obra nao inserida" + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
+    }
+     public List pesquisarTituloReserva() throws DaoException {
+        
+       ArrayList<clnObra> a = new ArrayList<>();
+        clnObra cRet = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_RESERVADOS);
+            //ps.setInt(1,i);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnObra();
+                cRet.setTitulo(rs.getString("Titulo"));                
                 a.add(cRet);
             }
         } catch (Exception e) {

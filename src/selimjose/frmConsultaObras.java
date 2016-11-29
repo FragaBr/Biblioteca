@@ -12,6 +12,7 @@ import dao.EditoraDao;
 import dao.EmprestimoDao;
 import dao.ExemplarDao;
 import dao.ObraDao;
+import dao.ReservaDao;
 import dao.SituacaoDao;
 import java.awt.Color;
 import java.awt.Component;
@@ -44,6 +45,7 @@ public class frmConsultaObras extends javax.swing.JFrame {
     private List<clnEditora> EditoraList;
     private List<clnExemplar> ExemplarList;
     private List<clnEmprestimo> EmprestimoList;
+    private List<clnReserva> ReservaList;
     ArrayList<clnObra> ObraList = null;
     
     /**
@@ -474,15 +476,11 @@ public class frmConsultaObras extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 1166, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1166, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
         );
 
         jtObra.addTab("Movimentação", jPanel3);
@@ -783,6 +781,7 @@ public class frmConsultaObras extends javax.swing.JFrame {
         AutorDao autorDao = new AutorDao();
         SituacaoDao sDao = new SituacaoDao();
         EmprestimoDao empDao = new EmprestimoDao();
+        ReservaDao   rDao = new ReservaDao();
         AlunoDao alDao = new AlunoDao();
         ObraDao obraDao = new ObraDao();
         
@@ -953,19 +952,25 @@ public class frmConsultaObras extends javax.swing.JFrame {
                             tabelaListaSituacao.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),editora.getNmEditora(),autor.getNmAutor(),s.getNmSituacao()});                             
                         }
                         
-                        EmprestimoList = (ArrayList<clnEmprestimo>) empDao.PesquisarLista();
-                        for (clnEmprestimo emprestimo : EmprestimoList) {
-                            
+                            ReservaList = (ArrayList<clnReserva>) rDao.PesquisarLista(); ////--------------------------
                             try {
-                                aluno = alDao.pesquisarNome(emprestimo.getCdUsuario());
+                                ObraList = (ArrayList<clnObra>) obraDao.pesquisarTituloReserva();
                             } catch (DaoException ex) {
                                 Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                                
+                        int i=0;
+                        clnObra obra = new clnObra();
+                        for (clnReserva emprestimo : ReservaList) {
+                            obra = ObraList.get(i);
                             
-                            tabelaEmprestimo.setSelectionBackground(Color.LIGHT_GRAY);
-                            tabelaListaEmprestimo.addRow(new Object[]{emprestimo.getCdEmprestimo(),emprestimo.getCdUsuario(),aluno.getNmUsuario(),emprestimo.getDtEmprestimo(),emprestimo.getDtDevolucao(),
-                            emprestimo.getDtDevolucaoEfetiva()}); 
+                            try {
+                                    aluno = alDao.pesquisarNome(emprestimo.getCdUsuario());
+                                } catch (DaoException ex) {
+                                    Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                tabelaEmprestimo.setSelectionBackground(Color.LIGHT_GRAY);
+                                tabelaListaEmprestimo.addRow(new Object[]{emprestimo.getCdReserva(),emprestimo.getCdUsuario(),aluno.getNmUsuario(),obra.getTitulo(),emprestimo.getDtReserva()}); 
+                            i++;
                         }
                             
                         }else if(e.getCdSituacao() == 3){ //Emprestado
