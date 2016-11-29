@@ -52,6 +52,8 @@ public class AlunoDao extends Dao implements DbDao<clnAluno> {
     public static final String SQL_LOGAR =
     "SELECT * FROM `usuario` WHERE `Login` = ? and `Senha` = ?  ";
 
+    public static final String SQL_PESQUISARNOME =
+    "SELECT * FROM `usuario` WHERE `CdUsuario`= ? ";
     
     @Override
     public int inserir(clnAluno Obj) throws DaoException {
@@ -119,6 +121,33 @@ public class AlunoDao extends Dao implements DbDao<clnAluno> {
         }finally{
             close(con, ps, rs);
         }	
+        return cRet;
+    }
+
+    
+    public clnAluno pesquisarNome(int i) throws DaoException {
+        clnAluno cRet = null;		
+	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+        
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_PESQUISARNOME);  
+            ps.setInt (1, i);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cRet = new clnAluno();
+                cRet.setNmUsuario(rs.getString("NmUsuario"));
+            }
+                
+        } catch (Exception e) {
+            new DaoException("Autor nao inserido "+ e.getMessage()).printStackTrace();;
+        }finally{
+            close(con, ps, rs);
+        }        
+	
         return cRet;
     }
 

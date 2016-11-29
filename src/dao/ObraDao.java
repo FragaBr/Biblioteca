@@ -50,6 +50,12 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
     "select a.CdObra,a.Titulo,a.Edicao,a.Ano,a.Volume,a.ISBN,a.Editora_CdEditora,a.Autor_CdAutor,a.Sugestao,b.NmAutor,c.NmEditora from obra a "
             + "inner join autor b on a.Autor_CdAutor = b.CdAutor inner join editora c on a.Editora_CdEditora = c.CdEditora";
     
+    public static final String SQL_EMPRESTADOS= "select a.Emprestimo_CdEmprestimo,b.Usuario_CdUsuario,c.NmUsuario,d.Titulo,b.DtEmprestimo, b.DtDevolucao,a.DtDevolucaoEfetiva\n" +
+"from exemplar_has_emprestimo a\n" +
+"inner join emprestimo b on a.Emprestimo_CdEmprestimo = b.CdEmprestimo\n" +
+"inner join usuario c on b.Usuario_CdUsuario = c.CdUsuario\n" +
+"inner join obra d on a.Exemplar_Obra_CdObra = d.CdObra";
+    
     @Override
     public int inserir(clnObra Obj) throws DaoException {
         
@@ -112,6 +118,40 @@ public class ObraDao extends Dao implements DbDao<clnObra> {
 	
         return cRet;
     }
+     public List pesquisarTitulo() throws DaoException {
+        
+       ArrayList<clnObra> a = new ArrayList<>();
+        clnObra cRet = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(SQL_EMPRESTADOS);
+            //ps.setInt(1,i);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cRet = new clnObra();
+                //cRet.setCdObra(rs.getInt("CdObra"));
+                cRet.setTitulo(rs.getString("Titulo"));
+               // cRet.setEdicao(rs.getInt("Edicao"));
+               // cRet.setAno(rs.getInt("Ano"));
+                //cRet.setVolume(rs.getString("Volume"));
+               // cRet.setISBN(rs.getString("ISBN"));
+                //cRet.setCdEditora(rs.getInt("Editora_CdEditora"));
+               // cRet.setCdAutor(rs.getInt("Autor_CdAutor"));                
+                a.add(cRet);
+            }
+        } catch (Exception e) {
+            new DaoException("Obra nao inserida" + e.getMessage()).printStackTrace();;
+        } finally {
+            close(con, ps, rs);
+        }
+        return a;
+    }
+    
     
     
     @Override

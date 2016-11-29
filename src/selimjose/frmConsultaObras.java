@@ -5,6 +5,7 @@
  */
 package selimjose;
 
+import dao.AlunoDao;
 import dao.AutorDao;
 import dao.DaoException;
 import dao.EditoraDao;
@@ -34,10 +35,11 @@ public class frmConsultaObras extends javax.swing.JFrame {
 
     private int mod;
     private List<clnSituacao> SituacaoList;
-    private DefaultTableModel tabelaEmprestimo = new DefaultTableModel();
+    
     private DefaultTableModel tabelaLista = new DefaultTableModel();
     private DefaultTableModel tabelaListaEx = new DefaultTableModel();
     private DefaultTableModel tabelaListaSituacao = new DefaultTableModel();
+    private DefaultTableModel tabelaListaEmprestimo = new DefaultTableModel();
     private List<clnAutor> AutorList;
     private List<clnEditora> EditoraList;
     private List<clnExemplar> ExemplarList;
@@ -54,6 +56,7 @@ public class frmConsultaObras extends javax.swing.JFrame {
         tabelaLista = (DefaultTableModel) tabelaObra.getModel();
         tabelaListaEx = (DefaultTableModel) tabelaExemplar.getModel();
         tabelaListaSituacao = (DefaultTableModel) tabelaSituacao.getModel();
+        tabelaListaEmprestimo = (DefaultTableModel) tabelaEmprestimo.getModel();
         
         this.setLocationRelativeTo(null);
         this.setResizable(true);
@@ -164,7 +167,7 @@ public class frmConsultaObras extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         tabelaSituacao = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
         tabelaEmprestimo = new javax.swing.JTable();
         jLabel26 = new javax.swing.JLabel();
         comboCategoria = new javax.swing.JComboBox<>();
@@ -346,6 +349,7 @@ public class frmConsultaObras extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tabelaObra);
         tabelaObra.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (tabelaObra.getColumnModel().getColumnCount() > 0) {
+            tabelaObra.getColumnModel().getColumn(1).setHeaderValue("Título");
             tabelaObra.getColumnModel().getColumn(2).setHeaderValue("Edição");
             tabelaObra.getColumnModel().getColumn(3).setHeaderValue("Ano");
             tabelaObra.getColumnModel().getColumn(4).setHeaderValue("Volume");
@@ -356,7 +360,7 @@ public class frmConsultaObras extends javax.swing.JFrame {
         panelObra.setLayout(panelObraLayout);
         panelObraLayout.setHorizontalGroup(
             panelObraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1166, Short.MAX_VALUE)
         );
         panelObraLayout.setVerticalGroup(
             panelObraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,6 +390,7 @@ public class frmConsultaObras extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tabelaExemplar);
         tabelaExemplar.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (tabelaExemplar.getColumnModel().getColumnCount() > 0) {
+            tabelaExemplar.getColumnModel().getColumn(2).setHeaderValue("Título");
             tabelaExemplar.getColumnModel().getColumn(3).setHeaderValue("Edição");
             tabelaExemplar.getColumnModel().getColumn(4).setHeaderValue("Ano");
             tabelaExemplar.getColumnModel().getColumn(5).setHeaderValue("Volume");
@@ -425,52 +430,59 @@ public class frmConsultaObras extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(tabelaSituacao);
         tabelaSituacao.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (tabelaSituacao.getColumnModel().getColumnCount() > 0) {
+            tabelaSituacao.getColumnModel().getColumn(2).setHeaderValue("Título");
+        }
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1166, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 1156, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 489, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jtObra.addTab("Situação", jPanel5);
 
         tabelaEmprestimo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo Emprestimo", "Codigo Usuario", "Usuário", "Título", "Data Requisicão", "Data Devolução", "Data Devolução Efetiva"
+                "Codigo Movimentação", "Codigo Usuário", "Usuário", "Título", "Data Requisição", "Data Devolução", "Data Devolução Efetiva"
             }
-        ));
-        jScrollPane2.setViewportView(tabelaEmprestimo);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(tabelaEmprestimo);
+        tabelaEmprestimo.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1166, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 1166, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jtObra.addTab("Movimentação", jPanel3);
@@ -587,7 +599,7 @@ public class frmConsultaObras extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jtObra, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jtObra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -771,7 +783,8 @@ public class frmConsultaObras extends javax.swing.JFrame {
         AutorDao autorDao = new AutorDao();
         SituacaoDao sDao = new SituacaoDao();
         EmprestimoDao empDao = new EmprestimoDao();
-        
+        AlunoDao alDao = new AlunoDao();
+        ObraDao obraDao = new ObraDao();
         
         clnObra a = new clnObra();
         clnExemplar e = new clnExemplar();
@@ -912,8 +925,8 @@ public class frmConsultaObras extends javax.swing.JFrame {
                 }else{
                         
                         if(e.getCdSituacao() == 2 ){ //Reservado
-                        tabelaEmprestimo.setRowCount(0);
-                        tabelaEmprestimo.fireTableDataChanged();   
+                        tabelaListaEmprestimo.setRowCount(0);
+                        tabelaListaEmprestimo.fireTableDataChanged();   
                         tabelaListaEx.setRowCount(0);
                         tabelaListaEx.fireTableDataChanged();
                         tabelaListaSituacao.setRowCount(0);
@@ -943,14 +956,82 @@ public class frmConsultaObras extends javax.swing.JFrame {
                         EmprestimoList = (ArrayList<clnEmprestimo>) empDao.PesquisarLista();
                         for (clnEmprestimo emprestimo : EmprestimoList) {
                             
-                            tabelaExemplar.setSelectionBackground(Color.LIGHT_GRAY);
-                            tabelaEmprestimo.addRow(new Object[]{emprestimo.getCdEmprestimo(),emprestimo.getCdUsuario()}); 
+                            try {
+                                aluno = alDao.pesquisarNome(emprestimo.getCdUsuario());
+                            } catch (DaoException ex) {
+                                Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                                
+                            
+                            tabelaEmprestimo.setSelectionBackground(Color.LIGHT_GRAY);
+                            tabelaListaEmprestimo.addRow(new Object[]{emprestimo.getCdEmprestimo(),emprestimo.getCdUsuario(),aluno.getNmUsuario(),emprestimo.getDtEmprestimo(),emprestimo.getDtDevolucao(),
+                            emprestimo.getDtDevolucaoEfetiva()}); 
                         }
                             
                         }else if(e.getCdSituacao() == 3){ //Emprestado
                             
-                        }else{
+                            tabelaListaEmprestimo.setRowCount(0);
+                            tabelaListaEmprestimo.fireTableDataChanged();   
+                            tabelaListaEx.setRowCount(0);
+                            tabelaListaEx.fireTableDataChanged();
+                            tabelaListaSituacao.setRowCount(0);
+                            tabelaListaSituacao.fireTableDataChanged();
+                            ExemplarList = (ArrayList<clnExemplar>) eDao.PesquisarListaSituacao(e);
+                            for (clnExemplar p : ExemplarList) {
+                                try {
+                                    autor = autorDao.pesquisarNome(p.getCdAutor());
+                                } catch (DaoException ex) {
+                                    Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                try { 
+                                    editora = editoraDao.pesquisarNome(p.getCdEditora());
+                                } catch (DaoException ex) {
+                                    Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                try {
+                                    s= sDao.pesquisarNome(p.getCdSituacao());
+                                } catch (DaoException ex) {
+                                    Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                tabelaExemplar.setSelectionBackground(Color.LIGHT_GRAY);
+                                tabelaListaEx.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),p.getEdicao(),p.getAno(),p.getVolume(),p.getISBN(),editora.getNmEditora(),autor.getNmAutor()});
+                                tabelaListaSituacao.addRow(new Object[]{p.getCdObra(),p.getCdExemplar(), p.getTitulo(),editora.getNmEditora(),autor.getNmAutor(),s.getNmSituacao()});                             
+                            }
+                        
+                                EmprestimoList = (ArrayList<clnEmprestimo>) empDao.PesquisarLista();
+                            try {
+                                ObraList = (ArrayList<clnObra>) obraDao.pesquisarTitulo();
+                            } catch (DaoException ex) {
+                                Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            int i=0;
+                                for (clnEmprestimo emprestimo : EmprestimoList) {
+                                    clnObra obra = new clnObra();
+                                    obra = ObraList.get(i);
+                                    
+                                    
+                                try {
+                                    aluno = alDao.pesquisarNome(emprestimo.getCdUsuario());
+                                } catch (DaoException ex) {
+                                    Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                tabelaEmprestimo.setSelectionBackground(Color.LIGHT_GRAY);
+                                tabelaListaEmprestimo.addRow(new Object[]{emprestimo.getCdEmprestimo(),emprestimo.getCdUsuario(),aluno.getNmUsuario(),obra.getTitulo(),emprestimo.getDtEmprestimo(),emprestimo.getDtDevolucao(),
+                                emprestimo.getDtDevolucaoEfetiva()});
+                                        i++;
+                                /*try {
+                                    ObraList = (ArrayList<clnObra>) obraDao.pesquisarTitulo(emprestimo.getCdEmprestimo());
+                                } catch (DaoException ex) {
+                                    Logger.getLogger(frmConsultaObras.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                    for(clnObra obra : ObraList){
+                                        
+                                        
+                                    }*/
+                                }
+                        
                             
+                        }else{
                                 tabelaListaEx.setRowCount(0);
                                 tabelaListaEx.fireTableDataChanged();
                                 tabelaListaSituacao.setRowCount(0);
@@ -1245,9 +1326,9 @@ public class frmConsultaObras extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jtObra;
     private javax.swing.JPanel panelExemplar;
     private javax.swing.JPanel panelObra;
